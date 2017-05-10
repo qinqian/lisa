@@ -1,0 +1,30 @@
+rule lisa_in_silico_knockout:
+    input:
+        coef="{sample}.{epigenome}.coefs.csv",
+        background="{sample}.back_gene.rank.csv",
+        foreground="{sample}.fore_gene.rank.csv"
+    output:
+        "{sample}.{epigenome}.motif99.csv",
+        "{sample}.{epigenome}.chipseq.csv",
+    message: "lisa In silico Knockout..."
+    benchmark:
+        "{sample}.{epigenome}.knockout.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}",
+            cov=config['covariates']
+    shell:
+        "lisa_rank_tfs knockout --species {params.species}  --epigenome {wildcards.epigenome} --covariates={params.cov} --coefficient {input.coef} --background {input.background} --foreground {input.foreground} --prefix {params.prefix}"
+
+rule lisa_direct_beta:
+    input:
+        background="{sample}.back_gene.rank.csv",
+        foreground="{sample}.fore_gene.rank.csv"
+    output:
+        "{sample}.lisa_direct.csv"
+    message: "lisa rank TF from peak directly..."
+    benchmark:
+        "{sample}.lisa_direct.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}"
+    shell:
+        "lisa_rank_tfs direct --species {params.species} --background {input.background} --foreground {input.foreground} --prefix {params.prefix}"

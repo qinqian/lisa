@@ -1,0 +1,41 @@
+import os
+from pkg_resources import resource_filename
+import json
+configfile: "$config"
+
+if config['model']:
+    include: resource_filename('lisa.rules', 'model.rule')
+    include: resource_filename('lisa.rules', 'background_selection.rule')
+    include: resource_filename('lisa.rules', 'tf_rank.rule')
+
+if config['bigwigs'] != None:
+    include: resource_filename('lisa.rules', 'hdf5.rule')
+
+def get_targets():
+    targets = []
+    if config['model']:
+        targets = expand("{sample}.{epigenome}.coefs.csv", sample=config["gene_sets"], epigenome=config["epigenome"]) + expand("{sample}.{epigenome}.lisa_predicted_rp.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
+        targets += expand("{sample}.back_gene.rank.csv", sample=config["gene_sets"])
+
+        targets += expand("{sample}.lisa_direct.csv", sample=config["gene_sets"])
+        targets += expand("{sample}.{epigenome}.motif99.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
+        targets += expand("{sample}.{epigenome}.chipseq.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
+        print(targets)
+    else:
+        targets += []
+    if config['bigwigs'] != None:
+        print('-------------ok-------------')
+        targets += \
+                   expand('{sample}.%s.%s.1kb_read_count.h5' % (config['prefix'], config['epigenome']),
+                          sample=config['bigwigs']) + \
+                    expand('{sample}.%s.%s.reg_potential.h5' % (config['prefix'], config['epigenome']),
+                           sample=config['bigwigs'])
+        print(targets)
+    return targets
+
+rule all:
+    input:
+        get_targets()
+
+rule clean:
+    shell: "rm -rf *csv *performance *bench* *log *fore* *back*"

@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+""" input a bigwig, preprocess them to lisa
+regulatory potential and 1kb read count, generate hdf5 file
+"""
+import fire
+from lisa.data import EpigenomeData
+
+class HDF(object):
+    """ interface for processing single bigwig to hdf5 """
+    def __init__(self, species, epigenome, prefix):
+        """ `epigenome` can be epigenome type, e.g. H3K27ac or ATAC-seq or DNase
+            `epigenome` can also be covariates, e.g., GC or mappability
+
+            prefix is used to label output HDF5 files, for epigenome sample, use `project name`
+                                                       for covariates, use `covarates`
+        """
+        self.species = species
+        self.epigenome = epigenome
+        self.prefix = prefix
+
+    def get_regpotential_hdf(self, bigwig):
+        """ input one bigwig file, generate temporary
+        hdf5 file for RP and read count """
+        data = EpigenomeData(self.species, self.epigenome)
+        data.create_RP_h5(bigwig, self.prefix)
+
+    def merge_reg_potential_hdf(self):
+        """ processing a list of reg potential hdf5 files into one merged hdf5,
+        input should be from the same epigenome type, e.g. H3K4me3,
+        or from a list of covariates, e.g. GC.
+        """
+        pass
+
+    def get_readcount_hdf(self, bigwig):
+        """ input one bigwig file, generate temporary
+        hdf5 file for RP and read count """
+        data = EpigenomeData(self.species, self.epigenome)
+        data.create_Count_h5(bigwig, self.prefix)
+
+    def merge_readcount_hdf(self):
+        """ merge multiple hdf5 generated from process_one_bigwig """
+        pass
+
+if __name__ == '__main__':
+    fire.Fire(HDF)

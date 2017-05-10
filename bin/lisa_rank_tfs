@@ -1,0 +1,201 @@
+#!/usr/bin/env python
+""" Lisa interface to rank TFs based on the differential
+expression model and whole genome 1kb read count of the samples
+"""
+
+from lisa.rank import get_insilico_knockout_tensor_op
+from lisa.data import EpigenomeData
+from lisa.utils import Weight, one_side_ks_test, convert_name
+import h5py
+
+import os
+import pandas as pd
+import numpy as np
+import fire
+
+class LisaRank(object):
+    """rank the TFs given the gene sets
+        1. In silico knockout epigenome signal on motif or TF ChIP-seq peak
+        2. cluster the selected sample epigenome signal, then compute relative entropy
+    """
+    def __init__(self, species, prefix, background, foreground):
+        self.species = species
+        self.background_genes = pd.read_csv(background, index_col=0).index
+        self.foreground_genes = pd.read_csv(foreground, index_col=0).index
+        self.prefix = prefix
+
+    def _preprocess_signal(self):
+        return
+
+    def direct(self):
+        """ rank TF based on TF ChIP-seq peak regulatory potential difference
+        between foreground genes and background genes
+        """
+        epigenome = EpigenomeData(self.species, None)
+
+        diff_gene_num = len(self.foreground_genes)
+        # gene x tf sample
+        df = epigenome.get_beta(self.foreground_genes.values, self.background_genes.values)
+        pvalue = df.apply(lambda x: one_side_ks_test(x[:diff_gene_num],
+                                                     x[diff_gene_num:]),
+                          axis=0)
+        meta = pd.read_table(epigenome.config.tf_chipseq_meta,
+                             index_col=0)
+        meta.index = meta.index.astype(str)
+        selection = 'FactorName'
+        pvalue.index = meta.loc[pvalue.index, selection]
+        pvalue.sort_values(ascending=True, inplace=True)
+        pvalue.to_csv('%s.lisa_direct.csv' % self.prefix)
+        print(pvalue.head())
+
+    def knockout(self, epigenome, coefficient, covariates):
+        """ rank TFs by In silico knockout of the epigenome signals
+
+        there are two modes to rank
+        species: hg38 or mm10
+        prefix: output prefix of Lisa
+        epigenome: epigenome type, e.g. H3K27ac
+        covariates: True or False, to use GC covariates or not
+        coefficient: coefficients csv file
+        """
+        epigenome = EpigenomeData(self.species, epigenome)
+
+        # load raw regulatory potential
+        raw_reg = epigenome.get_RP
+        if covariates:
+            raw_reg = pd.concat([raw_reg, epigenome.get_covariates_reg], axis=1)
+
+        diff_gene_num = len(self.foreground_genes)
+        all_genes = np.concatenate([self.foreground_genes, self.background_genes])
+
+        # load model coefficients with sample ids in one csv file
+        coef = pd.read_csv(coefficient, index_col=0)
+        coef.index = coef.index.astype(str)
+
+        # select foreground and background selected genes
+        raw_reg = raw_reg.loc[all_genes, list(coef.index)]
+
+        # load 1kb average read count
+        read_count = epigenome.get_count(coef.index, covariates)
+
+        # load gene TSS bins
+        gene_tss_bin = epigenome.get_gene_tss_bin
+
+        bin_length = 1000
+        weight_obj = Weight(bin_length)  # 1kb windows
+        gene_bins, gene_bin_centers, gene_chrs, gene_tss = [], [], [], []
+        for gene in all_genes:
+            # center cooridinates, 0-based bin index
+            gene_bins.append(int(gene_tss_bin[gene][1]))
+            gene_bin_centers.append(int(gene_tss_bin[gene][0]))
+            gene_chrs.append(gene.split(":")[0])
+            gene_tss.append(int(gene.split(":")[1]))
+        gene_bins = np.array(gene_bins)
+        gene_bin_centers = np.array(gene_bin_centers)
+        gene_tss = np.array(gene_tss)
+
+        # load chromatin boundary mask array
+        chrom_bin_mask = epigenome.get_chr_boundary_mask(gene_chrs)
+
+        bin_center_2d, bin_2d = [], []
+        # get the bin center matrix
+        for i in range(-100, 100):
+            # bin center base coordinate
+            bin_center_2d.append(gene_bin_centers + i * bin_length)
+            # TSS bin index
+            bin_2d.append(gene_bins + i)
+
+        # setup bins for delta rp
+        # genes x 200bin
+        bin_center_2d = np.vstack(bin_center_2d).T
+        bin_2d = np.vstack(bin_2d).T
+        bin_2d_left = bin_2d >= 0 # left chromosome margin
+        bin_2d_right = (bin_2d.T - chrom_bin_mask).T <= 0 # right chromosome margin
+        boundary_mask = bin_2d_left & bin_2d_right
+        bin_2d = bin_2d * boundary_mask
+
+        # extract signals in bins for all samples
+        # gene x bin x sample
+        signal = read_count[bin_2d]
+        # sample x gene x bin
+        signal = signal.transpose(2, 0, 1)
+        signal = signal * bin_length # average signal x window size
+
+        # prepare weights, each bin center distance from TSS
+        dist = (bin_center_2d.T - gene_tss).T
+        weight_obj.balance_weight(dist)
+        weight = weight_obj.get_weight()
+
+        normalized_reg = np.log2(raw_reg.values+1)
+        normalized_reg = normalized_reg - np.mean(normalized_reg, axis=0)
+        lisa_prediction = np.dot(normalized_reg, coef.iloc[:, 0])
+
+        # precompute sample x gene x bin
+        precompute = signal * weight * boundary_mask
+        # sample x (gene1_bin1, gene1_bin2...gene2_bin1,gene2_bin2...)
+        precompute = \
+            precompute.reshape((precompute.shape[0], -1))
+
+        theano_deltarp_function = get_insilico_knockout_tensor_op(lisa_prediction, precompute, coef)
+        # load 100bp to 1kb mapping files
+        bin_100_to_1kb = np.load(epigenome.config.genome_window_map) # 0-based
+
+        for hdf, dtype in zip([epigenome.config.get_motif_index(99), epigenome.config.tf_chipseq],
+                              ['motif99', 'chipseq']):
+            print(hdf, dtype)
+            # motif index is 0-based in 100bp windows
+            # TF ChIP-seq peak index is 1-based in 100bp windows
+            offset = 0 if dtype == 'motif99' else -1
+            delta_rps = []
+            sids = []
+            #get TF binding sites in 100bp windows,
+            #when motif=True, use motif hit with cutoff (percentile 97,98,99)
+            #when motif=False, use TF ChIP-seq peak hit, cutoff is not used in this situation
+            with h5py.File(hdf) as store:
+                IDs = store['IDs'][...]
+                for sid in IDs:
+                    tfbs_index = store[sid][...]
+                    tfbs_binary = np.zeros(bin_100_to_1kb[-1] + 1, dtype=np.int32)
+                    # map 100bp windows back to 1kb windows
+                    # TODO: add DNase-seq peak filter
+                    tfbs_binary[bin_100_to_1kb[tfbs_index+offset]] = 1
+                    # gene x bin
+                    E = tfbs_binary[bin_2d]
+                    E = E.reshape(1, -1) # 1 x (gene, bin)
+                    E = np.logical_not(E)
+                    delta_rps.append(theano_deltarp_function(E))
+                    sids.append(convert_name(sid))
+
+            delta_rps = np.vstack(delta_rps).T # gene x tfbs (motif or peak)
+            print(delta_rps.shape)
+            delta_rp_df = pd.DataFrame(delta_rps, columns=sids, index=all_genes)
+            if dtype == 'chipseq':
+                selection_ids = delta_rp_df.columns.map(lambda x: int(x.replace('_peaks_5fold', '')))
+                meta = pd.read_table(epigenome.config.tf_chipseq_meta, index_col=0)
+                selection = 'FactorName'
+            else:
+                selection_ids = delta_rp_df.columns
+                selection = 'symbol'
+                meta = pd.read_table(epigenome.config.get_motif_meta, index_col=0)
+
+            delta_rp_df.columns = meta.loc[selection_ids, selection]
+            pvalue = delta_rp_df.apply(lambda x: one_side_ks_test(x[:diff_gene_num],
+                                                                  x[diff_gene_num:]),
+                                       axis=0)
+
+            diff_binary = np.zeros(len(all_genes)+1) # add 1 to align the p-value
+            diff_binary[:diff_gene_num] = 1
+            delta_rp_df.loc['pvalue', :] = pvalue
+            delta_rp_df = delta_rp_df.iloc[:, np.argsort(pvalue)]
+            delta_rp_df.loc[:, 'diff_status'] = diff_binary
+            delta_rp_df.to_csv("%s.%s.%s.csv" % (self.prefix, epigenome.epigenome, dtype))
+
+    def entropy(self, epigenome, coefficient, covariates):
+        """ first cluster selected samples by regions
+        then evaluate kl divergence
+        """
+        epigenome = EpigenomeData(self.species, epigenome)
+        return
+
+if __name__ == '__main__':
+    fire.Fire(LisaRank)

@@ -1,0 +1,2 @@
+include *.in
+#recursive-include lisa/data *

@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+"""lisa fire interface
+render Snakefile conditionally
+"""
+from functools import reduce
+import yaml
+import numpy as np
+import pandas as pd
+import math
+import sys
+import os
+import argparse
+import pickle
+import glob
+import h5py
+import fire
+from pkg_resources import resource_filename
+from string import Template
+import json
+
+class LisaPipeline(object):
+    """ LISA pipeline for processing multiple files """
+    def __init__(self, prefix, species, epigenome, cluster):
+        """ species: the species of gene_sets,
+            epigenome: a list of marks, e.g. ['H3K4me3', 'H3K27ac'],
+                       for multiple_bigwig2hdf, this can be covariates, such as `GC`
+            gene_sets: a list of path to gene list file, the file contains a gene per line.
+        """
+        self.prefix = prefix
+        self.species = species
+        self.epigenome = epigenome
+        self.cluster = cluster
+        self.yml_data = dict(
+            species=self.species,
+            epigenome=self.epigenome,
+            bigwigs=None,
+            model=False,
+            gene_sets=None,
+            prefix=self.prefix)
+
+    def multiple_bigwig2hdf(self, *bigwigs):
+        """ input multiple bigwig files, generate hdf5 file for RP
+        and read count with snakemake """
+        print('bigwigs:--------', bigwigs)
+        self.yml_data['bigwigs'] = bigwigs
+        self.yml_data['prefix'] = "%s" % self.prefix
+        print(self.yml_data)
+        with open('%s.yml' % self.prefix, 'w') as outfile:
+            yaml.dump(self.yml_data, outfile, default_flow_style=False)
+        # render workflow Snakefile
+        snakemake_template = resource_filename("lisa.workflows", "Snakefile")
+        with open(snakemake_template) as snake:
+            template = Template(snake.read())
+            with open('Snakefile.hdf5', 'w') as outf:
+                outf.write(template.substitute(
+                    {'config': "%s.yml" % self.prefix}))
+        os.system("snakemake -s Snakefile.hdf5 -j 4 --use-conda")
+
+    def model(self, covariates, *gene_sets):
+        """ modeling a batch of gene sets with multiple epigenome types
+        """
+        # generate snakemake config file
+        self.yml_data['model'] = True
+        self.yml_data['gene_sets'] = gene_sets
+        self.yml_data['covariates'] = covariates
+        with open('%s.yml' % self.prefix, 'w') as outfile:
+            yaml.dump(self.yml_data, outfile,
+                      default_flow_style=False)
+        # render workflow Snakefile
+        snakemake_template = resource_filename("lisa.workflows", "Snakefile")
+        with open(snakemake_template) as snake:
+            template = Template(snake.read())
+            with open('%s.Snakefile.model' % self.prefix, 'w') as outf:
+                outf.write(template.substitute(
+                    {'config': "%s.yml" % self.prefix}))
+        os.system("snakemake --latency-wait 60 -s %s.Snakefile.model -j 4 --use-conda" % self.prefix)
+
+if __name__ == '__main__':
+    fire.Fire(LisaPipeline)

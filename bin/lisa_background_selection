@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+""" for each differential gene, select a nearest background gene
+based on the lisa prediction of regulatory potential
+
+if two DE genes have the same background gene, one of the DE genes would
+choose the secondary nearest gene
+"""
+from glob import glob
+import fire
+import pandas as pd
+from lisa.data import EpigenomeData
+import numpy as np
+
+def select_background(species, covariates, prefix, *files):
+    """
+    species: hg38 or mm10
+    covariates: True or False, whether to consider GC or not
+    prefix: the prefix of lisa_model output, e.g. gene symbols file name
+    files: a list of lisa prediction output files from lisa_model
+    """
+    epigenome = EpigenomeData(species, None)
+    pred = []
+    if covariates:
+        pred.append(epigenome.get_covariates_reg)
+
+    fore_genes = glob("%s.*.foreground_gene" % prefix)[0]
+    fore_genes = np.genfromtxt(fore_genes,dtype='str')
+
+    all_back_genes = glob("%s.*.all_background_gene" % prefix)[0]
+    all_back_genes = np.genfromtxt(all_back_genes,dtype='str')
+
+    for lp in glob("%s.*lisa_predicted_rp.csv" % prefix):
+        df = pd.read_csv(lp, index_col=0)
+        pred.append(df)
+
+    pred = pred[0].join(pred[1:])
+    pred = pred.rank(axis=0, ascending=False)
+    fore_genes_df = pred.loc[fore_genes]
+    all_back_genes_df = pred.loc[all_back_genes]
+
+    # |rank_j K4me3 - rank_i K4me3| + | rank_j K27ac - rank_i K27ac | +  | rank_j GC - rank_i GC |
+    background_genes = set()
+    for fore_gene in fore_genes:
+        dist = all_back_genes_df.sub(fore_genes_df.loc[fore_gene], axis=1) \
+                                .abs() \
+                                .sum(axis=1)
+        dist.sort_values(axis=0, ascending=True, inplace=True)
+        for candidate in dist.index:
+            # if first nearest candidate background gene is already be taken
+            # choose the next one, etc...
+            if not candidate in background_genes:
+                background_genes.add(candidate)
+                break # match one background gene
+
+    back_genes_df = pred.loc[list(background_genes)]
+    print(back_genes_df.head())
+    fore_genes_df.to_csv("%s.fore_gene.rank.csv" % prefix)
+    back_genes_df.to_csv("%s.back_gene.rank.csv" % prefix)
+
+if __name__ == '__main__':
+    fire.Fire(select_background)

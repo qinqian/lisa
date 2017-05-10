@@ -1,0 +1,13 @@
+rule lisa_select_background:
+    input:
+        expand("{{sample}}.{epigenome}.lisa_predicted_rp.csv", epigenome=config["epigenome"])
+    output:
+        "{sample}.fore_gene.rank.csv",
+        "{sample}.back_gene.rank.csv"
+    message: "lisa selecting background genes..."
+    benchmark:
+        "{sample}.background_gene.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}"
+    shell:
+        "lisa_background_selection --species {params.species} --covariates=True --prefix {params.prefix} {input}"

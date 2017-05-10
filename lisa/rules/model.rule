@@ -1,0 +1,20 @@
+def get_command(cov):
+    if cov:
+        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input} --prefix {params.prefix} --covariates=True 2>&1>>{log}"
+    else:
+        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input} --prefix {params.prefix} --covariates=False 2>&1>>{log}"
+
+rule lisa_regress:
+    input: "{sample}"
+    output:
+        "{sample}.{epigenome}.coefs.csv",
+        "{sample}.{epigenome}.lisa_predicted_rp.csv"
+    message: "lisa regression steps..."
+    benchmark:
+        "{sample}.{epigenome}.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"],
+            epigenome="{epigenome}",
+            prefix="{sample}.{epigenome}"
+    shell:
+        get_command(config['covariates'])

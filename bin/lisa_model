@@ -11,7 +11,7 @@ from sklearn.preprocessing import RobustScaler
 import pandas as pd
 import numpy as np
 
-def model(species, epigenome, gene_set, prefix, covariates):
+def model(species, epigenome, gene_set, prefix, covariates, jobs):
     """
     species: species for epigenome and gene_set
     epigenome: one epigenome type, e.g. DNase
@@ -48,15 +48,15 @@ def model(species, epigenome, gene_set, prefix, covariates):
     feature_symbols_y = feature_symbols.Y
 
     feature_symbols_x = np.log2(feature_symbols_x+1)
-    feature_symbols_x = feature_symbols_x.where(feature_symbols_x > 0, -1)
+    # feature_symbols_x = feature_symbols_x.where(feature_symbols_x > 0, -1)
 
-    # scale = StandardScaler(with_std=False)
-    scale = RobustScaler(quantile_range=(5, 95))
+    scale = StandardScaler(with_std=False)
+    # scale = RobustScaler(quantile_range=(5, 95))
     feature_symbols_x = pd.DataFrame(scale.fit_transform(feature_symbols_x),
                                      columns=feature_symbols_x.columns,
                                      index=feature_symbols_x.index)
 
-    logit = Logit(feature_symbols_x, feature_symbols_y, jobs=3, covariates=covariates)
+    logit = Logit(feature_symbols_x, feature_symbols_y, jobs=jobs, covariates=covariates)
     auc, prauc, coefs = logit.train()
 
     coefs = coefs.join(epigenome.get_sample_annotation(coefs.index))
@@ -66,7 +66,7 @@ def model(species, epigenome, gene_set, prefix, covariates):
 
     feature = feature.iloc[:, :(feature.shape[1]-2)]
     feature = np.log2(feature+1)
-    feature = feature.where(feature > 0, -1)
+    # feature = feature.where(feature > 0, -1)
     feature = pd.DataFrame(scale.fit_transform(feature),
                            columns=feature.columns,
                            index=feature.index)

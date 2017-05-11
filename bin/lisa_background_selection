@@ -53,7 +53,6 @@ def select_background(species, covariates, prefix, *files):
                 break # match one background gene
 
     back_genes_df = pred.loc[list(background_genes)]
-    print(back_genes_df.head())
     fore_genes_df.to_csv("%s.fore_gene.rank.csv" % prefix)
     back_genes_df.to_csv("%s.back_gene.rank.csv" % prefix)
 

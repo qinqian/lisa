@@ -8,6 +8,7 @@ rule lisa_select_background:
     benchmark:
         "{sample}.background_gene.benchmark.txt"
     log: "{sample}.log"
-    params: species=config["species"], prefix="{sample}"
+    params: species=config["species"], prefix="{sample}",
+            cov=config["covariates"]
     shell:
-        "lisa_background_selection --species {params.species} --covariates=True --prefix {params.prefix} {input}"
+        "lisa_background_selection --species {params.species} --covariates={params.cov} --prefix {params.prefix} {input}"

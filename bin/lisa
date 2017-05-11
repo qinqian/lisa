@@ -29,13 +29,13 @@ class LisaPipeline(object):
         self.prefix = prefix
         self.species = species
         self.epigenome = epigenome
-        self.cluster = cluster
         self.yml_data = dict(
             species=self.species,
             epigenome=self.epigenome,
             bigwigs=None,
             model=False,
             gene_sets=None,
+            cluster=cluster,
             prefix=self.prefix)
 
     def multiple_bigwig2hdf(self, *bigwigs):
@@ -56,8 +56,10 @@ class LisaPipeline(object):
                     {'config': "%s.yml" % self.prefix}))
         os.system("snakemake -s Snakefile.hdf5 -j 4 --use-conda")
 
-    def model(self, covariates, *gene_sets):
+    def model(self, threads, covariates, *gene_sets):
         """ modeling a batch of gene sets with multiple epigenome types
+
+        covariates: True or False, use GC covariates or no
         """
         # generate snakemake config file
         self.yml_data['model'] = True
@@ -73,7 +75,8 @@ class LisaPipeline(object):
             with open('%s.Snakefile.model' % self.prefix, 'w') as outf:
                 outf.write(template.substitute(
                     {'config': "%s.yml" % self.prefix}))
-        os.system("snakemake --latency-wait 60 -s %s.Snakefile.model -j 4 --use-conda" % self.prefix)
+        os.system("snakemake -j %s --latency-wait 60 -s %s.Snakefile.model --use-conda"
+                  % (threads, self.prefix))
 
 if __name__ == '__main__':
     fire.Fire(LisaPipeline)

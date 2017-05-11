@@ -1,8 +1,8 @@
 def get_command(cov):
     if cov:
-        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input} --prefix {params.prefix} --covariates=True 2>&1>>{log}"
+        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input} --prefix {params.prefix} --covariates=True --jobs {threads} 2>&1>>{log}"
     else:
-        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input} --prefix {params.prefix} --covariates=False 2>&1>>{log}"
+        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input} --prefix {params.prefix} --covariates=False --jobs {threads} 2>&1>>{log}"
 
 rule lisa_regress:
     input: "{sample}"
@@ -16,5 +16,6 @@ rule lisa_regress:
     params: species=config["species"],
             epigenome="{epigenome}",
             prefix="{sample}.{epigenome}"
+    threads: 3
     shell:
         get_command(config['covariates'])

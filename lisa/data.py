@@ -22,10 +22,9 @@ class EpigenomeData(object):
         """ load ChiLin quality metrics and filter by cutoff
         """
         quality = pd.read_csv(self.config.get_meta, encoding="ISO-8859-1")
-        selector = (quality['UniquelyMappedRatio'] > 0.6) \
-                 & (quality['MappedReadsNumber'] > 15e6) \
-                 & (quality['FRiP'] > 0.01) \
-                 & (quality['AllPeaksNumber'] > 10000) \
+        selector = (quality['UniquelyMappedRatio'] > 0.4) \
+                 & (quality['MappedReadsNumber'] > 4e6) \
+                 & (quality['AllPeaksNumber'] > 1000) \
                  & (quality['PBC'] > 0.7) \
                  & (quality['FactorName'] == self.epigenome)
         sids = quality.ix[selector, 'X']
@@ -195,7 +194,7 @@ class EpigenomeData(object):
         chrom_bin = self.chrom_boundary_bin
         return np.array([chrom_bin[c] for c in chrs])
 
-    def get_beta(self, foreground, background):
+    def get_beta(self, genes):
         """ get beta score for all TF ChIP-seq data
         get foreground and background gene TF RP
         """
@@ -205,4 +204,4 @@ class EpigenomeData(object):
             gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),
                                                 store['RefSeq'][...])))
             df = pd.DataFrame(store['RP'][...], index=gene_annotation, columns=ids)
-            return df.loc[np.concatenate([foreground, background]), :]
+            return df.loc[genes, :]

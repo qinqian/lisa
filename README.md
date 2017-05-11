@@ -40,5 +40,5 @@ python setup.py install
 #### Start to use
 
 ``` bash
-lisa model --species hg38 --epigenome '['H3K4me3','H3K27ac','H3K4me1','DNase']'  --cluster=False --covariates=False --prefix test AR.symbol ESR1.symbol
+lisa model --species hg38 --epigenome '['H3K4me3','H3K27ac','H3K4me1','DNase']' --cluster=True --covariates=True --prefix test --threads 12 AR.symbol ESR1.symbol
 ```

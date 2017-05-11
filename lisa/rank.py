@@ -2,6 +2,10 @@
 """
 import theano
 import theano.tensor as T
+import pandas as pd
+import numpy as np
+import scipy.stats as stats
+from numpy.linalg import norm
 
 def get_insilico_knockout_tensor_op(lisa_prediction, precompute, coef):
     """ use theano tensor operation to speed up
@@ -30,7 +34,33 @@ def get_insilico_knockout_tensor_op(lisa_prediction, precompute, coef):
     theano_delta_rp = theano.function([x], tensor_delta, mode=mode)
     return theano_delta_rp
 
-def rank_by_cluster_kl_divergence():
-    """ first cluster, then evaluate kl divergence, wasserstein distance
+def rank_by_entropy(pq, kl=True):
+    """ evaluate kl divergence, wasserstein distance
+    wasserstein: http://pythonhosted.org/pyriemann/_modules/pyriemann/utils/distance.html
     """
-    return
+    # to avoid Inf cases
+    pq = pq + 0.0000001
+    pq = pq/pq.sum(axis=0)
+
+    if kl:     # entropy actually can calculate KL divergence
+        final=pq.iloc[:, :-1].apply(
+            lambda x: stats.entropy(x, pq.iloc[:, -1], base=2), axis=0)
+        label = 'KL'
+    else:      # JS divergence
+        final=pq.iloc[:, :-1].apply(
+            lambda x: JSD(x, pq.iloc[:, -1]), axis=0)
+        label = 'JSD'
+    final.sort_values(ascending=False, inplace=True)
+    rank = final.rank(ascending=False)
+    final = pd.concat([final, rank], axis=1)
+    final.columns = [label, 'rank']
+    return final
+
+def JSD(P, Q):
+    """ compute JS divergence
+    JSD:  http://stackoverflow.com/questions/15880133/jensen-shannon-divergence
+    """
+    P = P / norm(P, ord=1)
+    Q = Q / norm(Q, ord=1)
+    M = 0.5 * (P + Q)
+    return 0.5 * (stats.entropy(P, M) + stats.entropy(Q, M))

@@ -1,0 +1,31 @@
+rule lisa_entropy_motif_99:
+    input:
+        coef="{sample}.{epigenome}.coefs.csv",
+        background="{sample}.back_gene.rank.csv",
+        foreground="{sample}.fore_gene.rank.csv"
+    output:
+        "{sample}.{epigenome}.motif99.entropy_rank.csv"
+    message: "lisa cluster motif KL divergene ..."
+    benchmark:
+        "{sample}.{epigenome}.motif99.entropy.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}",
+            cov=config['covariates']
+    shell:
+        "lisa_rank_tfs entropy --species {params.species}  --epigenome {wildcards.epigenome} --covariates={params.cov} --coefficient {input.coef} --background {input.background} --foreground {input.foreground} --prefix {params.prefix} --dtype motif99 2>&1>>{log}"
+
+rule lisa_entropy_chipseqpeak:
+    input:
+        coef="{sample}.{epigenome}.coefs.csv",
+        background="{sample}.back_gene.rank.csv",
+        foreground="{sample}.fore_gene.rank.csv"
+    output:
+        "{sample}.{epigenome}.chipseq.entropy_rank.csv"
+    message: "lisa cluster chip-seq KL divergene ..."
+    benchmark:
+        "{sample}.{epigenome}.chipseq.entropy.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}",
+            cov=config['covariates']
+    shell:
+        "lisa_rank_tfs entropy --species {params.species}  --epigenome {wildcards.epigenome} --covariates={params.cov} --coefficient {input.coef} --background {input.background} --foreground {input.foreground} --prefix {params.prefix} --dtype chipseq 2>&1>>{log}"

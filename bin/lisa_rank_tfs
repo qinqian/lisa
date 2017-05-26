@@ -2,7 +2,6 @@
 """ Lisa interface to rank TFs based on the differential
 expression model and whole genome 1kb read count of the samples
 """
-import os
 
 from sklearn.cluster import MiniBatchKMeans
 from lisa.rank import get_insilico_knockout_tensor_op, rank_by_entropy
@@ -22,8 +21,8 @@ class LisaRank(object):
     def __init__(self, species, prefix, background, foreground):
         self.epigenome = EpigenomeData(species, None)
         self.species = species
-        self.background_genes = pd.read_csv(background, index_col=0).index
-        self.foreground_genes = pd.read_csv(foreground, index_col=0).index
+        self.background_genes = np.genfromtxt(background, dtype='str')
+        self.foreground_genes = np.genfromtxt(foreground, dtype='str')
 
         self.diff_gene_num = len(self.foreground_genes)
         self.all_genes = np.concatenate([self.foreground_genes, self.background_genes])
@@ -120,8 +119,6 @@ class LisaRank(object):
         # load model coefficients with sample ids in one csv file
         coef = pd.read_csv(coefficient, index_col=0)
         coef.index = coef.index.astype(str)
-        diff_binary = np.zeros(len(self.all_genes)+1) # add 1 to align the p-value
-        diff_binary[: self.diff_gene_num] = 1
 
         # select foreground and background selected genes
         raw_reg = raw_reg.loc[self.all_genes, list(coef.index)]
@@ -187,10 +184,17 @@ class LisaRank(object):
         pvalue = delta_rp_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
                                                               x[self.diff_gene_num:]),
                                    axis=0)
+
         delta_rp_df.loc['pvalue', :] = pvalue
         delta_rp_df = delta_rp_df.iloc[:, np.argsort(pvalue)]
+
+        diff_binary = np.zeros(len(self.all_genes)+1) # add 1 to align the p-value
+        diff_binary[: self.diff_gene_num] = 1
+
         delta_rp_df.loc[:, 'diff_status'] = diff_binary
         delta_rp_df.to_csv("%s.%s.%s.csv" % (self.prefix, self.epigenome.epigenome, dtype))
+        pvalue.sort_values(inplace=True)
+        pvalue.to_csv("%s.%s.%s.p_value.csv" % (self.prefix, self.epigenome.epigenome, dtype))
 
     def _get_tfbs_annotation(self, cols, dtype):
         # annotation of chipseq dc ids or motif ids
@@ -219,8 +223,6 @@ class LisaRank(object):
         # load model coefficients with sample ids in one csv file
         coef = pd.read_csv(coefficient, index_col=0)
         coef.index = coef.index.astype(str)
-        diff_binary = np.zeros(len(self.all_genes)+1) # add 1 to align the p-value
-        diff_binary[: self.diff_gene_num] = 1
 
         # load 1kb average read count
         read_count = self.epigenome.get_count(coef.index, covariates)

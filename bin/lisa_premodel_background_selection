@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import KFold
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import make_scorer, average_precision_score, roc_auc_score
+from scipy.stats import uniform
+import h5py
+import fire
+import os
+import numpy as np
+import fire
+from lisa.data import EpigenomeData
+from lisa.utils import binarize_gene_set
+from lisa.model import Logit
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+import numpy as np
+
+def get_background(species, epigenomes, gene_set, prefix):
+    """ get background information by using regression of all input data of epigenome types
+    cluster center to get the predicted RP and get the 1000 nearest neighbors
+    """
+    rank_dict = {}
+    for e in epigenomes:
+        epigenome = EpigenomeData(species, e)
+        feature = epigenome.get_cluster_median
+        refseq = feature.index.map(lambda x: x.split(':')[-2].upper())
+        symbol = feature.index.map(lambda x: x.split(':')[-1].upper())
+
+        gene_vec = binarize_gene_set(gene_set, refseq, symbol)
+        feature.loc[:, 'Y'] = gene_vec
+        feature.loc[:, 'symbols'] = symbol
+        feature_symbols = feature.drop_duplicates(subset='symbols', keep='first', inplace=False)
+        feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
+        np.savetxt('%s.foreground_gene' % prefix,
+                   feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
+        feature_symbols_x = feature_symbols.iloc[:, :(feature_symbols.shape[1]-1)]
+        feature_symbols_y = feature_symbols.Y
+        scale = StandardScaler(with_std=False)
+        feature_symbols_x = pd.DataFrame(scale.fit_transform(feature_symbols_x),
+                                         columns=feature_symbols_x.columns,
+                                         index=feature_symbols_x.index)
+        fold = KFold(n_splits=3, shuffle=True, random_state=777)
+        np.random.RandomState(777)
+        parameters = {'clf__C': np.random.uniform(1e3, 1e8, 5)}
+        logit = LogisticRegression(penalty='l1', tol=0.01, dual=False, random_state=999)
+        lisa_expression_gs = GridSearchCV(Pipeline([('clf', logit)]),
+                                          parameters, cv=fold, n_jobs=3,
+                                          scoring=make_scorer(roc_auc_score))
+        lisa_expression_gs.fit(feature_symbols_x, feature_symbols_y)
+
+        prediction = lisa_expression_gs.predict_log_proba(feature_symbols_x)[:, 1]
+        prauc = average_precision_score(feature_symbols_y, prediction)
+        auc = roc_auc_score(feature_symbols_y, prediction)
+        coefs = lisa_expression_gs.best_estimator_.named_steps['clf'].coef_[0]
+        best_params = lisa_expression_gs.best_params_.get('clf__C', None)
+        print(prauc, auc, coefs, best_params)
+        rank_dict[e] = prediction
+
+    rank_df = pd.DataFrame(rank_dict, index=feature_symbols_x.index)
+    print(rank_df.head())
+    rank_df = rank_df.rank(axis=0, ascending=False)
+    print(rank_df.head())
+    prediction_control = rank_df.ix[feature_symbols_y==0, :]
+    prediction_diff = rank_df.ix[feature_symbols_y==1, :]
+
+    # control gene number matching one differential gene
+    control_gene_per_diff = 2000 // prediction_diff.shape[0]
+    # |rank_j K4me3 - rank_i K4me3| + | rank_j K27ac - rank_i K27ac | +  | rank_j GC - rank_i GC |
+    background_genes = set()
+    for fore_gene in feature_symbols.index[feature_symbols.Y == 1]:
+        dist = prediction_control.sub(prediction_diff.loc[fore_gene], axis=1) \
+                                 .abs() \
+                                 .sum(axis=1)
+        dist.sort_values(axis=0, ascending=True, inplace=True)
+        background_genes = background_genes.union(dist.index[:control_gene_per_diff])
+
+    np.random.RandomState(999)
+    background_genes = np.array(list(background_genes))
+    np.savetxt('%s.background_gene.2000' % prefix,
+               background_genes, fmt="%s")
+    np.savetxt('%s.background_gene.300' % prefix,
+               np.random.choice(background_genes, size=300, replace=False), fmt="%s")
+
+if __name__ == '__main__':
+    fire.Fire(get_background)

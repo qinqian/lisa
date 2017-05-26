@@ -24,14 +24,15 @@ def select_background(species, covariates, prefix, *files):
         pred.append(epigenome.get_covariates_reg)
 
     fore_genes = glob("%s.*.foreground_gene" % prefix)[0]
-    fore_genes = np.genfromtxt(fore_genes,dtype='str')
+    fore_genes = np.genfromtxt(fore_genes, dtype='str')
 
     all_back_genes = glob("%s.*.all_background_gene" % prefix)[0]
-    all_back_genes = np.genfromtxt(all_back_genes,dtype='str')
+    all_back_genes = np.genfromtxt(all_back_genes, dtype='str')
 
-    for lp in glob("%s.*lisa_predicted_rp.csv" % prefix):
-        df = pd.read_csv(lp, index_col=0)
-        pred.append(df)
+    for lp in files:
+        if not 'H3K27me3' in lp:
+            df = pd.read_csv(lp, index_col=0)
+            pred.append(df)
 
     pred = pred[0].join(pred[1:])
     pred = pred.rank(axis=0, ascending=False)

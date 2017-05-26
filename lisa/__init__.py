@@ -32,8 +32,8 @@ class Config(ConfigParser):
 
     def get_rp(self, factor):
         if hasattr(self, "s"):
-            # if factor == 'H3K4me3':
-            #     return self.get(self.s, '%s_1kbRP' % factor)
+            if factor == 'H3K4me3':
+                return self.get(self.s, '%s_1kbRP' % factor)
             return self.get(self.s, '%s_RP' % factor)
 
     @property
@@ -111,3 +111,9 @@ class Config(ConfigParser):
         """
         if hasattr(self, "s"):
             return self.get(self.s, 'bwa_index')
+
+    @property
+    def get_cluster(self):
+        """only for hg38 now......"""
+        if hasattr(self, "s"):
+            return self.get(self.s, 'cluster')

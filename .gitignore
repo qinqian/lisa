@@ -4,3 +4,4 @@ build
 lisa.egg-info
 __pycache__
 flycheck*
+.nfs*

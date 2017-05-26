@@ -79,6 +79,7 @@ gc_count = /data/home/qqin/MARGE/scripts/lisa/db/hg38_gc5Base.bw.Covariates.GC.1
 tf_chipseq = /data/home/qqin/MARGE/scripts/lisa/db/hg38_lisa_tf_100bp_all_nonhm_nonca_peak5fold.h5
 tf_chipseq_meta = /data/home/qqin/MARGE/scripts/lisa/db/hg38_best_dc_tfcr_basedon_frip_peak_dhs_all_nonhm_nonca.xls
 tf_chipseq_beta = /data/home/qqin/MARGE/scripts/lisa/db/hg38_beta_peak5fold.h5
+cluster = /data/home/qqin/MARGE/scripts/lisa/db/LISA_sample_K_means_cluster
 genome_100bp_motif_index99 = /data/home/qqin/MARGE/scripts/lisa/db/marge2_motif_100bp_99.h5
 genome_100bp_motif_index97 = /data/home/qqin/MARGE/scripts/lisa/db/marge2_motif_100bp_97.h5
 genome_100bp_motif_index98 = /data/home/qqin/MARGE/scripts/lisa/db/marge2_motif_100bp_98.h5

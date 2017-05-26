@@ -7,17 +7,15 @@ from lisa.data import EpigenomeData
 from lisa.utils import binarize_gene_set
 from lisa.model import Logit
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import RobustScaler
 import pandas as pd
 import numpy as np
 
-def model(species, epigenome, gene_set, prefix, covariates, jobs):
+def model(species, epigenome, gene_set, foreground, background, prefix, covariates):
     """
     species: species for epigenome and gene_set
     epigenome: one epigenome type, e.g. DNase
     gene_set: a gene set file, one gene per line
     """
-    output = prefix
     epigenome = EpigenomeData(species, epigenome)
     feature = epigenome.get_RP
 
@@ -36,37 +34,38 @@ def model(species, epigenome, gene_set, prefix, covariates, jobs):
     feature_symbols = feature.drop_duplicates(subset='symbols', keep='first', inplace=False)
     feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
 
-    # output differential unique genes for lisa_background_selection
-    np.savetxt('%s.foreground_gene' % prefix,
-               feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
-
-    # output all unique background genes for lisa_background_selection
-    np.savetxt('%s.all_background_gene' % prefix,
-               feature_symbols.index[feature_symbols.Y==0].values, fmt="%s")
+    fore_genes = np.genfromtxt(foreground, dtype='str')
+    back_genes = np.genfromtxt(background, dtype='str')
+    feature_symbols = pd.concat([feature_symbols.loc[fore_genes],
+                                 feature_symbols.loc[back_genes]],
+                                axis=0)
 
     feature_symbols_x = feature_symbols.iloc[:, :(feature_symbols.shape[1]-1)]
     feature_symbols_y = feature_symbols.Y
 
     feature_symbols_x = np.log2(feature_symbols_x+1)
     # feature_symbols_x = feature_symbols_x.where(feature_symbols_x > 0, -1)
-
     scale = StandardScaler(with_std=False)
+
     # scale = RobustScaler(quantile_range=(5, 95))
     feature_symbols_x = pd.DataFrame(scale.fit_transform(feature_symbols_x),
                                      columns=feature_symbols_x.columns,
                                      index=feature_symbols_x.index)
 
-    logit = Logit(feature_symbols_x, feature_symbols_y, jobs=jobs, covariates=covariates)
+    logit = Logit(feature_symbols_x, feature_symbols_y, covariates=covariates)
     auc, prauc, coefs = logit.train()
 
     coefs = coefs.join(epigenome.get_sample_annotation(coefs.index))
-    coefs.to_csv("%s.coefs.csv" % output)
-    with open("%s.gene_set.performance" % output, 'w') as fin:
+    coefs.to_csv("%s.coefs.csv" % prefix)
+    with open("%s.gene_set.performance" % prefix, 'w') as fin:
         fin.write("%s\t%s\n" % (auc, prauc))
 
     feature = feature.iloc[:, :(feature.shape[1]-2)]
+
     feature = np.log2(feature+1)
     # feature = feature.where(feature > 0, -1)
+
+    # feature = np.sqrt(feature)
     feature = pd.DataFrame(scale.fit_transform(feature),
                            columns=feature.columns,
                            index=feature.index)
@@ -75,7 +74,7 @@ def model(species, epigenome, gene_set, prefix, covariates, jobs):
                                coefs.iloc[:, 0].values)
     lisa_predicted_rp = pd.DataFrame(lisa_predicted_rp, index=feature.index,
                                      columns=[epigenome.epigenome])
-    lisa_predicted_rp.to_csv("%s.lisa_predicted_rp.csv" % output)
+    lisa_predicted_rp.to_csv("%s.lisa_predicted_rp.csv" % prefix)
 
 if __name__ == '__main__':
     fire.Fire(model)

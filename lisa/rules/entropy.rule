@@ -1,8 +1,8 @@
 rule lisa_entropy_motif_99:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
-        background="{sample}.back_gene.rank.csv",
-        foreground="{sample}.fore_gene.rank.csv"
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
     output:
         "{sample}.{epigenome}.motif99.entropy_rank.csv"
     message: "lisa cluster motif KL divergene ..."
@@ -17,8 +17,8 @@ rule lisa_entropy_motif_99:
 rule lisa_entropy_chipseqpeak:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
-        background="{sample}.back_gene.rank.csv",
-        foreground="{sample}.fore_gene.rank.csv"
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
     output:
         "{sample}.{epigenome}.chipseq.entropy_rank.csv"
     message: "lisa cluster chip-seq KL divergene ..."

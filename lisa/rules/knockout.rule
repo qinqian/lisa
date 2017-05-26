@@ -1,8 +1,8 @@
 rule lisa_in_silico_knockout_motif_99:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
-        background="{sample}.back_gene.rank.csv",
-        foreground="{sample}.fore_gene.rank.csv"
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
     output:
         "{sample}.{epigenome}.motif99.csv"
     message: "lisa In silico Knockout motif..."
@@ -17,8 +17,8 @@ rule lisa_in_silico_knockout_motif_99:
 rule lisa_in_silico_knockout_tf_chipseqpeak:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
-        background="{sample}.back_gene.rank.csv",
-        foreground="{sample}.fore_gene.rank.csv"
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
     output:
         "{sample}.{epigenome}.chipseq.csv"
     message: "lisa In silico Knockout chip-seq ..."

@@ -1,4 +1,4 @@
-""" Compute the Delta Regulatory potential upon In silico deletion of TF binding sites"""
+"""Compute the Delta Regulatory potential upon In silico deletion of TF binding sites"""
 import h5py
 import os
 import numpy as np
@@ -205,3 +205,16 @@ class EpigenomeData(object):
                                                 store['RefSeq'][...])))
             df = pd.DataFrame(store['RP'][...], index=gene_annotation, columns=ids)
             return df.loc[genes, :]
+
+    @property
+    def get_cluster_median(self):
+        """ get cluster for the 7 cluster for each of the marks """
+        folder = self.config.get_cluster
+        f = os.path.join(folder, '%s_median_for_each_cluster.h5' % self.epigenome)
+        with h5py.File(f) as store:
+            vals = store['median_log2RP_minus_1'][...].T
+            clusters = store['K_means_cluster_index'][...]
+            gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),
+                                                store['RefSeq'][...])))
+        return pd.DataFrame(vals, columns=clusters,
+                            index=gene_annotation)

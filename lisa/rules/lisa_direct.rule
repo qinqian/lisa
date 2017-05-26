@@ -1,7 +1,7 @@
 rule lisa_direct_beta:
     input:
-        background="{sample}.back_gene.rank.csv",
-        foreground="{sample}.fore_gene.rank.csv"
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
     output:
         "{sample}.lisa_direct.csv"
     message: "lisa rank TF from peak directly..."

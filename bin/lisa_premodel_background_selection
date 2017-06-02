@@ -18,7 +18,7 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
 
-def get_background(species, epigenomes, gene_set, prefix):
+def get_background(species, epigenomes, gene_set, prefix, random):
     """ get background information by using regression of all input data of epigenome types
     cluster center to get the predicted RP and get the 1000 nearest neighbors
     """
@@ -47,7 +47,7 @@ def get_background(species, epigenomes, gene_set, prefix):
         parameters = {'clf__C': np.random.uniform(1e3, 1e8, 5)}
         logit = LogisticRegression(penalty='l1', tol=0.01, dual=False, random_state=999)
         lisa_expression_gs = GridSearchCV(Pipeline([('clf', logit)]),
-                                          parameters, cv=fold, n_jobs=3,
+                                          parameters, cv=fold, n_jobs=1,
                                           scoring=make_scorer(roc_auc_score))
         lisa_expression_gs.fit(feature_symbols_x, feature_symbols_y)
 
@@ -69,15 +69,19 @@ def get_background(species, epigenomes, gene_set, prefix):
     # control gene number matching one differential gene
     control_gene_per_diff = 2000 // prediction_diff.shape[0]
     # |rank_j K4me3 - rank_i K4me3| + | rank_j K27ac - rank_i K27ac | +  | rank_j GC - rank_i GC |
-    background_genes = set()
-    for fore_gene in feature_symbols.index[feature_symbols.Y == 1]:
-        dist = prediction_control.sub(prediction_diff.loc[fore_gene], axis=1) \
-                                 .abs() \
-                                 .sum(axis=1)
-        dist.sort_values(axis=0, ascending=True, inplace=True)
-        background_genes = background_genes.union(dist.index[:control_gene_per_diff])
-
     np.random.RandomState(999)
+
+    if not random:
+        background_genes = set()
+        for fore_gene in feature_symbols.index[feature_symbols.Y == 1]:
+            dist = prediction_control.sub(prediction_diff.loc[fore_gene], axis=1) \
+                                     .abs() \
+                                     .sum(axis=1)
+            dist.sort_values(axis=0, ascending=True, inplace=True)
+            background_genes = background_genes.union(dist.index[:control_gene_per_diff])
+    else:
+        background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=2000, replace=False)
+
     background_genes = np.array(list(background_genes))
     np.savetxt('%s.background_gene.2000' % prefix,
                background_genes, fmt="%s")
@@ -86,3 +90,4 @@ def get_background(species, epigenomes, gene_set, prefix):
 
 if __name__ == '__main__':
     fire.Fire(get_background)
+

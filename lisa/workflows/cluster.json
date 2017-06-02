@@ -1,0 +1,12 @@
+{
+    "__default__" :
+    {
+        "queue"     : "general",
+        "nCPUs"     : "3",
+        "memory"    : "16g",
+        "time"      : "24:00:00",
+        "name"      : "{rule}.{wildcards.sample}",
+        "output"    : "logs/cluster/{rule}.{wildcards.sample}.%j.out",
+        "error"     : "logs/cluster/{rule}.{wildcards.sample}.%j.err"
+    }
+}

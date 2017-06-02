@@ -48,11 +48,7 @@ class LisaRank(object):
         pvalue = beta_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
                                                           x[self.diff_gene_num:]),
                                axis=0)
-        meta = pd.read_table(self.epigenome.config.tf_chipseq_meta,
-                             index_col=0)
-        meta.index = meta.index.astype(str)
-        selection = 'FactorName'
-        pvalue.index = meta.loc[pvalue.index, selection]
+        pvalue.index = self._get_tfbs_annotation(pvalue.index, 'chipseq')
         pvalue.sort_values(ascending=True, inplace=True)
         pvalue.to_csv('%s.lisa_direct.csv' % self.prefix)
 
@@ -117,7 +113,7 @@ class LisaRank(object):
             raw_reg = pd.concat([raw_reg, self.epigenome.get_covariates_reg], axis=1)
 
         # load model coefficients with sample ids in one csv file
-        coef = pd.read_csv(coefficient, index_col=0)
+        coef = pd.read_csv(coefficient, encoding="ISO-8859-1", index_col=0)
         coef.index = coef.index.astype(str)
 
         # select foreground and background selected genes
@@ -206,13 +202,19 @@ class LisaRank(object):
                 cols_new.append(i.split('_')[0])
         if dtype == 'chipseq':
             selection_ids = list(map(int, cols_new))
-            meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, index_col=0)
+            meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, 
+                                 encoding="ISO-8859-1",
+                                 index_col=0)
             selection = 'FactorName'
         else:
             selection_ids = cols_new
             selection = 'symbol'
-            meta = pd.read_table(self.epigenome.config.get_motif_meta, index_col=0)
-        return meta.loc[selection_ids, selection]
+            meta = pd.read_table(self.epigenome.config.get_motif_meta, encoding="ISO-8859-1", index_col=0)
+        annotation = meta.loc[selection_ids, selection]
+        result = list(map(lambda x: '|'.join(map(str, x)), 
+                          zip(annotation.index, 
+                              annotation)))
+        return result
 
     def entropy(self, epigenome, coefficient, covariates, dtype):
         """ first cluster selected samples by regions
@@ -221,7 +223,7 @@ class LisaRank(object):
         self.epigenome.epigenome = epigenome
 
         # load model coefficients with sample ids in one csv file
-        coef = pd.read_csv(coefficient, index_col=0)
+        coef = pd.read_csv(coefficient, encoding="ISO-8859-1", index_col=0)
         coef.index = coef.index.astype(str)
 
         # load 1kb average read count

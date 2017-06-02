@@ -73,7 +73,7 @@ class Logit(object):
         lisa_expression_rs = RandomizedSearchCV(Pipeline([('clf', _get_model())]),
                                                 {'clf__C': uniform(loc=1e-3,
                                                                    scale=upper_bound)},
-                                                n_iter=10, cv=3, n_jobs=3,
+                                                n_iter=10, cv=3, n_jobs=1,
                                                 scoring=make_scorer(roc_auc_score),
                                                 random_state=999)
         lisa_expression_rs.fit(self.reg_log2, self.gene_binary)
@@ -115,7 +115,7 @@ class Logit(object):
         np.random.RandomState(777)
         parameters = {'clf__C': np.random.uniform(1e-2, 1e5, 5)}
         lisa_expression_gs = GridSearchCV(Pipeline([('clf', _get_model(regularized='l1'))]),
-                                          parameters, cv=fold,
+                                          parameters, cv=fold, n_jobs=1,
                                           scoring=make_scorer(roc_auc_score))
         lisa_expression_gs.fit(self.reg_log2, self.gene_binary)
         best_params, coefs, prauc, auc = self.evaluate(lisa_expression_gs)

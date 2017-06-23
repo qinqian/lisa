@@ -6,6 +6,7 @@ configfile: "$config"
 if config['model']:
     include: resource_filename('lisa.rules', 'background_selection.rule')
     include: resource_filename('lisa.rules', 'model.rule')
+    include: resource_filename('lisa.rules', 'baseline.rule')
     include: resource_filename('lisa.rules', 'lisa_direct.rule')
     include: resource_filename('lisa.rules', 'knockout.rule')
     if config['cluster']:
@@ -19,6 +20,8 @@ def get_targets():
     if config['model']:
         targets = expand("{sample}.{epigenome}.coefs.csv", sample=config["gene_sets"], epigenome=config["epigenome"]) + expand("{sample}.{epigenome}.lisa_predicted_rp.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
         targets += expand("{sample}.lisa_direct.csv", sample=config["gene_sets"])
+        targets += expand("{sample}_motif99_baseline.csv", sample=config["gene_sets"])
+        targets += expand("{sample}_chipseq_baseline.csv", sample=config["gene_sets"])
         targets += expand("{sample}.{epigenome}.motif99.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
         targets += expand("{sample}.{epigenome}.chipseq.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
         print(targets)

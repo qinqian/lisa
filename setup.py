@@ -42,7 +42,7 @@ def main():
         classifiers=[
             'Environment::Console',
             'Operating System:: POSIX',
-            "Programming Language :: Python :: 2",
+            "Programming Language :: Python :: 3",
             "Topic :: Scientific/Engineering :: Bio-Informatics"],
         keywords='epigenome rank TF',
         zip_safe=False)

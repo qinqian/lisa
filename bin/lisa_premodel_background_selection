@@ -56,13 +56,14 @@ def get_background(species, epigenomes, gene_set, prefix, random):
         auc = roc_auc_score(feature_symbols_y, prediction)
         coefs = lisa_expression_gs.best_estimator_.named_steps['clf'].coef_[0]
         best_params = lisa_expression_gs.best_params_.get('clf__C', None)
-        print(prauc, auc, coefs, best_params)
+        with open('%s.premodel_records.txt' % prefix, 'w') as cluster_regf:
+            cluster_regf.write("%s\t%s\t%s\n" % (prauc, auc, best_params))
+            cluster_regf.write('\t'.join(list(map(str, coefs))))
+
         rank_dict[e] = prediction
 
     rank_df = pd.DataFrame(rank_dict, index=feature_symbols_x.index)
-    print(rank_df.head())
     rank_df = rank_df.rank(axis=0, ascending=False)
-    print(rank_df.head())
     prediction_control = rank_df.ix[feature_symbols_y==0, :]
     prediction_diff = rank_df.ix[feature_symbols_y==1, :]
 

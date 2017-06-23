@@ -1,0 +1,30 @@
+rule lisa_baseline_motif_99:
+    input:
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
+    output:
+        #../PhaseQ_Figures/AR_motif99_baseline.csv
+        "{sample}_motif99_baseline.csv"
+    message: "lisa baseline for motif hit number"
+    benchmark:
+        "{sample}.motif99.baseline.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}",
+            cov=config['covariates']
+    shell:
+        "lisa_baseline run --species {params.species} --prefix {params.prefix} --background {input.background} --foreground {input.foreground} --dtype motif99"
+
+rule lisa_baseline_chipseqpeak:
+    input:
+        background = "{sample}.background_gene.300",
+        foreground="{sample}.foreground_gene"
+    output:
+        "{sample}_chipseq_baseline.csv"
+    message: "lisa baseline for chip-seq peak number"
+    benchmark:
+        "{sample}.chipseq.baseline.benchmark.txt"
+    log: "{sample}.log"
+    params: species=config["species"], prefix="{sample}",
+            cov=config['covariates']
+    shell:
+        "lisa_baseline run --species {params.species} --prefix {params.prefix} --background {input.background} --foreground {input.foreground} --dtype chipseq"

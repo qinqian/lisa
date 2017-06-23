@@ -123,7 +123,6 @@ class LisaBaseLine(object):
                 motif_hit_cont = np.sum(tfbs_bin[bins_cont_2d], axis=1)
                 p = mannwhitneyu_test(motif_hit_diff, motif_hit_cont, how='greater')
                 pval.append(p)
-                print(tfbs_id, p)
             prop = pd.DataFrame(pval, index=ids)
         prop.index = self._get_tfbs_annotation(prop.index, dtype)
         prop.columns = ['mann_u_pvalue']

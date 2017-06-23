@@ -1,0 +1,134 @@
+#!/usr/bin/env python
+""" Lisa interface to rank TFs based on the differential
+expression model and whole genome 1kb read count of the samples
+"""
+
+from sklearn.cluster import MiniBatchKMeans
+from lisa.rank import get_insilico_knockout_tensor_op, rank_by_entropy
+from lisa.data import EpigenomeData
+from lisa.utils import Weight, one_side_ks_test, convert_name, mannwhitneyu_test
+import h5py
+
+import pandas as pd
+import numpy as np
+from scipy.stats import fisher_exact
+import fire
+
+class LisaBaseLine(object):
+    """rank the TFs given the gene sets
+        1. In silico knockout epigenome signal on motif or TF ChIP-seq peak
+        2. cluster the selected sample epigenome signal, then compute relative entropy
+    """
+    def __init__(self, species, prefix, background, foreground):
+        self.epigenome = EpigenomeData(species, None)
+        self.species = species
+        self.background_genes = np.genfromtxt(background, dtype='str')
+        self.foreground_genes = np.genfromtxt(foreground, dtype='str')
+
+        self.diff_gene_num = len(self.foreground_genes)
+        self.all_genes = np.concatenate([self.foreground_genes, self.background_genes])
+        self.prefix = prefix
+
+    def get_hdf(self, dtype):
+        """ get corresponding TF binding data type for 100bp window hit
+        """
+        tfbs_dict = dict(
+            motif99=self.epigenome.config.get_motif_index(99),
+            motif98=self.epigenome.config.get_motif_index(98),
+            motif97=self.epigenome.config.get_motif_index(97),
+            chipseq=self.epigenome.config.tf_chipseq
+        )
+        return tfbs_dict[dtype]
+
+    def _prepare_data(self):
+        # load gene TSS bins
+        gene_tss_bin = self.epigenome.get_gene_tss_bin
+        gene_bins = []
+        gene_chrs = []
+        for gene in self.all_genes:
+            gene_bins.append(int(gene_tss_bin[gene][1]))
+            gene_chrs.append(gene.split(":")[0])
+        return np.array(gene_bins), gene_chrs
+
+    def _get_tfbs_annotation(self, cols, dtype):
+        cols_new = []
+        for i in cols:
+            try:
+                cols_new.append(i.decode('utf-8').split('_')[0])
+            except:
+                cols_new.append(i.split('_')[0])
+        if dtype == 'chipseq':
+            selection_ids = list(map(int, cols_new))
+            #meta = pd.read_table(self.epigenome.config.tf_chipseq_meta,
+            #                     encoding="ISO-8859-1",
+            #                     index_col=0)
+            meta = pd.read_table(self.epigenome.config.get_basic_meta,
+                                 encoding="ISO-8859-1",
+                                 index_col=0)
+            #selection = 'FactorName'
+            selection = 'factor'
+        else:
+            selection_ids = cols_new
+            selection = 'symbol'
+            meta = pd.read_table(self.epigenome.config.get_motif_meta, encoding="ISO-8859-1", index_col=0)
+        annotation = meta.loc[selection_ids, selection]
+        result = list(map(lambda x: '|'.join(map(str, x)),
+                          zip(annotation.index,
+                              annotation)))
+        return result
+
+    def run(self, dtype):
+        """ first cluster selected samples by regions
+        then evaluate kl divergence
+        """
+        bins, gene_chrs = self._prepare_data()
+        chrom_bin_mask = self.epigenome.get_chr_boundary_mask(gene_chrs)
+
+        bins_diff = bins[:self.diff_gene_num]
+        bins_cont = bins[self.diff_gene_num:]
+        mask_diff = chrom_bin_mask[:self.diff_gene_num]
+        mask_cont = chrom_bin_mask[self.diff_gene_num:]
+
+        bins_diff_2d = []
+        bins_cont_2d = []
+        # based on 100bp bins
+        for i in range(-50, 50):
+            bins_diff_2d.append(bins_diff + i)
+            bins_cont_2d.append(bins_cont + i)
+
+        bins_diff_2d = np.vstack(bins_diff_2d).T # genes x bins
+        bins_cont_2d = np.vstack(bins_cont_2d).T # genes x bins
+
+        bins_diff_2di = bins_diff_2d >= 0
+        bins_diff_2di &= (bins_diff_2d.T - mask_diff).T <= 0
+        bins_cont_2di = bins_cont_2d >= 0
+        bins_cont_2di &= (bins_cont_2d.T - mask_cont).T <= 0
+
+        bins_diff_2d = bins_diff_2d * bins_diff_2di
+        bins_cont_2d = bins_cont_2d * bins_cont_2di
+
+        # load 100bp to 1kb mapping files
+        bin_100_to_1kb = np.load(self.epigenome.config.genome_window_map) # 0-based
+        offset = -1 if dtype == 'chipseq' else 0
+        pval = []
+        with h5py.File(self.get_hdf(dtype)) as store:
+            ids = store['IDs'][...]
+            #ids = ids[:3]
+            for tfbs_id in ids:
+                tfbs_index = store[tfbs_id][...] + offset
+                tfbs_bin = np.zeros(len(bin_100_to_1kb), dtype=np.int32)
+                # 1kb 0-1 vector
+                tfbs_bin[tfbs_index] = 1
+                motif_hit_diff = np.sum(tfbs_bin[bins_diff_2d], axis=1)
+                motif_hit_cont = np.sum(tfbs_bin[bins_cont_2d], axis=1)
+                p = mannwhitneyu_test(motif_hit_diff, motif_hit_cont, how='greater')
+                pval.append(p)
+                print(tfbs_id, p)
+            prop = pd.DataFrame(pval, index=ids)
+        prop.index = self._get_tfbs_annotation(prop.index, dtype)
+        prop.columns = ['mann_u_pvalue']
+        prop.sort_values(by='mann_u_pvalue', inplace=True)
+        prop.to_csv('%s_%s_%s' % (self.prefix, dtype, 'baseline.csv'))
+
+if __name__ == '__main__':
+    fire.Fire(LisaBaseLine)

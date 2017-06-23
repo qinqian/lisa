@@ -1,6 +1,7 @@
 [basics]
 motif = /data/home/qqin/MARGE/scripts/lisa/db/cistrome.txt
 motif_similarity = /data/home/qqin/MARGE/scripts/lisa/db/APE_pwm_id_similarity.xls
+meta = /data/home/qqin/MARGE/scripts/lisa/db/dc_samples_latest_20170720.xls
 
 [mm10]
 bwa_index = /data/home/qqin/MARGE/scripts/lisa/db/mm10.fa

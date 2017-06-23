@@ -6,7 +6,7 @@ expression model and whole genome 1kb read count of the samples
 from sklearn.cluster import MiniBatchKMeans
 from lisa.rank import get_insilico_knockout_tensor_op, rank_by_entropy
 from lisa.data import EpigenomeData
-from lisa.utils import Weight, one_side_ks_test, convert_name
+from lisa.utils import Weight, one_side_ks_test, convert_name, mannwhitneyu_test
 import h5py
 
 import pandas as pd
@@ -45,8 +45,12 @@ class LisaRank(object):
         """
         # gene x tf sample
         beta_df = self.epigenome.get_beta(self.all_genes)
-        pvalue = beta_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
-                                                          x[self.diff_gene_num:]),
+        # pvalue = beta_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
+        #                                                   x[self.diff_gene_num:]),
+        #                        axis=0)
+        pvalue = beta_df.apply(lambda x: mannwhitneyu_test(x[:self.diff_gene_num],
+                                                           x[self.diff_gene_num:],
+                                                           how="greater"),
                                axis=0)
         pvalue.index = self._get_tfbs_annotation(pvalue.index, 'chipseq')
         pvalue.sort_values(ascending=True, inplace=True)
@@ -177,8 +181,13 @@ class LisaRank(object):
         delta_rp_df = pd.DataFrame(delta_rps, columns=sids, index=self.all_genes)
 
         delta_rp_df.columns = self._get_tfbs_annotation(delta_rp_df.columns, dtype)
-        pvalue = delta_rp_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
-                                                              x[self.diff_gene_num:]),
+        # pvalue = delta_rp_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
+        #                                                       x[self.diff_gene_num:]),
+        #                            axis=0)
+
+        pvalue = delta_rp_df.apply(lambda x: mannwhitneyu_test(x[:self.diff_gene_num],
+                                                               x[self.diff_gene_num:],
+                                                               how="greater"),
                                    axis=0)
 
         delta_rp_df.loc['pvalue', :] = pvalue
@@ -202,10 +211,14 @@ class LisaRank(object):
                 cols_new.append(i.split('_')[0])
         if dtype == 'chipseq':
             selection_ids = list(map(int, cols_new))
-            meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, 
+            #meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, 
+            #                     encoding="ISO-8859-1",
+            #                     index_col=0)
+            meta = pd.read_table(self.epigenome.config.get_basic_meta,
                                  encoding="ISO-8859-1",
                                  index_col=0)
-            selection = 'FactorName'
+            #selection = 'FactorName'
+            selection = 'factor'
         else:
             selection_ids = cols_new
             selection = 'symbol'

@@ -21,6 +21,11 @@ class Config(ConfigParser):
             return self.get(self.s, 'meta')
 
     @property
+    def get_basic_meta(self):
+        if hasattr(self, "s"):
+            return self.get('basics', 'meta')
+
+    @property
     def get_annotation(self):
         if hasattr(self, "s"):
             return self.get(self.s, 'tssbin')

@@ -3,6 +3,7 @@ import math
 import numpy as np
 
 from scipy.stats import wilcoxon, ks_2samp
+import scipy
 
 def convert_name(name):
     try:
@@ -21,6 +22,12 @@ def one_side_ks_test(x, y):
     d = test[0]
     p = test[1]/2
     return p
+
+def mannwhitneyu_test(x,y,how="two-sided"):
+    try:
+        return scipy.stats.mannwhitneyu(x,y,alternative=how)[1]
+    except:
+        return 1
 
 def binarize_gene_set(gene_set, *args):
     """ gene_set: one gene per line

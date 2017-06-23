@@ -67,13 +67,17 @@ def get_background(species, epigenomes, gene_set, prefix, random):
     prediction_diff = rank_df.ix[feature_symbols_y==1, :]
 
     # control gene number matching one differential gene
-    control_gene_per_diff = 2000 // prediction_diff.shape[0]
+    diff_gene = feature_symbols.index[feature_symbols.Y == 1]
+    if len(diff_gene) <= 3000:
+        control_gene_per_diff = 3000 // prediction_diff.shape[0]
+    else:
+        raise Exception('more genes than 3000...')
     # |rank_j K4me3 - rank_i K4me3| + | rank_j K27ac - rank_i K27ac | +  | rank_j GC - rank_i GC |
     np.random.RandomState(999)
 
     if not random:
         background_genes = set()
-        for fore_gene in feature_symbols.index[feature_symbols.Y == 1]:
+        for fore_gene in diff_gene:
             dist = prediction_control.sub(prediction_diff.loc[fore_gene], axis=1) \
                                      .abs() \
                                      .sum(axis=1)
@@ -83,6 +87,9 @@ def get_background(species, epigenomes, gene_set, prefix, random):
         background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=2000, replace=False)
 
     background_genes = np.array(list(background_genes))
+    print(background_genes)
+    print(len(background_genes))
+
     np.savetxt('%s.background_gene.2000' % prefix,
                background_genes, fmt="%s")
     np.savetxt('%s.background_gene.300' % prefix,
@@ -90,4 +97,3 @@ def get_background(species, epigenomes, gene_set, prefix, random):
 
 if __name__ == '__main__':
     fire.Fire(get_background)
-

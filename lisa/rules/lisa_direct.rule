@@ -10,4 +10,4 @@ rule lisa_direct_beta:
     log: "{sample}.log"
     params: species=config["species"], prefix="{sample}"
     shell:
-        "lisa_rank_tfs direct --species {params.species} --background {input.background} --foreground {input.foreground} --prefix {params.prefix}"
+        "lisa_rank_tfs direct --species {params.species} --background {input.background} --foreground {input.foreground} --prefix {params.prefix} 2>&1>>{log}"

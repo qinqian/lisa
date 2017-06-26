@@ -12,7 +12,7 @@ rule lisa_baseline_motif_99:
     params: species=config["species"], prefix="{sample}",
             cov=config['covariates']
     shell:
-        "lisa_baseline run --species {params.species} --prefix {params.prefix} --background {input.background} --foreground {input.foreground} --dtype motif99"
+        "lisa_baseline run --species {params.species} --prefix {params.prefix} --background {input.background} --foreground {input.foreground} --dtype motif99 2>&1>>{log}"
 
 rule lisa_baseline_chipseqpeak:
     input:
@@ -27,4 +27,4 @@ rule lisa_baseline_chipseqpeak:
     params: species=config["species"], prefix="{sample}",
             cov=config['covariates']
     shell:
-        "lisa_baseline run --species {params.species} --prefix {params.prefix} --background {input.background} --foreground {input.foreground} --dtype chipseq"
+        "lisa_baseline run --species {params.species} --prefix {params.prefix} --background {input.background} --foreground {input.foreground} --dtype chipseq 2>&1>>{log}"

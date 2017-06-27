@@ -30,6 +30,13 @@ class EpigenomeData(object):
         sids = quality.ix[selector, 'X']
         return list(set(map(str, list(sids))))
 
+    @property
+    def get_intersect_ids(self):
+        high_quality_ids = self.high_quality_ids
+        count_ids = self.get_count(None, None)
+        high_quality_ids = list(set(high_quality_ids) & set(count_ids))
+        return high_quality_ids
+
     def get_sample_annotation(self, ids, TF=False):
         """get samples tissue, cell type annotation
         ids: DC ids
@@ -82,8 +89,7 @@ class EpigenomeData(object):
         species: mm10 or hg38
         return: pandas DataFrame, column is sample ids, index is gene symbol
         """
-        high_quality_ids = self.high_quality_ids
-        print(self.epigenome)
+        high_quality_ids = self.get_intersect_ids
         h5 = self.config.get_rp(self.epigenome)
         with h5py.File(h5) as store:
             gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),
@@ -127,6 +133,8 @@ class EpigenomeData(object):
         with h5py.File(hdf5) as store:
             ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
                                     store['IDs'][...])))
+            if selected_ids == None:
+                return ids
             count = np.zeros((store['OrderCount'].shape[0],
                               len(list(selected_ids))), dtype=np.float32)
             print(count.shape)
@@ -135,6 +143,7 @@ class EpigenomeData(object):
                     val = self.gc_covariates_count
                 else:
                     index, = np.where(ids == sid)
+                    print(index)
                     val = store['OrderCount'][:, index]
                 count[:, i] = val
         return count

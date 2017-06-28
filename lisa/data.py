@@ -133,7 +133,7 @@ class EpigenomeData(object):
         with h5py.File(hdf5) as store:
             ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
                                     store['IDs'][...])))
-            if selected_ids == None:
+            if not isinstance(selected_ids, list):
                 return ids
             count = np.zeros((store['OrderCount'].shape[0],
                               len(list(selected_ids))), dtype=np.float32)
@@ -142,8 +142,8 @@ class EpigenomeData(object):
                 if covariates and sid == 'GC':
                     val = self.gc_covariates_count
                 else:
-                    index, = np.where(ids == sid)
-                    print(index)
+                    index, = np.where(ids == sid) # n x 1 dimension array, may cause assign error for `count[:, i]`
+                    index = index[0]              # fix by using the first one 
                     val = store['OrderCount'][:, index]
                 count[:, i] = val
         return count

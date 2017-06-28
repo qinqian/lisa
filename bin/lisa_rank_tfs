@@ -129,7 +129,7 @@ class LisaRank(object):
         lisa_prediction = np.dot(normalized_reg, coef.iloc[:, 0].values)
 
         # load 1kb average read count
-        read_count = self.epigenome.get_count(coef.index, covariates)
+        read_count = self.epigenome.get_count(list(coef.index), covariates)
 
         # load chromatin boundary mask array
         bin_length = 1000
@@ -240,7 +240,7 @@ class LisaRank(object):
         coef.index = coef.index.astype(str)
 
         # load 1kb average read count
-        read_count = self.epigenome.get_count(coef.index, covariates)
+        read_count = self.epigenome.get_count(list(coef.index), covariates)
 
         # load chromatin boundary mask array
         bin_length = 1000

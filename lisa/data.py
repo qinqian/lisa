@@ -43,6 +43,7 @@ class EpigenomeData(object):
         TF: TF ChIP-seq or epigenome ChIP-seq
         """
         if not TF:
+            print(ids)
             meta = pd.read_csv(self.config.get_meta, encoding="ISO-8859-1", index_col=0)
             meta.index = meta.index.astype('str')
             return meta.ix[ids, 3:6]
@@ -71,7 +72,7 @@ class EpigenomeData(object):
                                               shuffle=True, fletcher32=True)
             refseq_arr[...] = np.array(refseq)
             ids = store.create_dataset("IDs",
-                                       shape=(1, ), dtype='S10',
+                                       shape=(1, ), dtype='S50',
                                        compression='gzip', shuffle=True, fletcher32=True)
             ids[...] = np.array(str.encode(bigwig, 'utf-8'))
             store.flush()
@@ -161,7 +162,7 @@ class EpigenomeData(object):
         count = count[np.argsort(i)]
         with h5py.File("%s.h5" % output, "a") as store:
             ids = store.create_dataset("IDs", shape=(1, ),
-                                       dtype='S10',
+                                       dtype='S50',
                                        compression='gzip', shuffle=True, fletcher32=True)
             ids[...] = np.array(str.encode(bigwig, 'utf-8'))
             count_h5 = store.create_dataset("OrderCount",

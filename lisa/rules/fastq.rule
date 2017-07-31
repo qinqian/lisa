@@ -1,0 +1,47 @@
+import os
+
+rule lisa_bwa_aln:
+    input: "%s/{sample}" % (config['input_root'])
+    output:
+        '%s/%s/{sample}.sai' % (config['prefix'], config['epigenome'])
+    message: "lisa mapping fastq file"
+    params: species=config["species"],
+            epigenome=config['epigenome'],
+            prefix=config['prefix'],
+            index=config['index']
+    threads: 4
+    shell:
+        "bwa aln -q 5 -l 32 -k 2 -t {threads} {params.index} {input} > {output}"
+
+rule lisa_get_bam:
+    input:
+        sai='%s/%s/{sample}.sai' % (config['prefix'], config['epigenome']),
+        fastq='%s/{sample}'%(config['input_root'])
+    output:
+        bam='%s/%s/{sample}.bam' % (config['prefix'], config['epigenome']),
+        bam_u='%s/%s/{sample}_se.bam' % (config['prefix'], config['epigenome'])
+    message: "lisa output BAM file"
+    params: species=config["species"],
+            epigenome=config['epigenome'],
+            prefix=config['prefix'],
+            index=config['index'],
+            output_uprefix='%s/%s/{sample}_se' % (config['prefix'], config['epigenome']),
+            output_prefix='%s/%s/{sample}' % (config['prefix'], config['epigenome'])
+    shell:
+        """
+        bwa samse {params.index} {input.sai} {input.fastq} > {input.sai}.sam
+        samtools view -q 1 -Sb {input.sai}.sam > {input.sai}.bam
+        samtools sort -m 5000000000 {input.sai}.bam {params.output_prefix}
+        samtools rmdup -s {output.bam} {output.bam_u}
+        samtools index {output.bam_u}
+        rm {input.sai}.sam
+        """
+
+rule lisa_get_bigwig:
+    input:
+        '%s/%s/{sample}_se.bam' % (config['prefix'], config['epigenome'])
+    output:
+        '%s/%s/{sample}.bigwig' % (config['prefix'], config['epigenome'])
+    threads: 4
+    shell:
+        "bamCoverage -b {input} -p {threads} -e 146 --binSize 8 --scaleFactor 1 --normalizeUsingRPKM -o {output}"

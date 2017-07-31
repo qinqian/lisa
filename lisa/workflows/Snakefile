@@ -3,6 +3,14 @@ from pkg_resources import resource_filename
 import json
 configfile: "$config"
 
+if config['fastqs'] != None:
+    path = os.path.abspath(config['fastqs'][0])
+    config['input_root'] = os.path.dirname(path)
+    include: resource_filename('lisa.rules', 'fastq.rule')
+
+if config['bigwigs'] != None:
+    include: resource_filename('lisa.rules', 'hdf5.rule')
+
 if config['model']:
     include: resource_filename('lisa.rules', 'background_selection.rule')
     include: resource_filename('lisa.rules', 'model.rule')
@@ -11,9 +19,6 @@ if config['model']:
     include: resource_filename('lisa.rules', 'knockout.rule')
     if config['cluster']:
         include: resource_filename('lisa.rules', 'entropy.rule')
-
-if config['bigwigs'] != None:
-    include: resource_filename('lisa.rules', 'hdf5.rule')
 
 def get_targets():
     targets = []
@@ -30,12 +35,25 @@ def get_targets():
             targets += expand("{sample}.{epigenome}.motif99.entropy_rank.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
     else:
         targets += []
+
+    if config['fastqs'] != None:
+        ## assume file as id.fastq.gz
+        ids = list(map(os.path.basename, config['fastqs']))
+        targets += \
+                   expand('%s/%s/{sample}.bigwig' % (config['prefix'], config['epigenome']),
+                          sample=ids) + \
+                   expand('%s/%s/{sample}.bam' % (config['prefix'], config['epigenome']),
+                          sample=ids)
+
     if config['bigwigs'] != None:
         targets += \
                    expand('{sample}.%s.%s.1kb_read_count.h5' % (config['prefix'], config['epigenome']),
                           sample=config['bigwigs']) + \
                     expand('{sample}.%s.%s.reg_potential.h5' % (config['prefix'], config['epigenome']),
-                           sample=config['bigwigs'])
+                           sample=config['bigwigs']) + \
+                   ['%s.%s.reg.h5' % (config['prefix'], config['epigenome'])] + \
+                   ["%s.%s.readcount.h5" % (config['prefix'], config['epigenome'])]
+
         print(targets)
     return targets
 

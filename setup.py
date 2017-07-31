@@ -35,7 +35,7 @@ def main():
                           'h5py', 'pandas',
                           'seaborn', 'scipy',
                           'snakemake', 'PyYAML', 'yappi',
-                          'statsmodels'],
+                          'deeptools'],
         include_package_data=True,
         package_data={'lisa': ['rules/*', 'workflows/*', 'lisa.ini', 'lisa.ini.updated']},
         scripts=glob('bin/*'),

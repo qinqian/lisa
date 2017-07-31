@@ -102,7 +102,8 @@ class Logit(object):
         gene_binary:   binary vector for differential genes     (Y)
         jobs: threads when cross validation
         """
-        self.select_feature()   # original feature selection with binary search lambda
+        # self.select_feature()   # original feature selection with binary search lambda
+        self.select_feature(20)   # original feature selection with binary search lambda
         # self._select_feature2()     # anova 200~300 samples with cross validation of lambda search
 
         print('final shape:---', self.reg_log2.shape)

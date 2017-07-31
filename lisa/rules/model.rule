@@ -1,8 +1,15 @@
-def get_command(cov):
+def get_command(cov, new_h5):
+    frame="lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input.gene_set} --prefix {params.prefix} --foreground {input.foreground} --background {input.background} "
     if cov:
-        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input.gene_set} --prefix {params.prefix} --foreground {input.foreground} --background {input.background} --covariates=True 2>&1>>{log}"
+        frame+=" --covariates=True "
     else:
-        return "lisa_model --species {params.species} --epigenome {params.epigenome} --gene_set {input.gene_set} --prefix {params.prefix} --foreground {input.foreground} --background {input.background} --covariates=False 2>&1>>{log}"
+        frame+=" --covariates=False "
+
+    if new_h5 != None:
+        frame+=" --new_h5 %s " % new_h5
+    if new_h5 == None:
+        frame+=" --new_h5=None "
+    return frame
 
 rule lisa_regress:
     input:
@@ -20,4 +27,4 @@ rule lisa_regress:
             epigenome="{epigenome}",
             prefix="{sample}.{epigenome}"
     shell:
-        get_command(config['covariates'])
+        get_command(config['covariates'], config['new_rp_h5'])

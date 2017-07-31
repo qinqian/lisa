@@ -4,6 +4,9 @@ regulatory potential and 1kb read count, generate hdf5 file
 """
 import fire
 from lisa.data import EpigenomeData
+import h5py
+import numpy as np
+import os
 
 class HDF(object):
     """ interface for processing single bigwig to hdf5 """
@@ -24,12 +27,36 @@ class HDF(object):
         data = EpigenomeData(self.species, self.epigenome)
         data.create_RP_h5(bigwig, self.prefix)
 
-    def merge_reg_potential_hdf(self):
+    def merge_reg_potential_hdf(self, *hdf5):
         """ processing a list of reg potential hdf5 files into one merged hdf5,
         input should be from the same epigenome type, e.g. H3K4me3,
         or from a list of covariates, e.g. GC.
         """
-        pass
+        with h5py.File(hdf5[0]) as inf:
+            nrp = inf["RP"].shape[0]
+            refseq = inf["RefSeq"][...]
+        with h5py.File('%s.%s.reg.h5' % (self.prefix, self.epigenome), "a") as store:
+            refseq_arr = store.create_dataset("RefSeq",
+                                              shape=(len(refseq), ),
+                                              dtype='S200',
+                                              compression='gzip',
+                                              shuffle=True, fletcher32=True)
+            refseq_arr[...] = refseq
+
+            RP = store.create_dataset("RP", dtype=np.float32, shape=(nrp, len(hdf5)), compression='gzip', shuffle=True, fletcher32=True)
+            ids = store.create_dataset("IDs",
+                                       shape=(len(hdf5), ), dtype='S50',
+                                       compression='gzip', shuffle=True, fletcher32=True)
+
+            iids = []
+            for i, d in enumerate(hdf5):
+                with h5py.File(d) as inf:
+                    RP[:,i] = inf["RP"][:,0]
+                store.flush()
+                iids.append(str.encode(self.prefix + ".%s" % os.path.basename(d).split('.')[0], 'utf-8'))
+
+            ids[...] = np.array(iids)
+            store.flush()
 
     def get_readcount_hdf(self, bigwig):
         """ input one bigwig file, generate temporary
@@ -37,9 +64,26 @@ class HDF(object):
         data = EpigenomeData(self.species, self.epigenome)
         data.create_Count_h5(bigwig, self.prefix)
 
-    def merge_readcount_hdf(self):
+    def merge_readcount_hdf(self, *hdf5):
         """ merge multiple hdf5 generated from process_one_bigwig """
-        pass
+        with h5py.File(hdf5[0]) as inf:
+            nc = inf["OrderCount"].shape[0]
+
+        with h5py.File('%s.%s.readcount.h5' % (self.prefix, self.epigenome), "a") as store:
+            ct = store.create_dataset("OrderCount", dtype=np.float32, shape=(nc, len(hdf5)), compression='gzip', shuffle=True, fletcher32=True)
+            ids = store.create_dataset("IDs", shape=(len(hdf5), ),
+                                       dtype='S50',
+                                       compression='gzip', shuffle=True, fletcher32=True)
+
+            iids = []
+            for i, d in enumerate(hdf5):
+                with h5py.File(d) as inf:
+                    ct[:,i] = inf["OrderCount"][:,0]
+                store.flush()
+                iids.append(str.encode(self.prefix + ".%s" % os.path.basename(d).split('.')[0], 'utf-8'))
+            ids[...] = np.array(iids)
+            store.flush()
+
 
 if __name__ == '__main__':
     fire.Fire(HDF)

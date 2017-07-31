@@ -15,6 +15,6 @@ rule lisa_select_background:
     params: species=config["species"], prefix="{sample}",
             cov=config["covariates"],
             epigenomes=str(config["epigenome"]),
-            random=config['random']
+            random=config['random'],
     shell:
         "lisa_premodel_background_selection --species {params.species} --epigenomes '{params.epigenomes}' --gene_set {input} --prefix={params.prefix} --random={params.random} 2>&1>>{log}"

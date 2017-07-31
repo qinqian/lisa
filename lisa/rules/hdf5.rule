@@ -1,4 +1,5 @@
 import os
+
 rule lisa_reg_potential:
     input: "{sample}"
     output:
@@ -16,11 +17,36 @@ rule lisa_read_count:
     input: "{sample}"
     output:
         '{sample}.%s.%s.1kb_read_count.h5' % (config['prefix'], config['epigenome'])
-    message: "lisa compute regulatory potential from bigwig"
-    benchmark:
-        "{sample}.benchmark.txt"
+    message: "lisa compute read count from bigwig"
     log: "{sample}.log"
     params: species=config["species"],
             epigenome=config['epigenome'],
             prefix=config['prefix']
     shell: "lisa_bw2hdf get_readcount_hdf --species {params.species} --epigenome {params.epigenome} --prefix {params.prefix} {input} 2>&1>>{log}"
+
+rule lisa_merge_reg_potential:
+    input:
+        expand('{sample}.%s.%s.reg_potential.h5' % (config['prefix'], config['epigenome']),
+               sample=config['bigwigs'])
+    output:
+        '%s.%s.reg.h5' % (config['prefix'], config['epigenome'])
+    message: "lisa compute reg potential from bigwig"
+    params: species=config["species"],
+            epigenome=config['epigenome'],
+            prefix=config['prefix']
+    shell:
+        "lisa_bw2hdf merge_reg_potential_hdf --species {params.species} --epigenome {params.epigenome} --prefix {params.prefix} {input}"
+
+rule lisa_merge_read_count:
+    input:
+        expand('{sample}.%s.%s.1kb_read_count.h5' % (config['prefix'], config['epigenome']),
+               sample=config['bigwigs'])
+    output:
+        "%s.%s.readcount.h5" % (config['prefix'], config['epigenome'])
+    message: "lisa compute read count from bigwig"
+    params: species=config["species"],
+            epigenome=config['epigenome'],
+            prefix=config['prefix']
+    shell:
+        "lisa_bw2hdf merge_readcount_hdf --species {params.species} --epigenome {params.epigenome} --prefix {params.prefix} {input}"
+

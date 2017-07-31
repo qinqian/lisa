@@ -85,7 +85,8 @@ def get_background(species, epigenomes, gene_set, prefix, random):
             dist.sort_values(axis=0, ascending=True, inplace=True)
             background_genes = background_genes.union(dist.index[:control_gene_per_diff])
     else:
-        background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=2000, replace=False)
+        #background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=2000, replace=False)
+        background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=3000, replace=False)
 
     background_genes = np.array(list(background_genes))
     print(background_genes)

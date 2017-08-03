@@ -1,6 +1,7 @@
 """Compute the Delta Regulatory potential upon In silico deletion of TF binding sites"""
 import h5py
 import os
+import sys
 import numpy as np
 import pandas as pd
 from pkg_resources import resource_filename
@@ -33,7 +34,7 @@ class EpigenomeData(object):
     @property
     def get_intersect_ids(self):
         high_quality_ids = self.high_quality_ids
-        count_ids = self.get_count(None, None)
+        count_ids = self.get_count(None, None, None)
         high_quality_ids = list(set(high_quality_ids) & set(count_ids))
         return high_quality_ids
 
@@ -128,25 +129,43 @@ class EpigenomeData(object):
         with h5py.File(hdf5) as store:
             return store['OrderCount'][:, 0]
 
-    def get_count(self, selected_ids, covariates):
+    def get_count(self, selected_ids, covariates, new_h5_count):
         """ loading hdf5 data of 1kb read count """
         hdf5 = self.config.genome_count(self.epigenome)
+        if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
+            with h5py.File(new_h5_count) as st:
+                eids = np.array(list(map(lambda x: x.decode('utf-8'), st["IDs"][...])))
+
         with h5py.File(hdf5) as store:
             ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
                                     store['IDs'][...])))
             if not isinstance(selected_ids, list):
                 return ids
+
             count = np.zeros((store['OrderCount'].shape[0],
                               len(list(selected_ids))), dtype=np.float32)
-            print(count.shape)
             for i, sid in enumerate(selected_ids):
                 if covariates and sid == 'GC':
                     val = self.gc_covariates_count
-                else:
+                    count[:, i] = val
+                    continue
+                if sid != 'GC':
                     index, = np.where(ids == sid) # n x 1 dimension array, may cause assign error for `count[:, i]`
-                    index = index[0]              # fix by using the first one 
-                    val = store['OrderCount'][:, index]
-                count[:, i] = val
+                    if len(index) != 0:
+                        index = index[0]              # fix by using the first one
+                        val = store['OrderCount'][:, index]
+                        count[:, i] = val
+                    else: # search hdf5
+                        if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
+                            index, = np.where(eids == sid)
+                            with h5py.File(new_h5_count) as st:
+                                if len(index) != 0:
+                                    index = index[0]              # fix by using the first one
+                                    val = store['OrderCount'][:, index]
+                                    count[:, i] = val
+                                else: # not found read count ....
+                                    print('not found samples in matching samples in read count hdf5')
+                                    sys.exit(1)
         return count
 
     def create_Count_h5(self, bigwig, prefix):

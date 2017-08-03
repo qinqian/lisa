@@ -96,14 +96,13 @@ class Logit(object):
         best_params = model.best_params_.get('clf__C', None)
         return best_params, coefs, prauc, auc
 
-    def train(self):
+    def train(self, sample_number):
         """
         reg_potential: regulatory potential of a epigenome type (X)
         gene_binary:   binary vector for differential genes     (Y)
         jobs: threads when cross validation
         """
-        # self.select_feature()   # original feature selection with binary search lambda
-        self.select_feature(20)   # original feature selection with binary search lambda
+        self.select_feature(sample_number)   # original feature selection with binary search lambda
         # self._select_feature2()     # anova 200~300 samples with cross validation of lambda search
 
         print('final shape:---', self.reg_log2.shape)

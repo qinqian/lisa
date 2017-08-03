@@ -1,3 +1,16 @@
+def get_knockout_command(cov, dtype, new_h5_rp, new_h5_count):
+    frame="lisa_rank_tfs knockout --species {params.species}  --epigenome {wildcards.epigenome} --coefficient {input.coef} --background {input.background} --foreground {input.foreground} --prefix {params.prefix} --dtype %s " % dtype
+    if cov:
+        frame+=" --covariates=True "
+    else:
+        frame+=" --covariates=False "
+
+    if new_h5_rp != None:
+        frame+=" --new_h5_rp %s --new_h5_count %s " % (new_h5_rp, new_h5_count)
+    if new_h5_rp == None:
+        frame+=" --new_h5_rp=None --new_h5_count=None "
+    return frame
+
 rule lisa_in_silico_knockout_motif_99:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
@@ -9,10 +22,10 @@ rule lisa_in_silico_knockout_motif_99:
     benchmark:
         "{sample}.{epigenome}.motif99.knockout.benchmark.txt"
     log: "{sample}.log"
-    params: species=config["species"], prefix="{sample}",
-            cov=config['covariates']
+    params: species=config["species"], prefix="{sample}"
     shell:
-        "lisa_rank_tfs knockout --species {params.species}  --epigenome {wildcards.epigenome} --covariates={params.cov} --coefficient {input.coef} --background {input.background} --foreground {input.foreground} --prefix {params.prefix} --dtype motif99 2>&1>>{log}"
+        get_knockout_command(config['covariates'], 'motif99',
+                             config['new_rp_h5'], config['new_count_h5'])
 
 rule lisa_in_silico_knockout_tf_chipseqpeak:
     input:
@@ -26,6 +39,6 @@ rule lisa_in_silico_knockout_tf_chipseqpeak:
         "{sample}.{epigenome}.chipseq.knockout.benchmark.txt"
     log: "{sample}.log"
     params: species=config["species"], prefix="{sample}",
-            cov=config['covariates']
     shell:
-        "lisa_rank_tfs knockout --species {params.species}  --epigenome {wildcards.epigenome} --covariates={params.cov} --coefficient {input.coef} --background {input.background} --foreground {input.foreground} --prefix {params.prefix} --dtype chipseq 2>&1>>{log}"
+        get_knockout_command(config['covariates'], 'chipseq',
+                             config['new_rp_h5'], config['new_count_h5'])

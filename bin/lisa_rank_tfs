@@ -97,7 +97,7 @@ class LisaRank(object):
         weight = weight_obj.get_weight() * boundary_mask
         return bin_2d, weight
 
-    def knockout(self, epigenome, coefficient, covariates, dtype):
+    def knockout(self, epigenome, coefficient, covariates, dtype, new_h5_rp, new_h5_count):
         """ rank TFs by In silico knockout of the epigenome signals
 
         there are two modes to rank
@@ -113,6 +113,14 @@ class LisaRank(object):
         self.epigenome.epigenome = epigenome
         # load raw regulatory potential
         raw_reg = self.epigenome.get_RP
+
+        if new_h5_rp != None: # add hdf5 from fastqs or bigwigs for raw rp
+            with h5py.File(new_h5_rp) as st:
+                eids = list(map(lambda x: x.decode('utf-8'), st["IDs"][...]))
+                df = pd.DataFrame(st["RP"][...], index=raw_reg.index,
+                                  columns=eids)
+                raw_reg = pd.concat([raw_reg, df], axis=1)
+
         if covariates:
             raw_reg = pd.concat([raw_reg, self.epigenome.get_covariates_reg], axis=1)
 
@@ -121,6 +129,7 @@ class LisaRank(object):
         coef.index = coef.index.astype(str)
 
         # select foreground and background selected genes
+        # and reorder the sample names as the coefficient order
         raw_reg = raw_reg.loc[self.all_genes, list(coef.index)]
 
         # lisa prediction
@@ -129,7 +138,7 @@ class LisaRank(object):
         lisa_prediction = np.dot(normalized_reg, coef.iloc[:, 0].values)
 
         # load 1kb average read count
-        read_count = self.epigenome.get_count(list(coef.index), covariates)
+        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5_count)
 
         # load chromatin boundary mask array
         bin_length = 1000
@@ -229,7 +238,7 @@ class LisaRank(object):
                               annotation)))
         return result
 
-    def entropy(self, epigenome, coefficient, covariates, dtype):
+    def entropy(self, epigenome, coefficient, covariates, dtype, new_h5):
         """ first cluster selected samples by regions
         then evaluate kl divergence
         """
@@ -240,7 +249,7 @@ class LisaRank(object):
         coef.index = coef.index.astype(str)
 
         # load 1kb average read count
-        read_count = self.epigenome.get_count(list(coef.index), covariates)
+        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5)
 
         # load chromatin boundary mask array
         bin_length = 1000

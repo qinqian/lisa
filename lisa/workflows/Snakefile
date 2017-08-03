@@ -29,7 +29,6 @@ def get_targets():
         targets += expand("{sample}_chipseq_baseline.csv", sample=config["gene_sets"])
         targets += expand("{sample}.{epigenome}.motif99.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
         targets += expand("{sample}.{epigenome}.chipseq.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
-        print(targets)
         if config['cluster']:
             targets += expand("{sample}.{epigenome}.chipseq.entropy_rank.csv", sample=config["gene_sets"], epigenome=config["epigenome"])
             targets += expand("{sample}.{epigenome}.motif99.entropy_rank.csv", sample=config["gene_sets"], epigenome=config["epigenome"])

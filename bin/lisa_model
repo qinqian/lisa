@@ -12,14 +12,13 @@ import pandas as pd
 import numpy as np
 import h5py
 
-def model(species, epigenome, gene_set, foreground, background, prefix, new_h5, covariates):
+def model(sample_number, species, epigenome, gene_set, foreground, background, prefix, new_h5, covariates):
     """
     species: species for epigenome and gene_set
     epigenome: one epigenome type, e.g. DNase
     gene_set: a gene set file, one gene per line
     """
     print(new_h5)
-
     epigenome = EpigenomeData(species, epigenome)
     feature = epigenome.get_RP
 
@@ -30,10 +29,8 @@ def model(species, epigenome, gene_set, foreground, background, prefix, new_h5, 
     if new_h5 != None:
         with h5py.File(new_h5) as st:
             eids = list(map(lambda x: x.decode('utf-8'), st["IDs"][...]))
-            print(eids)
             df = pd.DataFrame(st["RP"][...], index=feature.index,
                               columns=eids)
-            print(df.head())
             feature = pd.concat([feature, df], axis=1)
 
     # add GC covariates
@@ -67,7 +64,7 @@ def model(species, epigenome, gene_set, foreground, background, prefix, new_h5, 
                                      index=feature_symbols_x.index)
 
     logit = Logit(feature_symbols_x, feature_symbols_y, covariates=covariates)
-    auc, prauc, coefs = logit.train()
+    auc, prauc, coefs = logit.train(sample_number)
 
     coefs = coefs.join(epigenome.get_sample_annotation(coefs.index))
     coefs.to_csv("%s.coefs.csv" % prefix)

@@ -18,7 +18,7 @@ class LisaRank(object):
         1. In silico knockout epigenome signal on motif or TF ChIP-seq peak
         2. cluster the selected sample epigenome signal, then compute relative entropy
     """
-    def __init__(self, species, prefix, background, foreground):
+    def __init__(self, species, prefix, background, foreground, only_newhdf5=False):
         self.epigenome = EpigenomeData(species, None)
         self.species = species
         self.background_genes = np.genfromtxt(background, dtype='str')
@@ -27,6 +27,7 @@ class LisaRank(object):
         self.diff_gene_num = len(self.foreground_genes)
         self.all_genes = np.concatenate([self.foreground_genes, self.background_genes])
         self.prefix = prefix
+        self.only_newhdf5 = only_newhdf5
 
     def get_hdf(self, dtype):
         """ get corresponding TF binding data type for 100bp window hit
@@ -119,7 +120,11 @@ class LisaRank(object):
                 eids = list(map(lambda x: x.decode('utf-8'), st["IDs"][...]))
                 df = pd.DataFrame(st["RP"][...], index=raw_reg.index,
                                   columns=eids)
-                raw_reg = pd.concat([raw_reg, df], axis=1)
+
+                if not self.only_newhdf5:
+                    raw_reg = pd.concat([raw_reg, df], axis=1)
+                else:
+                    raw_reg = df
 
         if covariates:
             raw_reg = pd.concat([raw_reg, self.epigenome.get_covariates_reg], axis=1)
@@ -249,7 +254,8 @@ class LisaRank(object):
         coef.index = coef.index.astype(str)
 
         # load 1kb average read count
-        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5)
+
+        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5, only_newh5=self.only_newhdf5)
 
         # load chromatin boundary mask array
         bin_length = 1000

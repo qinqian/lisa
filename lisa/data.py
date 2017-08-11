@@ -129,7 +129,7 @@ class EpigenomeData(object):
         with h5py.File(hdf5) as store:
             return store['OrderCount'][:, 0]
 
-    def get_count(self, selected_ids, covariates, new_h5_count):
+    def get_count(self, selected_ids, covariates, new_h5_count, only_newh5=False):
         """ loading hdf5 data of 1kb read count """
         hdf5 = self.config.genome_count(self.epigenome)
         if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
@@ -150,7 +150,10 @@ class EpigenomeData(object):
                     count[:, i] = val
                     continue
                 if sid != 'GC':
-                    index, = np.where(ids == sid) # n x 1 dimension array, may cause assign error for `count[:, i]`
+                    if not only_newh5:
+                        index, = np.where(ids == sid) # n x 1 dimension array, may cause assign error for `count[:, i]`
+                    else:
+                        index = []
                     if len(index) != 0:
                         index = index[0]              # fix by using the first one
                         val = store['OrderCount'][:, index]

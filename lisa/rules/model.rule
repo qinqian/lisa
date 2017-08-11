@@ -9,6 +9,8 @@ def get_command(cov, new_h5):
         frame+=" --new_h5 %s " % new_h5
     if new_h5 == None:
         frame+=" --new_h5=None "
+
+    frame+=" --only_newhdf5=%s " % (str(config['only_newhdf5']))
     return frame
 
 rule lisa_regress:

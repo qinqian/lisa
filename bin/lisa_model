@@ -12,7 +12,8 @@ import pandas as pd
 import numpy as np
 import h5py
 
-def model(sample_number, species, epigenome, gene_set, foreground, background, prefix, new_h5, covariates):
+
+def model(sample_number, species, epigenome, gene_set, foreground, background, prefix, new_h5, covariates, only_newhdf5):
     """
     species: species for epigenome and gene_set
     epigenome: one epigenome type, e.g. DNase
@@ -31,7 +32,10 @@ def model(sample_number, species, epigenome, gene_set, foreground, background, p
             eids = list(map(lambda x: x.decode('utf-8'), st["IDs"][...]))
             df = pd.DataFrame(st["RP"][...], index=feature.index,
                               columns=eids)
-            feature = pd.concat([feature, df], axis=1)
+            if only_newhdf5:
+                feature = df
+            else:
+                feature = pd.concat([feature, df], axis=1)
 
     # add GC covariates
     if covariates:

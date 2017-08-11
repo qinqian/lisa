@@ -21,7 +21,7 @@ from lisa import Config
 
 class LisaPipeline(object):
     """ LISA pipeline for processing multiple files """
-    def __init__(self, prefix, species, epigenome, cluster, sample_number=10):
+    def __init__(self, prefix, species, epigenome, cluster, only_newhdf5=False, sample_number=10):
         """ species: the species of gene_sets,
             epigenome: a list of marks, e.g. ['H3K4me3', 'H3K27ac'],
                        for multiple_bigwig2hdf, this can be covariates, such as `GC`
@@ -39,6 +39,7 @@ class LisaPipeline(object):
             gene_sets=None,
             sample_number=sample_number,
             cluster=cluster,
+            only_newhdf5=only_newhdf5,
             prefix=self.prefix)
 
     def multiple_fastq2bigwig(self, *fastqs):

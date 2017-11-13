@@ -94,6 +94,7 @@ def get_background(species, epigenomes, gene_set, prefix, random):
 
     np.savetxt('%s.background_gene.2000' % prefix,
                background_genes, fmt="%s")
+
     np.savetxt('%s.background_gene.300' % prefix,
                np.random.choice(background_genes, size=300, replace=False), fmt="%s")
 

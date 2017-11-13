@@ -1,0 +1,89 @@
+import logging
+import os
+from logging.handlers import RotatingFileHandler
+import time
+import numpy as np
+
+from flask import Flask, render_template, redirect, url_for, send_from_directory
+from flask import request
+from flask_bootstrap import Bootstrap
+
+
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
+from werkzeug.utils import secure_filename
+
+from wtforms import StringField
+from wtforms.validators import DataRequired
+
+class RabitForm(FlaskForm):
+    name = StringField('Job Name', validators=[DataRequired()])
+    gene = FileField('Select Rabit input file', validators=[FileRequired()],  render_kw={'multiple': True, 'data-preview-file-type':"text"})
+
+# initialize an application
+app = Flask(__name__, instance_relative_config = True)
+app.config['UPLOADED_PATH'] = 'upload'
+app.secret_key = 's3cr3t' # crsf
+
+# debug mode on
+app.debug = True
+if not app.debug:
+    app.logger.setLevel(logging.INFO)
+    handler = RotatingFileHandler('log', maxBytes=10000000, backupCount=20)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(formatter)
+    app.logger.addHandler(handler)
+
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.exception(exception)
+    return "Sorry internal program error", 500
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    form = RabitForm()
+    if form.validate_on_submit():
+        f = form.gene.data
+        filename = secure_filename(f.filename)
+        data = os.path.join(app.config['UPLOADED_PATH'], "%s.%s" % (f.filename, time.time()))
+        f.save(data)
+        app.logger.info("%s uploaded at %s" % (data, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
+        os.system('cp %s download' % data)
+
+        app.logger.info("lisa modeling finished %s" % (data, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
+        output = "%s.o.t" % data
+        with open("download/%s.txt" % os.path.basename(output), 'w') as out:
+            with open(output) as inf:
+                n = 0
+                lines = inf.readlines()
+                sample = np.array(lines[0].split())
+                t_vals = np.array(map(float, lines[1].split()[1:]))
+                index = np.argsort(t_vals)[::-1]
+                sample = sample[index]
+                t_vals = t_vals[index]
+                for i,j in zip(sample, t_vals):
+                    print >>out, "%s\t%s" % (i, j)
+        return redirect(url_for('custom_download', filename="%s.txt" % os.path.basename(output)))
+    return render_template('index.html', form = form)
+
+@app.route('/success', methods=['GET', 'POST'])
+def sucess():
+    return '<h1>Succeed</h1>'
+
+# add new static folder
+@app.route('/img/<path:filename>')
+def custom_static(filename):
+    return send_from_directory('img', filename)
+
+# add new static folder
+@app.route('/download/<path:filename>')
+def custom_download(filename):
+    return send_from_directory('download', filename)
+
+# interface
+Bootstrap(app)

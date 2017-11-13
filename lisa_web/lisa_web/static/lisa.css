@@ -1,0 +1,82 @@
+body {
+  background: #fafafa 50% 0 repeat;
+}
+
+.progress {
+    width: 100%;
+    text-align: center;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    overflow-y: scroll;
+    height: 500px;
+}
+
+//tbody {
+//   height: 250px;
+//   overflow: auto;
+//}
+
+td {
+   overflow-x: scroll;
+}
+
+.tf1,
+.tf2,
+.tf0,
+.tf,
+{
+    height: 480px;
+    overflow: auto;
+}
+
+.tfl 
+{
+    height: 600px;
+    width: 100%;
+}
+
+.footer,
+.title
+{
+  font-weight: bold;
+  color: #444;
+  text-align:center;
+  background-color: #eee;
+  border-top: 2px solid #444;
+  border-bottom: 2px solid #444;
+}
+
+select#species,
+select#mark {
+    width:86%;
+}
+
+.box2,
+.box1 {
+    height: 223px;
+}
+
+.genes {
+  resize: none;
+  width: 86%;
+  height: 135.3px;
+  color: black;
+}
+
+/* /\* .sp { *\/ */
+/* /\*   margin: 12px 12px 12px 12px; *\/ */
+/* /\*   text-align: center; *\/ */
+/* /\* } *\/ */
+
+
+/* /\* .main_content { *\/ */
+/* /\*   border-bottom: 2px solid #444; *\/ */
+/* /\*   text-align: center; *\/ */
+/* /\* } *\/ */
+
+.run {
+    margin: 0px 24px 5px 2px;
+}

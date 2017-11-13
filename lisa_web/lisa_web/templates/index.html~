@@ -1,0 +1,49 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+  {{super()}}
+  {{fixes.ie8()}}
+{% endblock %}
+
+{% block metas %}
+    <meta charset="utf-8">
+{% endblock %}
+{% block title %}LISA{% endblock %}
+{% block html_attribs %} lang="en"{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('.static', filename='lisa.css') }}">
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script href="{{ url_for('.static', filename='lisa.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <h2>LISA online: a web server for ranking TF from large-scale epigenome data</h2>
+  <hr>
+  <div class="row">
+    <div>
+      <form action="{{ url_for('upload_file') }}" class="form form-horizontal" method="post" role="form"  enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+        {{ wtf.form_field(form.genes) }}
+	{{ wtf.form_field(form.mark) }}
+<!--         <div class="form-group"> -->
+            <input class="btn btn-primary" type="submit" value="Go">
+<!--           </div>  -->
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

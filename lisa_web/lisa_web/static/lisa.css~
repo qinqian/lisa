@@ -1,0 +1,10 @@
+body { padding-top: 70px; }
+
+
+textarea {
+  resize: none;
+  max-width: 280px;
+  max-height: 800px; 
+  height: 300px;
+  overflow-y:hidden;
+}

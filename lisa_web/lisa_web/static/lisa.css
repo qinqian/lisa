@@ -7,22 +7,6 @@ body {
     text-align: center;
 }
 
-table {
-    table-layout: fixed;
-    width: 100%;
-    overflow-y: scroll;
-    height: 500px;
-}
-
-//tbody {
-//   height: 250px;
-//   overflow: auto;
-//}
-
-td {
-   overflow-x: scroll;
-}
-
 .tf1,
 .tf2,
 .tf0,
@@ -80,3 +64,45 @@ select#mark {
 .run {
     margin: 0px 24px 5px 2px;
 }
+
+/* .bd-example-modal-lg { */
+/*     width: 1000px; */
+/* } */
+
+td { vertical-align:middle; }
+td:hover {
+   cursor: pointer;
+}
+
+img {
+  opacity: 0.5;
+  filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.inspector_attrib_row {
+border-bottom: 1px #d6d6d6 solid;
+border-right: 1px #d6d6d6 solid
+}
+
+.circle-col {
+width: 12.5%;
+position: relative;
+float: left;
+}
+
+.circle {
+background: #A9A9A9;
+height: 23px;
+width: 23px;
+border-radius: 50%;
+margin: 0 auto;
+}
+
+.green {
+background-color: #27ae60;
+}
+
+.red {
+background-color: #c0392b;
+}
+

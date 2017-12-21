@@ -110,10 +110,17 @@ def run_lisa(self, species, mark, prefix):
     z=pd.read_csv(os.path.join(upload, '%s.txt.%s.coefs.csv' % (prefix, mark)))
     z.columns = ['id', 'coefficients', 'cell_type', 'cell_line', 'tissue']
     z.coefficients = z.coefficients.map(lambda x: "%.2E" % x)
+    z.loc[:, "coefficient"] = z.apply(lambda x: "%s|%s" % (x[0], x[1]), axis=1)
 
+    z.drop(["id", "coefficients"], axis=1, inplace=True)
     z.to_csv(os.path.join(upload, '%s.%s.coefs.csv' % (prefix, mark)), index=False)
 
     cmd = "/data/home/qqin/lisa_web/run_browser.sh %s %s %s" % ('%s.txt.%s.coefs.csv' % (prefix, mark), chipp, '%s.txt.foreground_gene' % prefix)
+    app.logger.info(cmd)
+    os.system(cmd)
+
+    # upload/AR12_2017_11_12_0017060.299.txt.DNase.chipseq.csv
+    cmd = "/data/home/qqin/lisa_web/run_heatmap.sh %s" % (os.path.join(upload, '%s.txt.%s.chipseq.csv' % (prefix, mark)))
     app.logger.info(cmd)
     os.system(cmd)
 
@@ -123,17 +130,29 @@ def get_collapse_tf(z, prefix, mark, t):
     z = z.sort_values(1) # pick the top five ones
     for i in range(z.shape[0]):
         a[z.iloc[i, 0].split('|')[1]] = a.get(z.iloc[i, 0].split('|')[1], []) + [z.iloc[i,0].split('|')[0]]
-        p[z.iloc[i, 0].split('|')[1]] = min(p.get(z.iloc[i, 0].split('|')[1],1000), z.iloc[i,1])
+        p[z.iloc[i, 0].split('|')[1]] = p.get(z.iloc[i, 0].split('|')[1], []) + [z.iloc[i,1]]
+        # p[z.iloc[i, 0].split('|')[1]] = min(p.get(z.iloc[i, 0].split('|')[1],1000), z.iloc[i,1])
 
     out = os.path.join(upload, "%s.%s.%scsv" % (prefix, mark, t))
+    nas = []
     with open(out, 'w') as fout:
-        fout.write("%s,%s,%s\n" % ("TF", "ID", "p"))
+        fout.write("%s,%s,%s,%s,%s,%s,%s\n" % ("Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value","p"))
         for j in p:
-            fout.write("%s,%s,%s\n" % (j, " | ".join(a[j][:5]), p[j])) # pick the top five ones
+            # fout.write("%s,%s,%s\n" % (j, " | ".join(a[j][:5]), p[j])) # pick the top five ones
+            temp = []
+            if len(a[j]) < 5:
+                nas = (5-len(a[j])) * ['NA']
+            else:
+                nas = []
+            for i, k in list(zip(a[j], p[j]))[:5]:
+                temp.append("%s;%.2E" % (i, k))
+            temp += nas
+            fout.write("%s,%s,%s\n" % (j.replace(',',' | '), ','.join(temp), min(p[j])))
 
     z = pd.read_csv(out)
     z = z.sort_values('p')
-    z.p = z.p.map(lambda x: "%.2E" % x)
+    z.drop(['p'], axis=1, inplace=True)
+    ##z.p = z.p.map(lambda x: "%.2E" % x)
     z.to_csv(out, index=False)
     return out
 

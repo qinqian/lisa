@@ -139,7 +139,8 @@ class LisaRank(object):
 
         # lisa prediction
         normalized_reg = np.log2(raw_reg.values+1)
-        normalized_reg = normalized_reg - np.mean(normalized_reg, axis=0)
+        original_median = np.mean(normalized_reg, axis=0)
+        normalized_reg = normalized_reg - original_median
         lisa_prediction = np.dot(normalized_reg, coef.iloc[:, 0].values)
 
         # load 1kb average read count
@@ -165,7 +166,7 @@ class LisaRank(object):
         precompute = \
             precompute.reshape((precompute.shape[0], -1))
 
-        theano_deltarp_function = get_insilico_knockout_tensor_op(lisa_prediction, precompute, coef)
+        theano_deltarp_function = get_insilico_knockout_tensor_op(lisa_prediction, precompute, coef, original_median)
         # load 100bp to 1kb mapping files
         bin_100_to_1kb = np.load(self.epigenome.config.genome_window_map) # 0-based
 

@@ -189,10 +189,51 @@ function update_progress(status_url, status_div, div_heatmap_data) {
             .style('width', screen_width+'px')
             .style('height', screen_height+'px');
         }
-
         $(this).tab('show');
       });
 
+
+      // show beta results by default
+      $(".tab-pane.active").ready(function() {
+        console.log("test");
+        if($(".tab-pane.active").hasClass("tf")) {
+          $(".tf").html($('<div class="col"><a href="' + data['result'] +'">download lisa beta results</a></div>'));
+          console.log("test2");
+          initiald = data['result'];
+          d3.csv(initiald, function(error, d) {
+            if (error) {
+              setTimeout(function() {
+                update_progress(status_url, status_div, div_heatmap_data);
+              }, 2000);
+            } else {
+              tabulate('tf', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf');
+              fetch();
+            }
+          });
+        } else if ($(".tab-pane.active").hasClass("tf1")) {
+          console.log("test3");
+          $(".tf1").html($('<div class="col"><a href="' + data['result1'] +'">download knockout ranks from ChIP-seq data</a></div>'));
+          initiald = data['result1'];
+          d3.csv(initiald, function(error, d) {
+            if (error) {
+              setTimeout(function() {
+                update_progress(status_url, status_div, div_heatmap_data);
+              }, 2000);
+            } else {
+              tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
+              fetch();
+            }
+          });
+        }
+      });
+
+     // $(".tf1").ready(function() {
+     //    $(".tf1").html($('<div class="col"><a href="' + data['result1'] +'">download chip-seq ranking of TF result</a></div>'));
+     //    d3.csv(data['result1'], function(error, d) {
+     //      tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
+     //      fetch();
+     //    });
+     // });
 
       $('.nav-tabs a[href="#tf"]').click(function(e){
         $('.active').removeClass("active");
@@ -229,7 +270,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
           $.getJSON('http://dc2.cistrome.org/api/inspector?id='+bookId, function(d) {
             $(".annotation").html("");
             conserv="http://dc2.cistrome.org/api/conserv?id="+bookId;
-            color = {true: "green", false: "red", "NA": "gray"}
+            color = {true: "green", false: "red", "NA": "gray"};
 
             modelc = $('<div class="card"><div class="card-header"><div class="card-title"><h3><b>Inspector</b></h3></div></div><div class="card-body"><div class="row"><div class="col-sm-9"><div class="row inspector_attrib_row"><div class="col"><b>Title:</b></div><div class="col">' + d.treats[0].name + '</div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
@@ -290,19 +331,11 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
       });
 
-     $(".tf1").ready(function() {
-        $(".tf1").html($('<div class="col"><a href="' + data['result1'] +'">download chip-seq ranking of TF result</a></div>'));
-        d3.csv(data['result1'], function(error, d) {
-          tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
-          fetch();
-        });
-     })
-
      $('.nav-tabs a[href="#tf1"]').click(function(e) {
 
       $('.active').removeClass("active");
       $(".annotation").hide();
-        $(".annotation").html("");
+      $(".annotation").html("");
       if ($('.tabtf1').length == 0) {
         $(".tf1").html($('<div class="col"><a href="' + data['result1'] +'">download chip-seq ranking of TF result</a></div>'));
         d3.csv(data['result1'], function(error, d) {

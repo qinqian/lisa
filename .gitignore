@@ -5,3 +5,4 @@ lisa.egg-info
 __pycache__
 flycheck*
 .nfs*
+*.pwm.jpg

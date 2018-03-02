@@ -1,5 +1,6 @@
 ### LISA
 LISA documentation is hosted at http://cistrome.org/~qqin/lisa/build/html.
+Web version is hosted at http://lisa.cistrome.org.
 Old version can be found at https://bitbucket.org/Alvin_Qin/marge2/.
 
 ### LICENSE

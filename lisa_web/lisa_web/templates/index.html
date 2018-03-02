@@ -54,7 +54,6 @@
   </div>
 
   <form action="{{ url_for('submit_lisa') }}" method="post">
-
       {{ form.csrf_token() }} {{ wtf.form_errors(form, hiddens='only') }}
       <div class="row">
         <div class="col box1">
@@ -70,13 +69,19 @@
               {{form.mark(class="form-control")}}
             </div>
           </div>
+          <div class="form-group">
+            <label class="row col-form-label">{{form.method.label}}</label>
+            <div class="row">
+              {{form.method(class="form-control")}}
+            </div>
+          </div>
         </div>
 
         <div class="col box2">
           <div class="form-group">
             <label class="row col-form-label">{{form.genes.label}}</label>
             <div class="row">
-              {{form.genes(class="form-control genes", placeholder="input a batch of genes (refseq or symbol)")}}
+              {{form.genes(class="form-control genes", placeholder="input less than 200 genes (refseq or symbol); for more genes, user can refer to the documentation to install the local version  ")}}
             </div>
           </div>
         </div>
@@ -85,6 +90,7 @@
       <div class="row run justify-content-md-center">
           {{form.name(class="form-control col-sm-3 ", placeholder="Job Name")}}
           <button type="submit" class="offset-sm-1 btn btn-primary">Run</button>
+          <p style="color:red; display: {{message}}; font:italic bold 12px/20px arial,sans-serif;">too many genes!</p>
       </div>
       <!-- {% for message in get_flashed_messages() %} -->
       <!-- <div class="alert alert-warnings"> -->

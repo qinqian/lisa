@@ -71,53 +71,70 @@
    <!-- Nav tabs -->
    <ul class="nav result nav-tabs" role="tablist" style="display: none;">
 
+     {% if method =='knockout' or method == 'all' %}
+
       <li class="nav-item">
          <a class="nav-link active" data-toggle="tab" href="#tf1" role="tab" aria-controls="home" aria-expanded="true">chip-seq only</a>
       </li>
 
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">lisa beta</a>
-      </li>
-
-      <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#tf2" role="tab" aria-controls="home" aria-expanded="true">motif only</a></li>
       </li>
+     {% endif %}
 
+     {% if method == 'all' %}
+     <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">lisa beta</a>
+     </li>
+
+     {% elif method =='beta' %}
       <li class="nav-item">
+         <a class="nav-link active" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">lisa beta</a>
+      </li>
+     {% endif %}
+
+     <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#tf0" role="tab" aria-controls="home" aria-expanded="true">epigenome coefficients</a></li>
       </li>
-
+<!--
       <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#tfheat" role="tab" aria-controls="home" aria-expanded="true">heatmap</a>
       </li>
-
+-->
       <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#tfl" role="tab" aria-controls="home" aria-expanded="true">genome browser</a></li>
       </li>
   </ul>
 
   <div class="tab-content result" style="display: none;">
-    <div role="tabpanel" class="tab-pane fade show active tf1" id="tf1">
+     {% if method =='knockout' or method == 'all' %}
+     <div role="tabpanel" class="tab-pane fade show active tf1" id="tf1">
+     </div>
+     <div role="tabpanel" class="tab-pane fade tf2" id="tf2">
+     </div>
+     {% endif %}
 
-    </div>
-
-    <div role="tabpanel" class="tab-pane fade tf2" id="tf2">
-    </div>
-
+    {% if method == 'all' %}
     <div role="tabpanel" class="tab-pane fade tf" id="tf">
     </div>
+    {% elif method =='beta' %}
+    <div role="tabpanel" class="tab-pane fade show active tf" id="tf">
+    </div>
+    {% endif %}
 
     <div role="tabpanel" class="tab-pane fade tf0" id="tf0">
     </div>
 
     <div role="tabpanel" class="tab-pane fade tfl" id="tfl">
     </div>
-
+<!--
     <div role="tabpanel" class="tab-pane fade tfheat" id="tfheat">
       <div id='container-id-1'>
         <h1 class='wait_message'>Please wait ...</h1>
       </div>
     </div>
+-->
+
   </div>
 
   <div class="annotation" style="display: none;">

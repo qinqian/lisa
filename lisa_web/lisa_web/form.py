@@ -6,6 +6,12 @@ from wtforms.validators import DataRequired, Required, length, optional
 class LISAForm(FlaskForm):
     genes = TextAreaField('Genes', validators=[Required()])
     name = StringField('Job Name', validators=[Required()])
+    method = SelectField("Methods",
+                         choices=[
+                                  ('knockout', 'In Silico Knockout'),
+                                  ('beta', 'BETA'),
+                                  ('all', 'All')],
+                         default='knockout')
     mark = SelectField("Epigenome Mark",
                        choices=[('H3K27ac', 'H3K27ac'),
                                 ('DNase', 'DNase-seq'),

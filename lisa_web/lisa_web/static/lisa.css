@@ -33,20 +33,25 @@ body {
   border-bottom: 2px solid #444;
 }
 
+select#method,
 select#species,
 select#mark {
     width:86%;
 }
 
+#name {
+    width: 70%;
+}
+
 .box2,
 .box1 {
-    height: 223px;
+    height: 320px;
 }
 
 .genes {
   resize: none;
-  width: 86%;
-  height: 135.3px;
+  width: 80%;
+  height: 240px;
   color: black;
 }
 

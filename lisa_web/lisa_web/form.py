@@ -1,11 +1,14 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from wtforms import TextAreaField, BooleanField, SubmitField, SelectMultipleField, SelectField, StringField
-from wtforms.validators import DataRequired, Required, length, optional
+from wtforms.validators import DataRequired, Required, length, optional, Email
+from wtforms.fields.html5 import EmailField
+
 
 class LISAForm(FlaskForm):
     genes = TextAreaField('Genes', validators=[Required()])
     name = StringField('Job Name', validators=[Required()])
+    mail = EmailField('Optional user e-mail', validators=[optional(), Email()])
     method = SelectField("Methods",
                          choices=[
                                   ('knockout', 'In Silico Knockout'),

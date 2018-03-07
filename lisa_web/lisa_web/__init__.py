@@ -15,6 +15,7 @@ from celery import Celery
 import random
 from flask import flash
 
+from .mail import send_localhost_mail
 
 # initialize an application
 app = Flask(__name__, instance_relative_config = True)
@@ -56,8 +57,12 @@ def submit_lisa():
     form = LISAForm()
     app.logger.info(form.validate_on_submit())
     if form.validate_on_submit():
+        to_user = form.mail.data
+
         genes = form.genes.data
         job_name = form.name.data
+        method = form.method.data
+
         species = form.species.data.encode('utf-8')
         marks = form.mark.data.encode('utf-8')
 
@@ -67,6 +72,10 @@ def submit_lisa():
         app.logger.info("%s %s %s at %s from %s" % (str(genes), marks, species, prefix,
                                                     request.remote_addr))
         gsf = os.path.join(upload, '%s.txt' % prefix)
+
+        if len(genes.split('\n')) > 200:
+            return render_template('index.html', form=form, message='inline-block')
+
         gene_set = open(gsf, 'w')
         for i in genes.split('\n'):
             i = i.strip()
@@ -76,20 +85,21 @@ def submit_lisa():
         target = os.path.join(download, "%s.chipseq.p_value.csv" % (prefix+'.txt'))
         app.logger.info(target)
         app.logger.info("%s lisa modeling finished %s" % (prefix, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
-        task = run_lisa.apply_async(args=(species, marks, prefix), countdown=1, expires=3600)
-        cc = render_template('display.html', epigenome=marks, task_id=prefix)
+        task = run_lisa.apply_async(args=(method, species, marks, prefix, to_user), countdown=1, expires=3600)
+        cc = render_template('display.html', epigenome=marks,
+                             task_id=prefix, method=method)
         with open('%s/%s%s' % (download, prefix, "_result.html"), 'w') as outf:
             outf.write(cc)
         #return render_template('display.html', epigenome=marks, task_id=prefix)
         return redirect('/download/%s_result.html'%prefix)
-    return render_template('index.html', form = form)
+    return render_template('index.html', form = form, message="none")
 
 @celery.task(bind=True)
-def run_lisa(self, species, mark, prefix):
+def run_lisa(self, method, species, mark, prefix, to_user):
     # issues: chmod 777 of lisa2 anaconda library and lisa_web root directory
     # chmod 777 /var/www/.theano
     # is not a good idea...
-    cmd = "/data/home/qqin/lisa_web/run_lisa.sh %s %s %s %s" % (species, str([mark]), prefix, "%s.txt" %  os.path.join(upload, prefix))
+    cmd = "/data/home/qqin/lisa_web/run_lisa.sh %s %s %s %s %s" % (species, str([mark]), prefix, "%s.txt" %  os.path.join(upload, prefix), str(method))
     app.logger.info(cmd)
     with open('/data/home/qqin/lisa_web/upload/%s_snakemake_output.txt' % prefix, 'a') as fout:
         p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
@@ -99,13 +109,16 @@ def run_lisa(self, species, mark, prefix):
         app.logger.info(err)
 
     chipp = '%s.txt.%s.chipseq.p_value.csv' % (prefix, mark)
-    c = pd.read_csv(os.path.join(upload, chipp), header=None)
-    m = pd.read_csv(os.path.join(upload, '%s.txt.%s.motif99.p_value.csv' % (prefix, mark)), header=None)
-    d = pd.read_csv(os.path.join(upload, '%s.txt.lisa_direct.csv' % (prefix)), header=None)
 
-    ch = get_collapse_tf(c, prefix, mark, 'chip.')
-    mo = get_collapse_tf(m, prefix, mark, 'motif.')
-    di = get_collapse_tf(d, prefix, 'direct', '')
+    if method == 'all' or method == 'knockout':
+        c = pd.read_csv(os.path.join(upload, chipp), header=None)
+        m = pd.read_csv(os.path.join(upload, '%s.txt.%s.motif99.p_value.csv' % (prefix, mark)), header=None)
+        ch = get_collapse_tf(c, prefix, mark, 'chip.')
+        mo = get_collapse_tf(m, prefix, mark, 'motif.')
+
+    if method == 'all' or method == 'beta':
+        d = pd.read_csv(os.path.join(upload, '%s.txt.lisa_direct.csv' % (prefix)), header=None)
+        di = get_collapse_tf(d, prefix, 'direct', '')
 
     z=pd.read_csv(os.path.join(upload, '%s.txt.%s.coefs.csv' % (prefix, mark)))
     z.columns = ['id', 'coefficients', 'cell_type', 'cell_line', 'tissue']
@@ -115,14 +128,18 @@ def run_lisa(self, species, mark, prefix):
     z.drop(["id", "coefficients"], axis=1, inplace=True)
     z.to_csv(os.path.join(upload, '%s.%s.coefs.csv' % (prefix, mark)), index=False)
 
-    cmd = "/data/home/qqin/lisa_web/run_browser.sh %s %s %s" % ('%s.txt.%s.coefs.csv' % (prefix, mark), chipp, '%s.txt.foreground_gene' % prefix)
-    app.logger.info(cmd)
-    os.system(cmd)
+    if method == 'all' or method == 'knockout':
+        ## not available now because of so many people scrape...
+        cmd = "/data/home/qqin/lisa_web/run_browser.sh %s %s %s" % ('%s.txt.%s.coefs.csv' % (prefix, mark), chipp, '%s.txt.foreground_gene' % prefix)
+        app.logger.info(cmd)
+        os.system(cmd)
 
     # upload/AR12_2017_11_12_0017060.299.txt.DNase.chipseq.csv
-    cmd = "/data/home/qqin/lisa_web/run_heatmap.sh %s" % (os.path.join(upload, '%s.txt.%s.chipseq.csv' % (prefix, mark)))
-    app.logger.info(cmd)
-    os.system(cmd)
+    ## turn off the heatmap
+    # cmd = "/data/home/qqin/lisa_web/run_heatmap.sh %s" % (os.path.join(upload, '%s.txt.%s.chipseq.csv' % (prefix, mark)))
+    # app.logger.info(cmd)
+    # os.system(cmd)
+    send_localhost_mail('html', 'LISA Result', to_user, 'Hi %s, the LISA results is ready at http://lisa.cistrome.org/download/%s_result.html.' % (to_user.split('@')[0], prefix), '')
 
 def get_collapse_tf(z, prefix, mark, t):
     a = {}

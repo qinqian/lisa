@@ -1,7 +1,14 @@
 // The table generation function
 function tabulate(cl, data, columns, interact) {
-  var table = d3.select("." + cl).append("table")
-        .attr("class", "col table compact hover row-border tab" + cl),
+  var table = d3.select("." + cl).append("div");
+  if (cl == 'tfcoef0' || cl == 'tfcoef') {
+      table.attr("class", "col-sm-7");
+  } else {
+      table.attr("class", "col-sm-10");
+  }
+
+  var table = table.append("table")
+        .attr("class", "table compact hover row-border tab" + cl),
       thead = table.append("thead"),
       tbody = table.append("tbody").attr("class", "tbody");
 
@@ -477,18 +484,19 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(".annotation").html("");
 
         if ($('.tabtf0').length == 0) {
-          $(".tf0").html($('<div class="col"><a href="' + data['result0'] +'">download epigenome sample coefficients</a></div>'));
-          $(".tf0").append($('<div class="col"><svg class="auc"></svg></div>'));
+          $(".tf0").html($('<div class="row"><div class="col"><a href="' + data['result0'] +'">download epigenome sample coefficients</a></div></div>'));
+          $(".tf0").append($('<div class="row tfcoef"><svg class="auc1"></svg></div>'));
 
           // http://lisa.cistrome.org/upload/NIPBLko_K27ac_8xup_8xdown_mouse_2018_05_01_1144360.215.H3K27ac.coefs1.csv
           d3.json(data['result0_auc'], function(error, data) {
             console.log(data['result0_auc']);
             console.log(data);
-            auc_curve(data, "svg.auc");
+            auc_curve(data, "svg.auc1");
           });
 
           d3.csv(data['result0'], function(error, d) {
-            tabulate('tf0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0');
+            //tabulate('tf0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0');
+            tabulate('tfcoef', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tfcoef');
             fetch(true);
           });
         }
@@ -502,19 +510,21 @@ function update_progress(status_url, status_div, div_heatmap_data) {
 
         if ($('.tabtf0_1').length == 0) {
           $(".tf0_1").html($('<div class="col"><a href="' + data['result0_1'] +'">download epigenome sample coefficients</a></div>'));
-          $(".tf0_1").append($('<div class="col"><svg class="auc"></svg></div>'));
+          $(".tf0_1").append($('<div class="row tfcoef0"><svg class="auc2"></svg></div>'));
 
           // http://lisa.cistrome.org/upload/NIPBLko_K27ac_8xup_8xdown_mouse_2018_05_01_1144360.215.H3K27ac.coefs1.csv
           d3.json(data['result1_auc'], function(error, data) {
             console.log(data['result1_auc']);
             console.log(data);
-            auc_curve(data, "svg.auc");
+            auc_curve(data, "svg.auc2");
           });
 
          d3.csv(data['result0_1'], function(error, d) {
-           tabulate('tf0_1', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0_1');
+           //tabulate('tf0_1', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0_1');
+           tabulate('tfcoef0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tfcoef0');
            fetch(true);
          });
+
         }
         $(this).tab('show');
        });

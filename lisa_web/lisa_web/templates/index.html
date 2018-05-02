@@ -27,10 +27,13 @@
       <div id="navbar">
         <ul class="nav navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">HOME</a>
+            <a class="nav-link" href="http://lisa.cistrome.org/">HOME</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="http://cistrome.org/~qqin/lisa/build/html">LISA Documentation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://lisa.cistrome.org/lisa_gallery">LISA Gallery</a>
           </li>
         </ul>
       </div>
@@ -85,6 +88,16 @@
             </div>
           </div>
         </div>
+
+        <div class="col box2">
+          <div class="form-group">
+            <label class="row col-form-label">{{form.genes2.label}}</label>
+            <div class="row">
+              {{form.genes2(class="form-control genes2", placeholder="another gene set run in parallel to compare with gene set 1")}}
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <div class="row run justify-content-md-center">

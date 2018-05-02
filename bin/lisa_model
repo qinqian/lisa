@@ -8,6 +8,8 @@ from lisa.data import EpigenomeData
 from lisa.utils import binarize_gene_set
 from lisa.model import Logit
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import make_scorer, roc_auc_score, average_precision_score, roc_curve, r2_score
+import json
 import pandas as pd
 import numpy as np
 import h5py
@@ -72,24 +74,46 @@ def model(sample_number, species, epigenome, gene_set, foreground, background, p
 
     coefs = coefs.join(epigenome.get_sample_annotation(coefs.index))
     coefs.to_csv("%s.coefs.csv" % prefix)
-    with open("%s.gene_set.performance" % prefix, 'w') as fin:
-        fin.write("%s\t%s\n" % (auc, prauc))
 
+    Y = feature.Y
     feature = feature.iloc[:, :(feature.shape[1]-2)]
-
     feature = np.log2(feature+1)
-    # feature = feature.where(feature > 0, -1)
 
+    # feature = feature.where(feature > 0, -1)
     # feature = np.sqrt(feature)
+
     feature = pd.DataFrame(scale.fit_transform(feature),
                            columns=feature.columns,
                            index=feature.index)
+
     feature_sub = feature.ix[:, coefs.index]
+
     lisa_predicted_rp = np.dot(feature_sub.values,
                                coefs.iloc[:, 0].values)
     lisa_predicted_rp = pd.DataFrame(lisa_predicted_rp, index=feature.index,
                                      columns=[epigenome.epigenome])
     lisa_predicted_rp.to_csv("%s.lisa_predicted_rp.csv" % prefix)
+
+    ## write out the selected mark regulatory potential
+    for i in range(feature_sub.shape[1]):
+        feature_sub.iloc[:, i].to_csv("%s.%s.csv" % (prefix, feature_sub.columns[i]))
+
+    # plt.plot(fpr, tpr, color='blue', label="ROC AUC %s" % auc)
+    # plt.title(name + " TF binding prediction \n from differential expression logistic regression ")
+    # plt.xlabel('False positive rate')
+    # plt.ylabel('True positive rate')
+    # plt.legend(fontsize=12, loc=3, bbox_to_anchor=(0., 0.88, 1., .102), ncol=2, mode='expand',borderaxespad=0.)
+
+    ## auc curve and performance
+    fpr, tpr, _ = roc_curve(Y, lisa_predicted_rp, pos_label=1)
+    d3json = {"performance": auc, 
+              "tpr": list(tpr), "fpr": list(fpr)}
+
+    with open("%s.roc_curve.json" % prefix, "w") as out_js:
+        json.dump(d3json, out_js, sort_keys=True, indent=4)
+
+    with open("%s.gene_set.performance" % prefix, 'w') as fin:
+        fin.write("%s\t%s\n" % (auc, prauc))
 
 if __name__ == '__main__':
     fire.Fire(model)

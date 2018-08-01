@@ -1,91 +1,2230 @@
-{% extends "bootstrap/base.html" %}
-{% import "bootstrap/fixes.html" as fixes %}
-<!-- {% import "bootstrap/wtf.html" as wtf %} -->
-
-{% block head %}{{super()}}{{fixes.ie8()}}{% endblock %}
-
-{% block metas %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LISA</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% endblock %}
 
-{% block title %}LISA{% endblock %}
-
-{% block html_attribs %} lang="en"{% endblock %}
-
-{% block navbar %}
-<div class="container">
-  <div class="row">
-  <div class="col-md-12">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
-      <a href="https://github.com/qinqian/lisa" class="navbar-brand">
-        <img src="/static/lisa.jpg" height="50" width="50">
-        <!-- <svg aria-hidden="true" class="octicon octicon-mark-github" height="22" version="1.1" viewBox="0 0 15 15" width="25"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg> -->
-      </a>
-
-      <div id="navbar">
-        <ul class="nav navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="http://cistrome.org/">HOME</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://cistrome.org/~qqin/lisa/build/html">LISA Documentation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://lisa.cistrome.org/lisa_gallery">LISA Gallery</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="gallery">
-    </div>
-  </div>
-</div>
-
-{% endblock %}
-
-{% block styles %}
 
 <!--
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/> -->
-<link rel="stylesheet" href="{{ url_for('.static', filename='font-awesome.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('.static', filename='custom.css') }}">
+<link rel="stylesheet" href="/static/font-awesome.min.css">
+<link rel="stylesheet" href="/static/custom.css">
+
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
 
-<link rel="stylesheet" href="{{ url_for('.static', filename='lisa.css') }}">
-{% endblock %}
+<link rel="stylesheet" href="/static/lisa.css">
 
-{% block scripts %}
-<!-- {{ super() }} -->
-<script src="{{ url_for('.static', filename='d3.js') }}"></script>
-<script src="{{ url_for('.static', filename='underscore-min.js') }}"></script>
-<script src="{{ url_for('.static', filename='jquery-1.12.4.js') }}"></script>
-<script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <!--[if lt IE 9]>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-<script src="{{ url_for('.static', filename='popper.min.js') }}"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  </head>
+  <body>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">RP(ongoing) </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html">Documentation</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html/Tutorial.html#faq">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+<div class="row body2">
+   <div class="col-sm-12">
+<div class="jumbotron jumbotron-fluid shadow-sm">
+  <div class="container">
+    <h1 class="display-4">Gallery of LISA benchmark datasets</h1>
+  </div>
+</div>
+  </div>
+</div>
 
-<script src="{{ url_for('.static', filename='clustergrammer.min.js') }}" type="text/javascript"></script>
-<script src="{{ url_for('.static', filename='Enrichrgram.js') }}" type="text/javascript"></script>
-<script src="{{ url_for('.static', filename='hzome_functions.js') }}" type="text/javascript"></script>
-<script src="{{ url_for('.static', filename='send_to_Enrichr.js') }}" type="text/javascript"></script>
-<script src="{{ url_for('.static', filename='gallery.js') }}" type="text/javascript"></script>
+<div class="container body">
+  <table class="table table-hover table-striped table-bordered " id="myTable">
+   <thead class="thead-dark">
+   <tr>
+  
+     <th scope="col">cell_type</th>
+  
+     <th scope="col">hs_gene_symbol</th>
+  
+     <th scope="col">organism</th>
+  
+     <th scope="col">pert_type</th>
+  
+     <th scope="col">gene_set_type</th>
+  
+     <th scope="col">LISA_DNase</th>
+  
+     <th scope="col">LISA_H3K27ac</th>
+  
+   </tr>
+   </thead>
+   <tbody>
+  
+    <tr>
+    
+       
+       <td>2102Ep human embryonal carcinoma cell line</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/3_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/3_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/3_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/3_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>NTera-2 human embryonal carcinoma cell line</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/4_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/4_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/4_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/4_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>AZ-521 gastric cancer (GC) cell line - 18 Hours</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/17_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/17_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/17_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/17_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>AZ-521 gastric cancer (GC) cell line - 24 Hours</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/18_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/18_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/18_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/18_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF10A</td>
+       
+    
+       
+       <td>HER2 MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/24_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/24_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/24_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/24_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Pfeiffer DLBCL</td>
+       
+    
+       
+       <td>BCL6</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/26_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/26_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/26_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/26_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>OCI-Ly7 DLBCL</td>
+       
+    
+       
+       <td>BCL6</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/27_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/27_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/27_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/27_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>A549</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/35_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/35_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/35_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/35_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>A549</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/36_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/36_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/36_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/36_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/56_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/56_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/56_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/56_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MDA-MB-231</td>
+       
+    
+       
+       <td>TP53</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/77_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/77_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/77_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/77_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>medulloblastoma</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/79_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/79_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/79_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/79_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>medulloblastoma</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/80_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/80_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/80_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/80_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>medulloblastoma</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/81_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/81_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/81_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/81_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>medulloblastoma</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/82_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/82_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/82_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/82_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>medulloblastoma</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/83_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/83_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/83_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/83_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/84_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/84_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/84_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/84_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/85_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/85_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/85_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/85_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Dendritic cells  (DCs)</td>
+       
+    
+       
+       <td>RARA</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/123_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/123_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/123_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/123_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Dendritic cells  (DCs)</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/124_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/124_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/124_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/124_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Hela</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/125_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/125_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/125_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/125_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/126_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/126_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/126_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/126_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/137_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/137_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/137_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/137_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/138_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/138_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/138_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/138_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/139_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/139_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/139_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/139_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/142_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/142_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/142_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/142_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>MYC</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/143_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/143_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/143_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/143_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MOLT4</td>
+       
+    
+       
+       <td>NOTCH1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/146_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/146_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/146_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/146_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>KATOIII(gastric cancer)</td>
+       
+    
+       
+       <td>GATA4</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/202_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/202_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/202_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/202_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>YCC3(gastric cancer)</td>
+       
+    
+       
+       <td>GATA4</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/203_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/203_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/203_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/203_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>AGS(gastric cancer)</td>
+       
+    
+       
+       <td>GATA4</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/204_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/204_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/204_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/204_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>AGS(gastric cancer)</td>
+       
+    
+       
+       <td>GATA6</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/205_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/205_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/205_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/205_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>KATOIII(gastric cancer)</td>
+       
+    
+       
+       <td>GATA6</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/206_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/206_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/206_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/206_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>YCC3(gastric cancer)</td>
+       
+    
+       
+       <td>GATA6</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/207_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/207_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/207_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/207_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>YCC3(gastric cancer)</td>
+       
+    
+       
+       <td>KLF5</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/208_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/208_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/208_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/208_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>KATOIII(gastric cancer)</td>
+       
+    
+       
+       <td>KLF5</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/209_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/209_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/209_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/209_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>AGS(gastric cancer)</td>
+       
+    
+       
+       <td>KLF5</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/210_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/210_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/210_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/210_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>LNCaP</td>
+       
+    
+       
+       <td>AR</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/265_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/265_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/265_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/265_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/266_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/266_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/266_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/266_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>CUTLL1 </td>
+       
+    
+       
+       <td>NOTCH1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/267_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/267_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/267_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/267_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>A549</td>
+       
+    
+       
+       <td>NR3C1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/268_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/268_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/268_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/268_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>embryonic stem cells</td>
+       
+    
+       
+       <td>POU5F1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/269_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/269_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/269_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/269_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>embryonic stem cells</td>
+       
+    
+       
+       <td>POU5F1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/270_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/270_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/270_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/270_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>HEK293</td>
+       
+    
+       
+       <td>REST</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/271_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/271_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/271_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/271_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>HEK293</td>
+       
+    
+       
+       <td>REST</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/272_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/272_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/272_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/272_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>peripheral blood</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/277_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/277_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/277_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/277_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MV4-11</td>
+       
+    
+       
+       <td>SMARCA4</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/278_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/278_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/278_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/278_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>DU145</td>
+       
+    
+       
+       <td>ETS1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/284_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/284_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/284_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/284_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>SPAC-1L</td>
+       
+    
+       
+       <td>STAT1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/286_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/286_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/286_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/286_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>SPAC-1L</td>
+       
+    
+       
+       <td>STAT1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/287_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/287_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/287_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/287_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>K562</td>
+       
+    
+       
+       <td>ERG</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/290_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/290_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/290_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/290_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF10A</td>
+       
+    
+       
+       <td>GABPA</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/294_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/294_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/294_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/294_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>PC9</td>
+       
+    
+       
+       <td>GATA6</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/295_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/295_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/295_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/295_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>NR3C1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/296_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/296_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/296_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/296_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/297_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/297_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/297_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/297_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>RARA</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/298_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/298_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/298_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/298_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>RARA RARG</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/299_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/299_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/299_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/299_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>RARG</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/300_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/300_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/300_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/300_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>STAT1 STAT2 STAT3 IRF9</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/302_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/302_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/302_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/302_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MCF7</td>
+       
+    
+       
+       <td>SIN3A</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/303_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/303_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/303_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/303_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>nan</td>
+       
+    
+       
+       <td>BMI1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/309_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/309_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/309_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/309_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>CWR22Rv1</td>
+       
+    
+       
+       <td>STAT3</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/310_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/310_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/310_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/310_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>DU145</td>
+       
+    
+       
+       <td>STAT3</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/312_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/312_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/312_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/312_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>H1618</td>
+       
+    
+       
+       <td>ASCL1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/315_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/315_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/315_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/315_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>H1618</td>
+       
+    
+       
+       <td>ASCL1</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/316_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/316_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/316_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/316_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>HCT116</td>
+       
+    
+       
+       <td>SIN3A SIN3B</td>
+       
+    
+       
+       <td>human</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/318_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/318_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/318_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/318_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+   </tbody>
+  </table>
 
-<script>
-$(function() {
-  $('.lisa_progress').ready(function() {
-    start_lisa_task("/lisa_status/{{epigenome}}/{{ task_id }}", "/upload/{{ task_id }}.txt.{{epigenome}}.chipseq.csv_mult_view.json");
-  });
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2018 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
+  </body>
+
+  <script src="http://lisa.cistrome.org/static/jquery-1.12.4.js"></script>
+  <script src="http://lisa.cistrome.org/static/popper.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+ <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+ <script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
 });
-</script>
-{% endblock %}
+ </script>
+</html>

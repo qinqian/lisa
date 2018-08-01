@@ -1,2 +1,90 @@
 #!/usr/bin/env python
 """ validate lisa model on prediction of TF binding sites """
+import fire
+from lisa.data import EpigenomeData
+from lisa.utils import binarize_gene_set
+from lisa.model import Logit
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import make_scorer, roc_auc_score, average_precision_score, roc_curve, r2_score
+import json
+import pandas as pd
+import numpy as np
+import h5py
+
+def convert_name(name):
+    try:
+        name = name.decode('utf-8').replace("tf_", "")
+    except:
+        name = name.replace("tf_", "")
+    return name
+
+def _get_hdf(epigenome, dtype):
+    """ get corresponding TF binding data type for 100bp window hit
+    """
+    tfbs_dict = dict(
+        motif99=epigenome.config.get_motif_index(99),
+        motif98=epigenome.config.get_motif_index(98),
+        motif97=epigenome.config.get_motif_index(97),
+        chipseq=epigenome.config.tf_chipseq
+    )
+    return tfbs_dict[dtype]
+
+def predict_tfbs(species, epigenome, prefix, coefficients, chip_seq_id=None):
+    """
+    species: species for epigenome and gene_set
+    epigenome: one epigenome type, e.g. DNase
+    gene_set: a gene set file, one gene per line
+    """
+    epigenome = EpigenomeData(species, epigenome)
+    bin_100_to_1kb = np.load(epigenome.config.genome_window_map)
+    meta = pd.read_table(epigenome.config.get_basic_meta,
+                         encoding="ISO-8859-1",
+                         index_col=0)
+    selection = 'factor'
+
+    coef = pd.read_csv(coefficients, encoding="ISO-8859-1", index_col=0)
+    coef.index = coef.index.astype(str)
+    print(coef)
+
+    aucs = []
+    prs = []
+    dtype = 'chipseq'
+    offset = -1 if dtype == 'chipseq' else 0
+    with h5py.File(_get_hdf(epigenome, dtype)) as store:
+        ids = store['IDs'][...]
+        for tfbs_id in ids:
+            try:
+                tfbs_id_c = int(tfbs_id.decode('utf-8').split('_')[0])
+            except:
+                tfbs_id_c = int(tfbs_id.split('_')[0])
+            if tfbs_id_c == int(chip_seq_id):
+                tfbs_index = store[tfbs_id][...] + offset
+                print(tfbs_index[:5])
+                # 1kb window
+                print(bin_100_to_1kb[-1])
+                tfbs_bin = np.zeros(bin_100_to_1kb[-1] + 1, dtype=np.int32)
+                # # 1kb 0-1 vector
+                tfbs_bin[bin_100_to_1kb[tfbs_index]] = 1
+
+                read_count = epigenome.get_count(list(coef.index), False, None) # no hdf5 and covariates
+                annotation = meta.loc[tfbs_id_c, selection]
+                print(annotation)
+                feature_x = np.log2(read_count+1)
+
+                scale = StandardScaler(with_std=False)
+                ## scale = RobustScaler(quantile_range=(5, 95))
+                feature_x = scale.fit_transform(feature_x)
+                print(feature_x[:5])
+
+                score = np.dot(feature_x, coef.iloc[:, 0].values)
+                aucs.append(roc_auc_score(tfbs_bin, score))
+                print(aucs)
+                prs.append(average_precision_score(tfbs_bin, score))
+
+    with open("%s_direct_tfbs.txt" % prefix, 'w') as outf:
+        for i, j in zip(aucs, prs):
+            outf.write("%s\t%s"%(i, j))
+
+if __name__ == '__main__':
+    fire.Fire(predict_tfbs)
+

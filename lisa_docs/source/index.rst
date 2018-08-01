@@ -14,7 +14,6 @@ LISA involve four methods to discover potential enhancer and rank TFs. If get st
 
    Installation
    Tutorial
-   FAQ
 
 Indices and tables
 ==================

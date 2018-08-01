@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/data/home/qqin/miniconda3/envs/lisa2/bin/python
 """ Lisa interface to rank TFs based on the differential
 expression model and whole genome 1kb read count of the samples
 """
@@ -58,7 +58,10 @@ class LisaBaseLine(object):
             except:
                 cols_new.append(i.split('_')[0])
         if dtype == 'chipseq':
-            selection_ids = list(map(int, cols_new))
+            try:
+                selection_ids = list(map(int, cols_new))
+            except ValueError:
+                return cols
             #meta = pd.read_table(self.epigenome.config.tf_chipseq_meta,
             #                     encoding="ISO-8859-1",
             #                     index_col=0)

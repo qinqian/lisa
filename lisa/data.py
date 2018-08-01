@@ -231,7 +231,9 @@ class EpigenomeData(object):
         get foreground and background gene TF RP
         """
         with h5py.File(self.config.get_beta) as store:
-            ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
+            #ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
+            #                        store['IDs'][...])))
+            ids = np.array(list(map(lambda x: x.decode('utf-8'),
                                     store['IDs'][...])))
             gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),
                                                 store['RefSeq'][...])))

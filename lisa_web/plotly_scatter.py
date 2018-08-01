@@ -93,9 +93,11 @@ layout = Layout(
         ),
         range=[-2, ylim]
     ),
+    hovermode = 'closest',
     width=750,
     height=650
 )
 
 fig = Figure(data=[top_trace0, trace1], layout=layout)
 plot(fig, filename='%s.html' % prefix, show_link=False, auto_open=False)
+

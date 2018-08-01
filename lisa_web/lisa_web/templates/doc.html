@@ -1,0 +1,428 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}{{super()}}{{fixes.ie8()}}{% endblock %}
+{% block html_attribs %} lang="en"{% endblock %}
+
+{% block metas %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+
+{% block title %}LISA{% endblock %}
+
+{% block navbar %}
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">RP(ongoing) </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html">Documentation</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html/Tutorial.html#faq">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block styles %}
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+<link rel="stylesheet" href="{{ url_for('.static', filename='lisa.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="row body2">
+   <div class="col-sm-12">
+<div class="jumbotron jumbotron-fluid shadow-sm">
+  <div class="container">
+    <h1 class="display-4"><b><abbr title="Large scale In Silico Analysis">LISA</abbr></b> documentation</h1>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="col-sm-3 fixed-left">
+<nav id="navbar-example" class="navbar navbar-light bg-light">
+  <nav class="nav nav-pills flex-column">
+    <a class="nav-link" href="#item-1">About</a>
+    <nav class="nav nav-pills flex-column">
+      <a class="nav-link ml-3 my-1" href="#item-1-1">Installation</a>
+      <a class="nav-link ml-3 my-1" href="#item-1-2">Usage</a>
+    </nav>
+    <a class="nav-link" href="#item-2">FAQ</a>
+  </nav>
+</nav>
+</div>
+<div class="col-sm-9">
+<div data-target="#navbar-example" data-offset="0">
+  <h4 id="item-1">About</h4>
+  <p>
+  LISA involve four methods to discover potential enhancer and rank TFs. If get stuck, try to create issues at <a href=https://github.com/qinqian/lisa>lisa github repository</a>.
+  </p>
+  <h4 id="item-1-1">Installation</h4>
+  <p> LISA can be deployed as a command line version, run the following commands. The related chromatin profile dataset will be released later, use <a href="http://lisa.cistrome.org">LISA online</a> now.</p>
+<code>
+<pre>
+wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
+export PATH="${HOME}/miniconda3/bin:$PATH"
+conda install anaconda-client
+
+conda create -n lisa_impute anaconda python=3
+source activate lisa_impute
+
+conda config --add channels defaults
+conda config --add channels conda-forge
+conda config --add channels bioconda
+conda install blas mkl-service
+conda install -c anaconda openssl
+conda install -c anaconda curl 
+
+# this is for curl and openssl header files 
+export C_INCLUDE_PATH=${C_INCLUDE_PATH}:/usr/include/:${HOME}/.local/include:${HOME}/miniconda3/envs/lisa_impute/include
+
+pip install deeptools
+pip install fire
+pip install psutil
+pip install numpy
+pip install scipy
+pip install sklearn
+pip install theano
+
+git clone https://github.com/qinqian/lisa
+cd lisa
+python setup.py install --user
+</pre>
+</code>
+
+  </p>
+  <h5 id="item-1-2">Usage</h5>
+  <p>
+<div class="section" id="standalone-version">
+<h6>Standalone version</h6>
+<p>The LISA framework has three pipeline represented with three sub-parser, <cite>model</cite>, <cite>multiple_fastq2bigwig</cite>, and <cite>multiple_bigwig2hdf</cite>;
+The TF rank method is run through the <cite>model</cite> sub-parser.</p>
+<div class="section" id="run-all-the-methods">
+<h6>Run all the methods</h6>
+<div class="highlight-bash"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'all'</span> --web<span class="o">=</span>False <span class="se">\</span>
+           --new_rp_h5<span class="o">=</span>None --new_count_h5<span class="o">=</span>None <span class="se">\</span>
+           --species hg38 --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
+           --cluster<span class="o">=</span>True --covariates<span class="o">=</span>False <span class="se">\</span>
+           --random<span class="o">=</span>True <span class="se">\</span>
+           --prefix test_function1 <span class="se">\</span>
+           --threads <span class="m">8</span> test.gene_symbol
+</pre></div>
+</td></tr></tbody></table></div>
+<p>Options:
+The <cite>test.gene_symbol</cite> is the gene set user input, which is a text file with one official gene symbol or refseq id, mixture of the both is not supported yet, this is used as a prefix for output, so put the file in a directory with written permission.</p>
+<p>–epigenome controls the histone mark or DNase to use in the features.</p>
+</div>
+<div class="section" id="run-only-one-method">
+<h6>Run only one method</h6></h3>
+<ol class="arabic simple">
+<li>run only the knockout or beta method:
+–method option can control the method to run knockout or beta method, use it with the option –web=True to turn off the baseline method.</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'knockout'</span> <span class="se">\</span>
+           --web<span class="o">=</span>True --new_rp_h5<span class="o">=</span>None <span class="se">\</span>
+           --new_count_h5<span class="o">=</span>None --species hg38 <span class="se">\</span>
+           --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
+           --cluster<span class="o">=</span>False --covariates<span class="o">=</span>False <span class="se">\</span>
+           --random<span class="o">=</span>True <span class="se">\</span>
+           --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
+
+lisa model --method<span class="o">=</span><span class="s1">'beta'</span> <span class="se">\</span>
+           --web<span class="o">=</span>True <span class="se">\</span>
+           --new_rp_h5<span class="o">=</span>None --new_count_h5<span class="o">=</span>None <span class="se">\</span>
+           --species hg38 --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
+           --cluster<span class="o">=</span>False --covariates<span class="o">=</span>False <span class="se">\</span>
+           --random<span class="o">=</span>True <span class="se">\</span>
+           --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
+</pre></div>
+</td></tr></tbody></table></div>
+<ol class="arabic simple" start="2">
+<li>run only the cluster method to rank</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'none'</span> <span class="se">\</span>
+           --web<span class="o">=</span>True --new_rp_h5<span class="o">=</span>None <span class="se">\</span>
+           --new_count_h5<span class="o">=</span>None --species hg38 <span class="se">\</span>
+           --epigenome <span class="s2">"['H3K27ac']"</span> --cluster<span class="o">=</span>True <span class="se">\</span>
+           --covariates<span class="o">=</span>False --random<span class="o">=</span>True <span class="se">\</span>
+           --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
+</pre></div>
+</td></tr></tbody></table></div>
+</div>
+<div class="section" id="understanding-output">
+<h6>Understanding Output</h6>
+<p>Take <em>AR.symbol</em> input and histone mark <em>H3K4me3</em> as an example. By using the above command, the key results are as follows,</p>
+<table border="0" class="table">
+<colgroup>
+<col width="26%">
+<col width="37%">
+<col width="36%">
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Output File</th>
+<th class="head">Content</th>
+<th class="head">Instruction</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>AR.symbol.premodel_records.txt</td>
+<td>regulatory potential cluster-based regression performance and coefficients</td>
+<td>one row is PRAUC,AUC,lambda, 2nd row is coefficients</td>
+</tr>
+<tr class="row-odd"><td>AR.symbol_motif99_baseline.csv</td>
+<td>baseline method based on motif hit between differential &amp; control gene</td>
+<td>one row is motif_id|TF_name,p-value</td>
+</tr>
+<tr class="row-even"><td>AR.symbol_chipseq_baseline.csv</td>
+<td>baseline method based on chip-seq peak hit between differential &amp; control gene</td>
+<td>one row is CistromeID|TF_name,p-value</td>
+</tr>
+<tr class="row-odd"><td>AR.symbol.gene_symbol.H3K4me3.coefs.csv</td>
+<td>Regression coefficients for H3K4me3</td>
+<td>one row is CistromeID,coefficient,cell type, cell line, tissue</td>
+</tr>
+<tr class="row-even"><td>AR.symbol.H3K4me3.lisa_predicted_rp.csv</td>
+<td>predicted differential expression log probability</td>
+<td>one row is refseq,log probability</td>
+</tr>
+<tr class="row-odd"><td>AR.symbol.H3K4me3.gene_set.performance</td>
+<td>differential gene prediction</td>
+<td>one row is AUC,PRAUC</td>
+</tr>
+<tr class="row-even"><td>AR.symbol.lisa_direct.csv</td>
+<td>BETA TF ranks based on random background or epigenetic background</td>
+<td>one row is CistromeID|TF_name,p_value</td>
+</tr>
+<tr class="row-odd"><td>AR.symbol.gene_symbol.H3K4me3.motif99.p_value.csv</td>
+<td>motif insilco knockout result for H3K4me3</td>
+<td>one row is motif_id|TF_name,p-value</td>
+</tr>
+<tr class="row-even"><td>AR.symbol.H3K4me3.chipseq.p_value.csv</td>
+<td>TF ChIP-seq insilco knockout result for H3K4me3</td>
+<td>one row is motif_id|TF_name,p-value</td>
+</tr>
+<tr class="row-odd"><td>AR.symbol.gene_symbol.H3K4me3.motif99.entropy_rank.csv</td>
+<td>motif-based TF ranks from KL divergence method</td>
+<td>one row is  motif_id|TF_name,KLD,rank</td>
+</tr>
+<tr class="row-even"><td>AR.symbol.gene_symbol.H3K4me3.chipseq.entropy_rank.csv</td>
+<td>ChIP-seq-based TF ranks from KL divergence method</td>
+<td>one row is  motif_id|TF_name,KLD,rank|</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+  </p>
+  <h4 id="item-2">FAQ</h4>
+  <p>
+<div class="section" id="web-version">
+<h2>Web Version<a class="headerlink" href="#web-version" title="Permalink to this headline">¶</a></h2>
+<p>The web version is intuitive to use, just copy and paste a gene list (one row a gene), and submit your job. One hidden tip is that each p-value in the output table can be click to view the dataset information from Cistrome Data Browser.</p>
+<div class="section" id="faq">
+<h3>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>What does LISA do? What do I need to run LISA?</li>
+</ol>
+<p>LISA is short for Large scale In Silico Analysis. LISA is a computational method that uses chromatin data from a comprehensive database of human and mouse DNase-seq, ATAC-seq and ChIP-seq profiles(H3K27ac, H3K4me3, H3K4me1, H3K27me3), to determine the transcription factors and chromatin regulators that are directly responsible for the perturbation of a differentially expressed gene set. To run LISA, the only thing you need is the differential gene list from whatever biological process you are interested in. Then you will be able to leverage the power of the most comprehensive DNase and ChIP-seq database (CistromeDB) to discover the underlying regulatory mechanisms, reveal the key transcription factors and chromatin regulators and also their binding sites!</p>
+<ol class="arabic simple" start="2">
+<li>How many datasets are there?</li>
+</ol>
+<p>For now (May 3rd, 2018), the dataset statistics is as the table below.</p>
+<table border="0" class="table">
+<colgroup>
+<col width="34%">
+<col width="34%">
+<col width="31%">
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Category</th>
+<th class="head">Human</th>
+<th class="head">Mouse</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DNase-seq</td>
+<td>1,110</td>
+<td>359</td>
+</tr>
+<tr class="row-odd"><td>H3K27ac</td>
+<td>1,545</td>
+<td>1,031</td>
+</tr>
+<tr class="row-even"><td>H3K27me3</td>
+<td>842</td>
+<td>932</td>
+</tr>
+<tr class="row-odd"><td>H3K4me3</td>
+<td>1,432</td>
+<td>1,032</td>
+</tr>
+<tr class="row-even"><td>H3K4me1</td>
+<td>726</td>
+<td>590</td>
+</tr>
+<tr class="row-odd"><td>TF and CR</td>
+<td>6,773</td>
+<td>4,363</td>
+</tr>
+<tr class="row-even"><td>Total</td>
+<td>12,428</td>
+<td>8,307</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div>Table 1. Chromatin profile data and TF/CR ChIP-seq dataset</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>How does LISA work?</li>
+</ol>
+<p>First, LISA will bulid a chromatin environment model using the input gene list based on the comprehensive database of DNase-seq, ATAC-seq or histone modification profiles. The model would try to match the cell type specific chromatin environment as good as possible. Then, for each gene, LISA will probe the effect of transcription factors in these environments by simulating deletions of their binding sites. The binding sites could come from the ChIP-seq data in cistromeDB or the motif hit profile. Finally, LISA would assign every binding site profile(ChIP-seq data or motif hit profile) a significance value showing how important the set of binding sites is by evaluating the effect across all the input genes.</p>
+<p>4. Which mark should I choose?
+Well, as we can see in the input interface (Figure 1), there are DNase-seq, ATAC-seq and ChIP-seq profiles(H3K27ac, H3K4me3, H3K4me1, H3K27me3) for us to choose. From the set of transcription factor perturbation experiments used as benchmarks in the paper, we found that DNase and H3K27ac would always show the best performance, so these two should be the default setting. If you know that the biological process you are looking at is associated with some other mark, it would be interesting to have a try using that mark.</p>
+<div class="figure" id="id1">
+<img alt="_images/1.png" src="_images/1.png">
+<p class="caption"><span class="caption-text">Figure 1. Input interface</span></p>
+</div>
+<ol class="arabic simple" start="5">
+<li>How many differential genes should I use?</li>
+</ol>
+<p>User can input one gene set or two gene set (Figure 1). If only one gene set is given, the TF ranking list would be provided. If two are given, the comparison figure will be generated, a typical scenario would input up and down regulated gene set from one expression profile experiment. We would recommend 50 to 500, since few genes will lower the predictive power of chromatin profile modelling. To build a model that can best represent the cell type specific chromatin environment, the number of genes can not be too few. However, because of the time-consuming step of deleting binding sites for all the ChIP-seq profile and motif hit profile for all the input genes, the LISA running time would suffer from the number of genes when it goes beyond 500.</p>
+<ol class="arabic simple" start="6">
+<li>What kind of results LISA offer?</li>
+</ol>
+<ol class="loweralpha simple">
+<li>a pairwise scatterplot for LISA cis-elements knockout (Figure 2) and direct prediction from TF ChIP-seq methodologies (Figure 3) will be generated if two gene sets are given(optional). The x axis and y axis shows the -log10(p-value) of the TF ranking significance for either gene set. Once user mouse over the points, the corresponding TF ChIP-seq sample will be shown by Cistrome ID and TF name.</li>
+</ol>
+<div class="figure">
+<img alt="_images/3.png" src="_images/3.png">
+</div>
+<p>Figure 2. LISA in-silico knockout method demo</p>
+<div class="figure">
+<img alt="_images/2.png" src="_images/2.png">
+</div>
+<p>Figure 3. LISA prediction directly from TF ChIP-seq demo</p>
+<ol class="loweralpha simple" start="2">
+<li>The ranking table of the LISA cis-elements knockout and direct prediction from TF ChIP-seq methodologies for ChIP-seq based TF ranking from either of the gene sets (Figure 4). Click each of the p-value, the Cistrome dataset link will be shown below (Figure 5).</li>
+</ol>
+<div class="figure">
+<img alt="_images/4.png" src="_images/4.png">
+</div>
+<p>Figure 4. LISA TF ranking based on ChIP-seq</p>
+<div class="figure">
+<img alt="_images/5.png" src="_images/5.png">
+</div>
+<p>Figure 5. Cistrome dataset link</p>
+<ol class="loweralpha simple" start="3">
+<li>The ranking table for Motif PWM based TF ranking.</li>
+</ol>
+<div class="figure">
+<img alt="_images/6.png" src="_images/6.png">
+</div>
+<p>Figure 6. TF ranking based on chromatin profile knockout of Cistrome Motif</p>
+<p>d. selected chromatin profile and model performance.
+The annotation and the coefficient of the selected chromatin profile is selected. In this panel, user can also select a row to view the Cistrome dataset. Along with the table, there is the ROCAUC curve to show the model performance.</p>
+<div class="figure">
+<img alt="_images/7.png" src="http://cistrome.org/~qqin/lisa/build/html/_images/7.png">
+</div>
+<p>Figure 7. selected chromatin profile and model performance</p>
+<p>e. WashU genome browser for gene set enrichment
+we randomly picked arbitrarily 20 genes from the differential gene set to generate the genome tracks for the top ranked TF ChIP-seq, selected chromatin profile ChIP-seq for both gene set 1 (e.g. up regulated) and gene set 2 (e.g. down regulated) gene set (Figure 8).</p>
+<div class="figure">
+<img alt="_images/8.png" src="http://cistrome.org/~qqin/lisa/build/html/_images/8.png">
+</div>
+<p>Figure 8. gene set enrichment view mode of Wash U genome browser</p>
+</div>
+</div>
+  </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2018 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
+
+{% endblock %}
+
+
+{% block scripts %}
+<!-- {{ super() }} -->
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+<!-- <script src="{{ url_for('.static', filename='jquery-3.2.1.min.js') }}"></script> -->
+<!-- <script src="{{ url_for('.static', filename='popper.min.js') }}"></script> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script> -->
+<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+<script src="{{ url_for('.static', filename='lisa.js') }}" type="text/javascript"></script>
+<!--<script>
+$('#spyOnThis').scrollspy();
+</script>
+-->
+{% endblock %}

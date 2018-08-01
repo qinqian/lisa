@@ -1,5 +1,65 @@
-body {
-  background: #fafafa 50% 0 repeat;
+.fixed-top {
+    background-color: #2B3B61;
+    color: #FFFFFF;
+    padding-top: 15px;
+    padding-bottom: 19px;
+    height: 50px;
+}
+
+.fixed-bottom {
+    background-color: #2B3B61;
+    color: #FFFFFF;
+    height: 52px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.nav-a {
+    color: #FFFFFF;
+    text-decoration: blink;
+    background-color: transparent;
+}
+
+* {
+    margin: 0;
+}
+
+.body3 {
+    padding-top: 72px;
+    padding-bottom: 0px;
+    font-family: lato, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    background-color: #fff;
+}
+
+.body2 {
+    padding-top: 35px;
+    padding-bottom: 0px;
+    font-family: lato, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    background-color: #fff;
+}
+
+.body {
+    padding-top: 0px;
+    padding-bottom: 85px;
+    font-family: lato, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    height: 690px;
+    background-color: #fff;
+}
+
+#navbar-example {
+ //   position: relative;
+    z-index: 998;
+    position: fixed;
+    top: 248px;
+    margin-left: 35px;
+    width: 220px;
+    left: 101px;
 }
 
 .progress {
@@ -16,7 +76,14 @@ body {
     overflow: auto;
 }
 
-.tfl 
+#spyOnThis {
+ height: 100%;
+ width: 100%;
+ position: relative;
+ overflow-y: scroll;
+}
+
+.tfl
 {
     height: 600px;
     width: 100%;
@@ -33,27 +100,13 @@ body {
   border-bottom: 2px solid #444;
 }
 
-select#method,
-select#species,
-select#mark {
-    width:86%;
+.genes2 {
+  resize: none;
+  height: 113px; 
 }
-
-#name {
-    width: 70%;
-}
-
-.box2,
-.box1 {
-    height: 320px;
-}
-
-.genes2,
 .genes {
   resize: none;
-  width: 80%;
-  height: 240px;
-  color: black;
+  height: 113px; 
 }
 
 /* /\* .sp { *\/ */
@@ -81,8 +134,8 @@ td:hover {
 }
 
 img {
-  opacity: 0.5;
-  filter: alpha(opacity=50); /* For IE8 and earlier */
+  opacity: 0.9;
+  filter: alpha(opacity=90); /* For IE8 and earlier */
 }
 
 .inspector_attrib_row {
@@ -102,6 +155,10 @@ height: 23px;
 width: 23px;
 border-radius: 50%;
 margin: 0 auto;
+}
+
+div {
+    display: block;
 }
 
 .green {

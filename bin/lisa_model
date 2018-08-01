@@ -106,7 +106,7 @@ def model(sample_number, species, epigenome, gene_set, foreground, background, p
 
     ## auc curve and performance
     fpr, tpr, _ = roc_curve(Y, lisa_predicted_rp, pos_label=1)
-    d3json = {"performance": auc, 
+    d3json = {"performance": auc,  "performance2": prauc, 
               "tpr": list(tpr), "fpr": list(fpr)}
 
     with open("%s.roc_curve.json" % prefix, "w") as out_js:

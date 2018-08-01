@@ -34,8 +34,8 @@ def main():
                           'sklearn', 'theano', 'fire',
                           'h5py', 'pandas',
                           'seaborn', 'scipy',
-                          'snakemake', 'PyYAML', 'yappi',
-                          'deeptools'],
+                          'snakemake', 'PyYAML', 'yappi'
+                          ],
         include_package_data=True,
         package_data={'lisa': ['rules/*', 'workflows/*', 'lisa.ini', 'lisa.ini.updated']},
         scripts=glob('bin/*'),

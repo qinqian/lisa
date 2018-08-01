@@ -1,134 +1,169 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/fixes.html" as fixes %}
-<!-- {% import "bootstrap/wtf.html" as wtf %} -->
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block head %}{{super()}}{{fixes.ie8()}}{% endblock %}
+{% block html_attribs %} lang="en"{% endblock %}
 
 {% block metas %}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 {% endblock %}
 
 {% block title %}LISA{% endblock %}
 
-{% block html_attribs %} lang="en"{% endblock %}
-
 {% block navbar %}
-<div class="container">
-  <div class="row">
-  <div class="col-md-12">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
-      <a href="https://github.com/qinqian/lisa" class="navbar-brand">
-          <img src="/static/lisa.jpg" height="50" width="50">
-        <!-- <svg aria-hidden="true" class="octicon octicon-mark-github" height="22" version="1.1" viewBox="0 0 15 15" width="25"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg> -->
-      </a>
-
-      <div id="navbar">
-        <ul class="nav navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="http://lisa.cistrome.org/">HOME</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://cistrome.org/~qqin/lisa/build/html">LISA Documentation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://lisa.cistrome.org/lisa_gallery">LISA Gallery</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">RP(ongoing) </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
+<!--
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html">Documentation</a>
+-->
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html/Tutorial.html#faq">FAQ</a>
+        </li>
+      </ul>
+    </div>
   </div>
-  </div>
-</div>
+</nav>
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
 <link rel="stylesheet" href="{{ url_for('.static', filename='lisa.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="row align-items-start">
-    <div class="title col-sm-12">
-      <h4>LISA online: TF ranking inference and enhancer identification from large scale epigenome data</h4>
-    </div>
+<div class="row body2">
+   <div class="col-sm-12">
+<div class="jumbotron jumbotron-fluid shadow-sm">
+  <div class="container">
+    <h1 class="display-4"><b><abbr title="Large scale In Silico Analysis">LISA</abbr></b> online</h1>
+    <p class="lead">TF ranking inference and enhancer identification from large scale epigenome data</p>
   </div>
+</div>
+  </div>
+</div>
 
+<div class="container body">
+<div class="row">
+<div class="col-sm-6 h-100 d-inline-block">
+     <div class="card shadow">
+       <div class="card-header">
+         <h4>Overview</h4>
+       </div>
+       <div class="card-body">
+         <h5 class="card-title"><b>L</b>arge scale <i><b>I</b>n-<b>S</b>ilico</i> <b>A</b>nalysis of Chromatin profile for inference of Gene Regulation</h5>
+         <p class="card-text">
+         The motivation of LISA is to use public along with in-house chromatin profile data from a comprehensive database of human and mouse DNase-seq, and H3K27ac ChIP-seq profiles, to determine the transcription factors and chromatin regulators that are directly responsible for the perturbation of a differentially expressed gene set. To run LISA, the only thing you need is the differential gene list from whatever biological process you are interested in. Then you will be able to leverage the power of the most comprehensive DNase and ChIP-seq database (CistromeDB) to discover the underlying regulatory mechanisms, reveal the key transcription factors and chromatin regulators and also their binding sites!
+         </p>
+         <a href="http://cistrome.org/~qqin/lisa/build/html" class="btn btn-primary">Go to Document</a>
+       </div>
+       <div class="card-footer text-muted">
+         Supported by Cistrome Data Browser
+       </div>
+     </div>
+   </div>
+  <div class="col-sm-6 h-100 d-inline-block">
+     <div class="card shadow">
+  <div class="card-body">
   <form action="{{ url_for('submit_lisa') }}" method="post">
       {{ form.csrf_token() }} {{ wtf.form_errors(form, hiddens='only') }}
-      <div class="row">
-        <div class="col box1">
-          <div class="form-group">
-            <label class="row col-form-label">{{form.species.label}}</label>
-            <div class="row">
-              {{form.species(class="form-control")}}
-            </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>{{form.species.label}}</label>
+            {{form.species(class="form-control")}}
           </div>
-          <div class="form-group">
-            <label class="row col-form-label">{{form.mark.label}}</label>
-            <div class="row">
-              {{form.mark(class="form-control")}}
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="row col-form-label">{{form.method.label}}</label>
-            <div class="row">
-              {{form.method(class="form-control")}}
-            </div>
+          <div class="form-group col-md-6">
+            <label>{{form.mark.label}}</label>
+            {{form.mark(class="form-control")}}
           </div>
         </div>
-
-        <div class="col box2">
-          <div class="form-group">
-            <label class="row col-form-label">{{form.genes.label}}</label>
-            <div class="row">
-              {{form.genes(class="form-control genes", placeholder="input less than 200 genes (refseq or symbol); for more genes, user can refer to the documentation to install the local version  ")}}
-            </div>
-          </div>
+        <div class="form-group">
+            <label>{{form.method.label}}</label>
+            {{form.method(class="form-control")}}
         </div>
 
-        <div class="col box2">
-          <div class="form-group">
-            <label class="row col-form-label">{{form.genes2.label}}</label>
-            <div class="row">
-              {{form.genes2(class="form-control genes2", placeholder="another gene set run in parallel to compare with gene set 1")}}
-            </div>
-          </div>
+        <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Gene Set 1</label>
+            {{form.genes(class="form-control genes", placeholder="input less than 200 genes (refseq or symbol); for more genes, user can refer to the documentation to install the local version  ")}}
+        </div>
+        <div class="form-group col-md-6">
+            <label>Gene Set 2 (optional)</label>
+            {{form.genes2(class="form-control genes2", placeholder="another gene set run in parallel to compare with gene set 1")}}
+        </div>
         </div>
 
-      </div>
-
-      <div class="row run justify-content-md-center">
-          {{form.mail(class="form-control col-sm-3 ", placeholder="Optional User E-mail")}}
-          {{form.name(class="form-control col-sm-3 ", placeholder="Job Name")}}
-          <button type="submit" class="offset-sm-1 btn btn-primary">Run</button>
-          <p style="color:red; display: {{message}}; font:italic bold 12px/20px arial,sans-serif;">too many genes!</p>
-      </div>
+        <div class="form-row">
+        <div class="form-group col-md-6">
+          {{form.mail(class="form-control", placeholder="Optional User E-mail")}}
+        </div>
+        <div class="form-group col-md-6">
+          {{form.name(class="form-control", placeholder="Job Name")}}
+        </div>
+        </div>
+        <div class="form-row">
+        <button type="submit" class="btn btn-primary">Run</button>
+        <p style="color:red; display: {{message}}; font:italic bold 12px/20px arial,sans-serif;">too many genes!</p>
+        </div>
       <!-- {% for message in get_flashed_messages() %} -->
       <!-- <div class="alert alert-warnings"> -->
       <!--   {{message}} -->
       <!-- </div> -->
       <!-- {% endfor %} -->
   </form>
-
-  <div class="row footer justify-content-md-center">
-    <footer>
-      Hosted at cistrome, created by Qian Qin.
-    </footer>
   </div>
 </div>
+</div>
+
+
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2018 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
 
 {% endblock %}
 
 
 {% block scripts %}
 <!-- {{ super() }} -->
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="{{ url_for('.static', filename='jquery-3.2.1.min.js') }}"></script>
-<script src="{{ url_for('.static', filename='popper.min.js') }}"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+<!-- <script src="{{ url_for('.static', filename='jquery-3.2.1.min.js') }}"></script> -->
+<!-- <script src="{{ url_for('.static', filename='popper.min.js') }}"></script> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script> -->
 <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 <script src="{{ url_for('.static', filename='lisa.js') }}" type="text/javascript"></script>
 {% endblock %}

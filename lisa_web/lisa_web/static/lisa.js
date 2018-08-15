@@ -19,6 +19,7 @@ function tabulate(cl, data, columns, interact) {
         .append("tr")
         .attr({
           data_id: function(d) {
+            console.log(d)
             if (d.hasOwnProperty('coefficient')) {
               return d.coefficient.split('|')[0];
             } else {
@@ -368,8 +369,9 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(".annotation").html("");
 
         if ($('.tabtf0').length == 0) {
-         $(".tf0").html($('<div class="col"><a href="' + data['result0'] +'">download epigenome sample coefficients</a></div>'));
+          $(".tf0").html($('<div class="col"><a href="' + data['result0'] +'">download epigenome sample coefficients</a></div>'));
           d3.csv(data['result0'], function(error, d) {
+            console.log(d);
             tabulate('tf0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0');
             fetch(true);
          });

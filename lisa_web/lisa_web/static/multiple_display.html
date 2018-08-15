@@ -1,0 +1,244 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+<!-- {% import "bootstrap/wtf.html" as wtf %} -->
+
+{% block head %}{{super()}}{{fixes.ie8()}}{% endblock %}
+
+{% block metas %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+{% endblock %}
+
+{% block title %}LISA{% endblock %}
+
+{% block html_attribs %} lang="en"{% endblock %}
+
+{% block navbar %}
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">RP(ongoing) </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
+<!--
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html">Documentation</a>
+-->
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html/Tutorial.html#faq">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block styles %}
+
+<!--
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/> -->
+<link rel="stylesheet" href="{{ url_for('.static', filename='font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='custom.css') }}">
+
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+
+<link rel="stylesheet" href="{{ url_for('.static', filename='lisa.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid body3">
+  <div class="row justify-content-md-center">
+    {% if task_id %}
+    <h4>Lisa is running. Output html will be: <a href="/download/{{task_id}}_result.html">{{task_id}}</a>. Refresh if necessary</h4>
+    {% endif %}
+  </div>
+
+  <div class="row lisa_progress">
+  </div>
+
+
+   <!-- Nav tabs -->
+   <ul class="nav result nav-tabs" role="tablist" style="display: none;">
+
+     <li class="nav-item">
+       <a class="nav-link active" data-toggle="tab" href="#tf1_fig" role="tab" aria-controls="home" aria-expanded="true">TF ranking comparison between gene set 1 and 2</a>
+     </li>
+
+     {% if method =='knockout' or method == 'all' %}
+     <li class="nav-item">
+       <!-- <a class="nav-link active" data-toggle="tab" href="#tf1" role="tab" aria-controls="home" aria-expanded="true">gene set 1 chip-seq only</a> -->
+       <a class="nav-link" data-toggle="tab" href="#tf1" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} ChIP-seq knockout of gene set 1</a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf1_1" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} ChIP-seq knockout of gene set 2</a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf2" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} motif knockout of gene set 1</a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf2_1" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} motif knockout of gene set 2</a>
+     </li>
+     {% endif %}
+
+     {% if method == 'all' %}
+     <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 1</a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf_1" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 2</a>
+     </li>
+
+     {% elif method =='beta' %}
+     <li class="nav-item">
+         <!-- <a class="nav-link active" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">gene set 1 lisa TF only</a> -->
+         <a class="nav-link" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 1</a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf_1" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 2</a>
+     </li>
+     {% endif %}
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf0" role="tab" aria-controls="home" aria-expanded="true">gene set 1 {{epigenome}} sample coefficients</a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link" data-toggle="tab" href="#tf0_1" role="tab" aria-controls="home" aria-expanded="true">gene set 2 {{epigenome}} sample coefficients</a>
+     </li>
+<!--
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#tfheat" role="tab" aria-controls="home" aria-expanded="true">heatmap</a>
+      </li>
+-->
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#tfl" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} gene set enrichment on genome browser</a></li>
+      </li>
+  </ul>
+
+  <div class="tab-content result" style="display: none;">
+     <div role="tabpanel" class="tab-pane fade show active tf1_fig" id="tf1_fig">
+     </div>
+
+     {% if method == 'knockout' or method == 'all' %}
+     <div role="tabpanel" class="tab-pane fade tf1" id="tf1">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tf1_1" id="tf1_1">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tf2" id="tf2">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tf2_1" id="tf2_1">
+     </div>
+     {% endif %}
+
+     {% if method == 'all' %}
+     <div role="tabpanel" class="tab-pane fade tf" id="tf">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tf_1" id="tf_1">
+     </div>
+
+     {% elif method =='beta' %}
+     <div role="tabpanel" class="tab-pane fade tf" id="tf">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tf_1" id="tf_1">
+     </div>
+     {% endif %}
+
+     <div role="tabpanel" class="tab-pane fade tf0" id="tf0">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tf0_1" id="tf0_1">
+     </div>
+
+     <div role="tabpanel" class="tab-pane fade tfl" id="tfl">
+     </div>
+<!--
+    <div role="tabpanel" class="tab-pane fade tfheat" id="tfheat">
+      <div id='container-id-1'>
+        <h1 class='wait_message'>Please wait ...</h1>
+      </div>
+    </div>
+-->
+  </div>
+
+  <div class="annotation" style="display: none;">
+
+  </div>
+
+</div>
+
+<!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"> -->
+<!--   <div class="modal-dialog modal-lg"> -->
+<!--     <div class="modal-content"> -->
+<!--     </div> -->
+<!--   </div> -->
+<!-- </div> -->
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2018 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
+
+{% endblock %}
+
+
+{% block scripts %}
+<!-- {{ super() }} -->
+<script src="{{ url_for('.static', filename='d3.v4.min.js') }}"></script>
+<script src="{{ url_for('.static', filename='underscore-min.js') }}"></script>
+<script src="{{ url_for('.static', filename='jquery-1.12.4.js') }}"></script>
+<script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="{{ url_for('.static', filename='popper.min.js') }}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+<script src="{{ url_for('.static', filename='clustergrammer.min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('.static', filename='Enrichrgram.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('.static', filename='hzome_functions.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('.static', filename='send_to_Enrichr.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('.static', filename='lisa2.js') }}" type="text/javascript"></script>
+
+<script>
+$(function() {
+  $('.lisa_progress').ready(function() {
+    start_lisa_task("/lisa_status2/{{epigenome}}/{{ task_id }}", "/upload/{{ task_id }}.txt.{{epigenome}}.chipseq.csv_mult_view.json");
+  });
+});
+</script>
+{% endblock %}

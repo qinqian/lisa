@@ -31,7 +31,7 @@ from .form import LISAForm
 
 app.secret_key = 's3cr3t' # crsf
 download = '/data/home/qqin/lisa_web/download'
-gallery = '/data/home/qqin/lisa_web/gallery'
+gallery = '/data/home/qqin/lisa_web/lisa_web/gallery'
 upload = '/data/home/qqin/lisa_web/upload'
 
 # debug mode on
@@ -280,6 +280,9 @@ def run_lisa(self, method, species, mark, prefix, to_user):
     z.coefficients = z.coefficients.map(lambda x: "%.2E" % x)
     z.loc[:, "coefficient"] = z.apply(lambda x: "%s|%s" % (x[0], x[1]), axis=1)
 
+    # /data/home/qqin/lisa_web/upload/AR_test10_2018_08_15_0602400.705.txt.H3K27ac.2199.csv
+    z.loc[:, "download"] = ["http://lisa.cistrome.org/upload/%s.txt.%s.%s.csv"%(prefix, mark, i) for i in z.id]
+
     z.drop(["id", "coefficients"], axis=1, inplace=True)
     z.to_csv(os.path.join(upload, '%s.%s.coefs.csv' % (prefix, mark)), index=False)
 
@@ -472,6 +475,10 @@ def lisa_taskstatus2(epigenome, task_id):
                 return jsonify(response)
     return jsonify(response)
 
+
+@app.route('/doc', methods=['GET'])
+def get_docs():
+    return render_template('doc.html')
 
 @app.route('/lisa_gallery', methods=['GET'])
 def get_gallery():

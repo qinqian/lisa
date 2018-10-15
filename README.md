@@ -16,3 +16,10 @@ or not-for-profit research. Use of the Code or any part thereof for commercial
 or clinical purposes is strictly prohibited in the absence of a Commercial
 License Agreement from Qian Qin.
 
+
+### Use conda environment 
+
+```bash
+conda env update -n root -f environment.yml
+```
+

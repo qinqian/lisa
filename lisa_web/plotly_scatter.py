@@ -12,6 +12,8 @@ up_r = sys.argv[1]
 dn_r = sys.argv[2]
 prefix = sys.argv[3]
 title = sys.argv[4]
+labels1 = sys.argv[5]
+labels2 = sys.argv[6]
 
 up=pd.read_csv(up_r, header=None)
 up=up.sort_values(by=1)
@@ -77,7 +79,7 @@ trace1 = Scatter(x=x,
 layout = Layout(
     title=title,
     xaxis=dict(
-        title='-log10(p-value) of Gene Set 1',
+        title='-log10(p-value) of Gene Set 1' if labels1.strip() == '' else '-log10(p-value) of %s' % labels1,
         showgrid=False,
         titlefont=dict(
             family='Arial',
@@ -85,7 +87,7 @@ layout = Layout(
         range=[-2, xlim]
     ),
     yaxis=dict(
-        title='-log10(p-value) of Gene Set 2',
+        title='-log10(p-value) of Gene Set 2' if labels2.strip() == '' else '-log10(p-value) of %s' % labels2,
         showgrid=False,
         titlefont=dict(
             family='Arial',

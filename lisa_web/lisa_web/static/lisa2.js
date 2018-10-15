@@ -101,7 +101,11 @@ function tabulate(cl, data, columns, interact) {
            retrieve: true,
            // destroy: true,
            paging: true,
-           "order": []
+           "order": [],
+           dom: 'Bfrtip',
+           buttons: [
+               'csv', 'excel', 'pdf'
+           ]
          });
        });
     } else {
@@ -111,6 +115,10 @@ function tabulate(cl, data, columns, interact) {
            retrieve: true,
            // destroy: true,
            paging: true,
+           dom: 'Bfrtip',
+           buttons: [
+               'csv', 'excel', 'pdf'
+           ],
            "columnDefs": [
               { "width": "20%", "targets": 0 }
            ]
@@ -292,7 +300,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       $('.progress').hide();
       $(".result").show(1500);
 
-      $('.nav-tabs a[href="#tfheat"]').click(function(e){
+      $('.leftpanel a[href="#tfheat"]').click(function(e){
         $(".annotation").html("");
         $('.active').removeClass("active");
         var hzome = ini_hzome();
@@ -403,7 +411,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       }
       });
 
-      $('.nav-tabs a[href="#tf1_fig"]').click(function(e){
+      $('.leftpanel a[href="#tf1_fig"]').click(function(e){
         $(".annotation").hide();
       });
 
@@ -450,7 +458,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       //   }
       // });
 
-      $('.nav-tabs a[href="#tf"]').click(function(e){
+      $('.leftpanel a[href="#tf"]').click(function(e){
         $('.active').removeClass("active");
         $(".annotation").hide();
         $(".annotation").html("");
@@ -464,7 +472,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
       });
 
-      $('.nav-tabs a[href="#tf_1"]').click(function(e){
+      $('.leftpanel a[href="#tf_1"]').click(function(e){
         $('.active').removeClass("active");
         $(".annotation").hide();
         $(".annotation").html("");
@@ -478,12 +486,12 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
       });
 
-      $('.nav-tabs a[href="#tf0"]').click(function(e) {
+      $('.leftpanel a[href="#tf0"]').click(function(e) {
         $('.active').removeClass("active");
         $(".annotation").hide();
         $(".annotation").html("");
 
-        if ($('.tabtf0').length == 0) {
+        if ($('.tabtfcoef').length == 0) {
           $(".tf0").html($('<div class="row"><div class="col"><a href="' + data['result0'] +'">download epigenome sample coefficients</a></div></div>'));
           $(".tf0").append($('<div class="row tfcoef"><svg class="auc1"></svg></div>'));
 
@@ -503,12 +511,13 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
       });
 
-      $('.nav-tabs a[href="#tf0_1"]').click(function(e) {
+      $('.leftpanel a[href="#tf0_1"]').click(function(e) {
         $('.active').removeClass("active");
         $(".annotation").hide();
         $(".annotation").html("");
 
-        if ($('.tabtf0_1').length == 0) {
+        //if ($('.tabtf0_1').length == 0) {
+        if ($('.tabtfcoef0').length == 0) {
           $(".tf0_1").html($('<div class="col"><a href="' + data['result0_1'] +'">download epigenome sample coefficients</a></div>'));
           $(".tf0_1").append($('<div class="row tfcoef0"><svg class="auc2"></svg></div>'));
 
@@ -529,7 +538,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
        });
 
-      $('.nav-tabs a[href="#tf2"]').click(function(e){
+      $('.leftpanel a[href="#tf2"]').click(function(e){
         $('.active').removeClass("active");
         $(".annotation").html("");
 
@@ -542,7 +551,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
       });
 
-      $('.nav-tabs a[href="#tf2_1"]').click(function(e){
+      $('.leftpanel a[href="#tf2_1"]').click(function(e){
         $('.active').removeClass("active");
         $(".annotation").html("");
 
@@ -555,8 +564,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(this).tab('show');
       });
 
-
-     $('.nav-tabs a[href="#tf1"]').click(function(e) {
+     $('.leftpanel a[href="#tf1"]').click(function(e) {
       $('.active').removeClass("active");
       $(".annotation").hide();
       $(".annotation").html("");
@@ -570,7 +578,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       $(this).tab('show');
     });
 
-      $('.nav-tabs a[href="#tf1_1"]').click(function(e) {
+      $('.leftpanel a[href="#tf1_1"]').click(function(e) {
        $('.active').removeClass("active");
        $(".annotation").hide();
        $(".annotation").html("");
@@ -584,7 +592,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
        $(this).tab('show');
      });
 
-    $('.nav-tabs a[href="#tfl"]').click(function(){
+    $('.leftpanel a[href="#tfl"]').click(function(){
         $('.active').removeClass("active");
         $(".annotation").hide();
         $(".annotation").html("");

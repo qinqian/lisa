@@ -61,10 +61,17 @@ def submit_lisa():
         to_user = form.mail.data
 
         genes = form.genes.data
+        labels = form.labels.data
         genes2 = form.genes2.data
+        labels2 = form.labels2.data
 
         if genes2 == '':
             job_name = form.name.data
+            ## fix space isssue
+            job_name = job_name.replace(' ', '_')
+            labels = labels.replace(' ', '_')
+            labels2 = labels2.replace(' ', '_')
+
             method = form.method.data
 
             species = form.species.data.encode('utf-8')
@@ -132,7 +139,7 @@ def submit_lisa():
                     print >>gene_set2, j
             gene_set2.close()
 
-            task = multiple_run_lisa.apply_async(args=(method, species, marks, prefix, to_user), countdown=1, expires=3600)
+            task = multiple_run_lisa.apply_async(args=(method, species, marks, prefix, to_user, labels, labels2), countdown=1, expires=3600)
 
             cc = render_template('multiple_display.html', epigenome=marks,
                                  task_id=prefix, method=method)
@@ -146,7 +153,7 @@ def submit_lisa():
     return render_template('index.html', form = form, message="none")
 
 @celery.task(bind=True)
-def multiple_run_lisa(self, method, species, mark, prefix, to_user):
+def multiple_run_lisa(self, method, species, mark, prefix, to_user, labels1, labels2):
     # issues: chmod 777 of lisa2 anaconda library and lisa_web root directory
     # chmod 777 /var/www/.theano
     # is not a good idea...
@@ -159,7 +166,6 @@ def multiple_run_lisa(self, method, species, mark, prefix, to_user):
         app.logger.info(out)
         app.logger.info(err)
 
-
     chipp1 = '%s_gs1.txt.%s.chipseq.p_value.csv' % (prefix, mark)
     chipp2 = '%s_gs2.txt.%s.chipseq.p_value.csv' % (prefix, mark)
 
@@ -167,19 +173,19 @@ def multiple_run_lisa(self, method, species, mark, prefix, to_user):
     motif2 = '%s_gs2.txt.%s.motif99.p_value.csv' % (prefix, mark)
 
     if method == 'all' or method == 'knockout':
-        cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_chip InSilicoChIP-seq" % (os.path.join(upload, chipp1), os.path.join(upload, chipp2), os.path.join(upload, prefix))
+        cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_chip InSilicoChIP-seq %s %s" % (os.path.join(upload, chipp1), os.path.join(upload, chipp2), os.path.join(upload, prefix), labels1, labels2)
         app.logger.info(cmd)
         with open('/data/home/qqin/lisa_web/upload/%s_chip_plot_output.txt' % prefix, 'a') as fout:
             p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
             out, err = p.communicate()
             fout.flush()
 
-        cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_motif InSilicoMotif" % (os.path.join(upload, motif1), os.path.join(upload, motif2), os.path.join(upload, prefix))
-        app.logger.info(cmd)
-        with open('/data/home/qqin/lisa_web/upload/%s_motif_plot_output.txt' % prefix, 'a') as fout:
-            p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
-            out, err = p.communicate()
-            fout.flush()
+        #cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_motif InSilicoMotif" % (os.path.join(upload, motif1), os.path.join(upload, motif2), os.path.join(upload, prefix))
+        #app.logger.info(cmd)
+        #with open('/data/home/qqin/lisa_web/upload/%s_motif_plot_output.txt' % prefix, 'a') as fout:
+        #    p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
+        #    out, err = p.communicate()
+        #    fout.flush()
 
         c = pd.read_csv(os.path.join(upload, chipp1), header=None)
         m = pd.read_csv(os.path.join(upload, motif1), header=None)
@@ -197,7 +203,7 @@ def multiple_run_lisa(self, method, species, mark, prefix, to_user):
         g1_beta = os.path.join(upload, '%s_gs1.txt.lisa_direct.csv' % (prefix))
         g2_beta = os.path.join(upload, '%s_gs2.txt.lisa_direct.csv' % (prefix))
 
-        cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_direct TFChIP-seq" % (g1_beta, g2_beta, os.path.join(upload, prefix))
+        cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_direct TFChIP-seq %s %s" % (g1_beta, g2_beta, os.path.join(upload, prefix), labels1, labels2)
         app.logger.info(cmd)
         with open('/data/home/qqin/lisa_web/upload/%s_direct_plot_output.txt' % prefix, 'a') as fout:
             p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)

@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
-source /data/home/qqin/miniconda3/envs/lisa2/bin/activate lisa2
+#source /data/home/qqin/miniconda3/envs/lisa2/bin/activate lisa2
+source /data/home/qqin/miniconda3/envs/lisa2/bin/activate lisa2018
 
 outdir=$3
 mkdir -p /data/home/qqin/lisa_web/upload/${outdir}

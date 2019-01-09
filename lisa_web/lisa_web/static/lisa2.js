@@ -210,6 +210,12 @@ function fetch(row) {
             conserv="http://dc2.cistrome.org/api/conserv?id="+bookId;
             color = {true: "green", false: "red", "NA": "gray"};
 
+            if (d.treats[0].species__name == "Homo sapiens") {
+               browser_sp = "hg38"
+            } else {
+               browser_sp = "mm10"
+            }
+
             modelc = $('<div class="card"><div class="card-header"><div class="card-title"><h3><b>Inspector</b></h3></div></div><div class="card-body"><div class="row"><div class="col-sm-9"><div class="row inspector_attrib_row"><div class="col"><b>Title:</b></div><div class="col">' + d.treats[0].name + '</div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 
@@ -230,7 +236,7 @@ function fetch(row) {
      '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"></div></div>' +
   '</div></div>' + 
   '<div class="row"><div class="col"><b>Visualize</b></div></div>' + 
-  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome=hg38&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU Browser</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=hg38">UCSC Browser</a></div></div></div>' + 
+  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU Browser</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC Browser</a></div></div></div>' + 
   '</div></div>');
   $(".annotation").append( modelc );
   modelc = $('<div class="card"><div class="card-header">Tool</div><div class="card-body"><table class="table">' +

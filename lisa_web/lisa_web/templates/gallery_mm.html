@@ -1,0 +1,3892 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LISA</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!--
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/> -->
+<link rel="stylesheet" href="/static/font-awesome.min.css">
+<link rel="stylesheet" href="/static/custom.css">
+
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+
+<link rel="stylesheet" href="/static/lisa2.css">
+
+    <!--[if lt IE 9]>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  </head>
+  <body>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Human Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery_mm">Mouse Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc#item-2">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+<div class="row body2">
+   <div class="col-sm-12">
+<div class="jumbotron jumbotron-fluid shadow-sm">
+  <div class="container">
+    <h1 class="display-4">Gallery of LISA benchmark datasets</h1>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="container body">
+  <table class="table table-hover table-striped table-bordered " id="myTable">
+   <thead class="thead-dark">
+   <tr>
+  
+     <th scope="col">cell_type</th>
+  
+     <th scope="col">hs_gene_symbol</th>
+  
+     <th scope="col">organism</th>
+  
+     <th scope="col">pert_type</th>
+  
+     <th scope="col">gene_set_type</th>
+  
+     <th scope="col">LISA_DNase</th>
+  
+     <th scope="col">LISA_H3K27ac</th>
+  
+   </tr>
+   </thead>
+   <tbody>
+  
+    <tr>
+    
+       
+       <td>ES cells</td>
+       
+    
+       
+       <td>FOXD3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/1_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/1_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/1_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/1_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>ES cells</td>
+       
+    
+       
+       <td>FOXD3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/2_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/2_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/2_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/2_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>spleen Ter19+CD71</td>
+       
+    
+       
+       <td>E2F8</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/6_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/6_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/6_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/6_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Mouse Embryonic Fibroblasts</td>
+       
+    
+       
+       <td>RB1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>mutant</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/8_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/8_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/8_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/8_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>ES cells differentiated into neural progenitor cells</td>
+       
+    
+       
+       <td>SOX3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/9_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/9_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/9_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/9_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart (12-week-old mice)</td>
+       
+    
+       
+       <td>PITX2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/11_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/11_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/11_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/11_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart (6-week-old mice)</td>
+       
+    
+       
+       <td>PITX2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/12_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/12_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/12_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/12_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone marrow progenitors (c-Kit +)</td>
+       
+    
+       
+       <td>ZFX</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/13_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/13_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/13_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/13_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>bone marrow</td>
+       
+    
+       
+       <td>NR4A1 NR4A3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/19_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/19_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/19_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/19_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>spleen B cells</td>
+       
+    
+       
+       <td>IRF4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/20_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/20_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/20_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/20_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>embryonic fibroblasts</td>
+       
+    
+       
+       <td>ATF5</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/25_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/25_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/25_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/25_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lung</td>
+       
+    
+       
+       <td>GATA5</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/28_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/28_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/28_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/28_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>HMGN1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/29_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/29_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/29_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/29_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>HMGN1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/30_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/30_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/30_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/30_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Retinas of C57BL/6J</td>
+       
+    
+       
+       <td>HMX1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Deficiency</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/33_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/33_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/33_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/33_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Pre-B ALL cells</td>
+       
+    
+       
+       <td>BACH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/34_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/34_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/34_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/34_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MEFs</td>
+       
+    
+       
+       <td>CEBPG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/37_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/37_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/37_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/37_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Retina</td>
+       
+    
+       
+       <td>NEUROD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Conditional KO under Crx promoter</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/47_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/47_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/47_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/47_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Pineal gland</td>
+       
+    
+       
+       <td>NEUROD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Conditional KO under Crx promoter</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/48_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/48_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/48_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/48_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Retina</td>
+       
+    
+       
+       <td>NEUROD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Conditional KO under Crx promoter</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/49_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/49_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/49_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/49_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>skeletal muscle (6 mo)</td>
+       
+    
+       
+       <td>YY1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/50_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/50_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/50_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/50_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lung</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/52_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/52_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/52_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/52_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lung</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/53_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/53_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/53_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/53_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lung</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/54_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/54_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/54_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/54_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lung</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/55_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/55_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/55_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/55_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreas</td>
+       
+    
+       
+       <td>BHLHA15</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/57_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/57_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/57_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/57_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>STAT5A STAT5B</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>knockin</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/58_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/58_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/58_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/58_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>STAT5A STAT5B</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>knockin</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/59_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/59_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/59_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/59_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>STAT5A STAT5B</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>knockin</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/60_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/60_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/60_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/60_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Skin</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>transgene</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/66_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/66_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/66_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/66_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>CD4+ T cells</td>
+       
+    
+       
+       <td>PBX1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Expression</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/87_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/87_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/87_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/87_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>embryonic day 17.5</td>
+       
+    
+       
+       <td>E2F1 E2F2 E2F3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/89_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/89_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/89_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/89_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>neonate</td>
+       
+    
+       
+       <td>E2F1 E2F2 E2F3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/90_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/90_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/90_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/90_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>kidney</td>
+       
+    
+       
+       <td>ESRRA</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/93_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/93_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/93_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/93_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic Fibroblast</td>
+       
+    
+       
+       <td>KRAS</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/95_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/95_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/95_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/95_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic Fibroblast</td>
+       
+    
+       
+       <td>WT1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/96_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/96_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/96_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/96_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic Fibroblast</td>
+       
+    
+       
+       <td>WT1 KRAS</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/97_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/97_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/97_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/97_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Retinas - 2 days</td>
+       
+    
+       
+       <td>NRL</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/116_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/116_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/116_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/116_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Retinas - 10 days</td>
+       
+    
+       
+       <td>NRL</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/117_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/117_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/117_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/117_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Retinas - 2 months</td>
+       
+    
+       
+       <td>NRL</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/118_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/118_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/118_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/118_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Fetal heart</td>
+       
+    
+       
+       <td>ESRRG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/121_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/121_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/121_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/121_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>colon</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/135_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/135_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/135_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/135_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>medullary thymic epithelial cells</td>
+       
+    
+       
+       <td>AIRE</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/148_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/148_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/148_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/148_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>thymic epithelial cells</td>
+       
+    
+       
+       <td>AIRE</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/150_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/150_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/150_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/150_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>hematopoietic stem cell</td>
+       
+    
+       
+       <td>FOXO1 FOXO3 FOXO4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/152_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/152_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/152_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/152_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>myeloid progenitor cell; FoxO1/3/4 triple knockout</td>
+       
+    
+       
+       <td>FOXO1 FOXO3 FOXO4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/153_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/153_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/153_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/153_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/154_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/154_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/154_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/154_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/155_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/155_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/155_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/155_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/156_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/156_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/156_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/156_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/157_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/157_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/157_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/157_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/158_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/158_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/158_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/158_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/159_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/159_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/159_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/159_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/160_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/160_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/160_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/160_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/161_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/161_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/161_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/161_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/162_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/162_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/162_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/162_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Heart ventricles</td>
+       
+    
+       
+       <td>GATA4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Deletion</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/163_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/163_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/163_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/163_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Heart</td>
+       
+    
+       
+       <td>ESRRA</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Deficiency</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/166_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/166_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/166_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/166_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Skeletal muscle</td>
+       
+    
+       
+       <td>KLF15</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Deficiency</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/167_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/167_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/167_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/167_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Liver</td>
+       
+    
+       
+       <td>KLF15</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Deficiency</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/168_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/168_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/168_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/168_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/172_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/172_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/172_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/172_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>EBF1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/173_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/173_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/173_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/173_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>EBF1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/174_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/174_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/174_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/174_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>EBF1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/175_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/175_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/175_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/175_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/176_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/176_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/176_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/176_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/177_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/177_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/177_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/177_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/178_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/178_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/178_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/178_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>FOXP3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/180_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/180_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/180_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/180_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>FOXP3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/181_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/181_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/181_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/181_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Epididymal white adipose tissue</td>
+       
+    
+       
+       <td>NR1D1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/182_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/182_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/182_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/182_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>NKX2-5</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/183_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/183_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/183_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/183_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>TBX5</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/184_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/184_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/184_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/184_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>TBX5 NKX2-5</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/185_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/185_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/185_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/185_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>brown adipose tissue</td>
+       
+    
+       
+       <td>YY1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/187_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/187_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/187_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/187_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>subcutaneaous white adipose tissue</td>
+       
+    
+       
+       <td>YY1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/188_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/188_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/188_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/188_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone Marrow Derived Murine Macrophages</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/189_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/189_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/189_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/189_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone Marrow Derived Murine Macrophages</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/190_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/190_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/190_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/190_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone Marrow Derived Murine Macrophages</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/191_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/191_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/191_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/191_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone Marrow Derived Murine Macrophages</td>
+       
+    
+       
+       <td>KEAP1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/192_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/192_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/192_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/192_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone Marrow Derived Murine Macrophages</td>
+       
+    
+       
+       <td>KEAP1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/193_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/193_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/193_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/193_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>NR1D1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/199_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/199_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/199_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/199_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreatic islet</td>
+       
+    
+       
+       <td>SOX17</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/211_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/211_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/211_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/211_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>TFAP4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/212_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/212_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/212_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/212_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>ovaries</td>
+       
+    
+       
+       <td>DMRT1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/216_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/216_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/216_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/216_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>129Sv</td>
+       
+    
+       
+       <td>DMRT1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/217_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/217_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/217_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/217_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>C57BL/6</td>
+       
+    
+       
+       <td>DMRT1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/218_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/218_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/218_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/218_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>CD8+ T cells</td>
+       
+    
+       
+       <td>RUNX3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/220_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/220_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/220_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/220_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pre-B cells</td>
+       
+    
+       
+       <td>BCL6</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/222_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/222_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/222_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/222_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/234_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/234_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/234_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/234_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/235_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/235_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/235_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/235_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/236_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/236_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/236_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/236_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/237_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/237_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/237_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/237_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/238_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/238_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/238_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/238_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/239_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/239_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/239_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/239_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/245_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/245_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/245_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/245_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreatic islets</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/250_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/250_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/250_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/250_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreatic islets</td>
+       
+    
+       
+       <td>HNF4A HNF1A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/251_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/251_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/251_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/251_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreatic islets</td>
+       
+    
+       
+       <td>HNF1A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>mutant</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/252_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/252_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/252_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/252_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/254_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/254_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/254_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/254_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lung carcinoma</td>
+       
+    
+       
+       <td>IGF1R</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/259_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/259_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/259_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/259_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>fetal testis</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/263_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/263_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/263_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/263_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>hair follicles</td>
+       
+    
+       
+       <td>GATA3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/264_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/264_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/264_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/264_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>hair follicle</td>
+       
+    
+       
+       <td>NOTCH1 NOTCH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/273_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/273_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/273_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/273_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>hair follicle</td>
+       
+    
+       
+       <td>RBPJ</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/274_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/274_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/274_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/274_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>neural stem cell</td>
+       
+    
+       
+       <td>BMI1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/275_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/275_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/275_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/275_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>midbrain</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/276_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/276_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/276_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/276_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lateral prostate</td>
+       
+    
+       
+       <td>MED1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/280_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/280_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/280_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/280_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>ventral prostate</td>
+       
+    
+       
+       <td>MED1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/281_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/281_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/281_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/281_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>regulatory T cell</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/282_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/282_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/282_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/282_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>colon</td>
+       
+    
+       
+       <td>HDAC2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/289_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/289_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/289_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/289_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>embryonic stem cell</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/291_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/291_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/291_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/291_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>trophoblast stem cell</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/292_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/292_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/292_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/292_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MEL cell line</td>
+       
+    
+       
+       <td>RUNX1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/304_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/304_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/304_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/304_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MEL cell line</td>
+       
+    
+       
+       <td>RUNX1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/305_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/305_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/305_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/305_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>TAF10</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/306_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/306_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/306_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/306_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>bone marrow</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/307_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/307_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/307_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/307_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>bone marrow</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/308_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/308_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/308_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/308_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>colon</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/314_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/314_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/314_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/314_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>primary embryonic fibroblasts</td>
+       
+    
+       
+       <td>BMI1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/320_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/320_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/320_DNase.html">DNase-seq</a></div></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/gallery/320_H3K27ac.html">H3K27ac</a></div></td>
+       
+    
+    </tr>
+  
+   </tbody>
+  </table>
+
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2018 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
+  </body>
+
+  <script src="http://lisa.cistrome.org/static/jquery-1.12.4.js"></script>
+  <script src="http://lisa.cistrome.org/static/popper.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+ <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+ <script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+});
+ </script>
+</html>

@@ -25,16 +25,13 @@
           <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Gallery</a>
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Human Gallery</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">RP(ongoing) </a>
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery_mm">Mouse Gallery</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html">Documentation</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link nav-a" href="http://cistrome.org/~qqin/lisa/build/html/Tutorial.html#faq">FAQ</a>
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
         </li>
       </ul>
     </div>
@@ -67,9 +64,19 @@
   <nav class="nav nav-pills flex-column">
     <a class="nav-link" href="#item-1">About</a>
     <nav class="nav nav-pills flex-column">
-      <a class="nav-link ml-3 my-1" href="#item-1-1">Installation</a>
-      <a class="nav-link ml-3 my-1" href="#item-1-2">Usage</a>
-      <a class="nav-link ml-3 my-1" href="#item-1-3">Output</a>
+        <a class="nav-link" href="#item-1">Website version</a>
+        <nav class="nav nav-pills flex-column">
+          <a class="nav-link ml-3 my-1" href="#item-1-1">Website Usage</a>
+          <a class="nav-link ml-3 my-1" href="#item-1-2">Website Output</a>
+        </nav>
+    </nav>
+    <nav class="nav nav-pills flex-column">
+        <a class="nav-link" href="#item-1">Local command version</a>
+    <nav class="nav nav-pills flex-column">
+      <a class="nav-link ml-3 my-1" href="#item-1-1">Local Installation</a>
+      <a class="nav-link ml-3 my-1" href="#item-1-2">Local Usage</a>
+      <a class="nav-link ml-3 my-1" href="#item-1-3">Local Output</a>
+    </nav>
     </nav>
     <a class="nav-link" href="#item-2">FAQ</a>
   </nav>
@@ -79,13 +86,72 @@
 <div class="col-sm-9">
 <div data-target="#navbar-example" data-offset="0">
   <h4 id="item-1">About</h4>
-  <p>
-  LISA involve four methods to discover potential enhancer and rank TFs. If get stuck, try to create issues at <a href=https://github.com/qinqian/lisa>lisa github repository</a>.
+  <p>LISA is short for Large scale In Silico Analysis. LISA is a computational method that uses chromatin data from a comprehensive database of human and mouse DNase-seq, and H3K27ac ChIP-seq profiles, to determine the transcription factors and chromatin regulators that are directly responsible for the perturbation of a differentially expressed gene set. To run LISA, the only thing you need is the differential gene list from whatever biological process you are interested in. Then you will be able to leverage the power of the most comprehensive DNase and ChIP-seq database (CistromeDB) to discover the underlying regulatory mechanisms, reveal the key transcription factors and chromatin regulators and also their binding sites!</p>
   </p>
   </hr>
 
-  <h4 id="item-1-1">Installation</h4>
-  <p> LISA can be deployed as a command line version, which is installed using the following commands. The related chromatin profile dataset will be released later, use <a href="http://lisa.cistrome.org">LISA online</a> for now.</p>
+  <h6>How does LISA work?</h6>
+<p>First, LISA will bulid a chromatin environment model using the input gene list based on the comprehensive database of DNase-seq, ATAC-seq or histone modification profiles. The model would try to match the cell type specific chromatin environment as good as possible. Then, for each gene, LISA will probe the effect of transcription factors in these environments by simulating deletions of their binding sites. The binding sites could come from the ChIP-seq data in cistromeDB or the motif hit profile. Finally, LISA would assign every binding site profile(ChIP-seq data or motif hit profile) a significance value showing how important the set of binding sites is by evaluating the effect across all the input genes.</p>
+
+<h6>Which mark should I choose?</h6>
+Well, as we can see in the input interface (Figure 1), there are DNase-seq, and H3K27ac ChIP-seq profiles for us to choose. From the set of transcription factor perturbation experiments used as benchmarks in the paper, we found that DNase and H3K27ac would always show the best performance, so these two should be the default setting. If you know that the biological process you are looking at is associated with some other mark, it would be interesting to have a try using that mark.</p>
+<div class="figure" id="id1">
+<img alt="_images/1.png" src="http://cistrome.org/~qqin/1.png" height="370" width="800">
+</div>
+<div align="center">Figure 1. Input interface</div>
+
+<h6>How many differential genes should I use?</h6>
+<p>User can input one gene set or two gene set (Figure 1). If only one gene set is given, it should be placed in "Gene Set 1", and the TF ranking list of that one gene list would be provided. If two are given, the comparison figure will be generated, a typical scenario would input up and down regulated gene set from one expression profile experiment. We would recommend 50 to 300 genes, since few genes will lower the predictive power of chromatin profile modelling. To build a model that can best represent the cell type specific chromatin environment, the number of genes can not be too few. However, because of the time-consuming step of deleting binding sites for all the ChIP-seq profile and motif hit profile for all the input genes, the LISA running time would suffer from the number of genes when it goes beyond 300.</p>
+
+<h6>What kind of results LISA offer?</h6>
+1. a pairwise scatterplot for LISA cis-elements knockout (Figure 2), 2. direct prediction from TF ChIP-seq methodologies (Figure 3) will be generated if two gene sets are given(optional). The x axis and y axis shows the -log10(p-value) of the TF ranking significance for either gene set. Once user mouse over the points, the corresponding TF ChIP-seq sample will be shown by Cistrome ID and TF name.
+
+<div class="figure">
+<img alt="_images/2.png" src="http://cistrome.org/~qqin/2.png">
+</div>
+
+<div align="center">Figure 2. LISA in-silico knockout method demo</div>
+<div class="figure">
+<img alt="_images/3.png" src="http://cistrome.org/~qqin/3.png">
+</div>
+<div align="center">Figure 3. LISA prediction directly from TF ChIP-seq demo</div>
+2. The ranking table of the LISA cis-elements knockout and direct prediction from TF ChIP-seq methodologies for ChIP-seq based TF ranking from either of the gene sets (Figure 4). Click each of the p-value, the Cistrome dataset link will be shown below (Figure 5).
+</ol>
+<div class="figure">
+<img alt="_images/4.png" src="http://cistrome.org/~qqin/4.png">
+</div>
+<div align="center">Figure 4. LISA TF ranking based on ChIP-seq</div>
+<div class="figure">
+<img alt="_images/5.png" src="http://cistrome.org/~qqin/5.png">
+</div>
+<div align="center">Figure 5. Cistrome dataset link</div>
+
+<ol class="loweralpha simple" start="3">
+<li>The ranking table for Motif PWM based TF ranking.</li>
+</ol>
+<div class="figure">
+<img alt="_images/6.png" src="http://cistrome.org/~qqin/6.png">
+</div>
+<div align="center">Figure 6. TF ranking based on chromatin profile knockout of Cistrome Motif</div>
+
+<p>d. selected chromatin profile and model performance.
+The annotation and the coefficient of the selected chromatin profile is selected. In this panel, user can also select a row to view the Cistrome dataset. Along with the table, there is the ROCAUC curve to show the model performance. The selected chromatin profile can be also linked to Cistrome dataset.</p>
+<div class="figure">
+<img alt="_images/7.png" src="http://cistrome.org/~qqin/7.png">
+</div>
+<div align="center">Figure 7. selected chromatin profile and model performance</div>
+
+<p>e. WashU genome browser for gene set enrichment
+We randomly picked arbitrarily 20 genes from the differential gene set to generate the genome tracks for the top ranked TF ChIP-seq, selected chromatin profile ChIP-seq for both gene set 1 (e.g. up regulated) and gene set 2 (e.g. down regulated) gene set (Figure 8).</p>
+<div class="figure">
+<img alt="_images/8.png" src="http://cistrome.org/~qqin/8.png">
+</div>
+<div align="center">Figure 8. gene set enrichment view mode of Wash U genome browser</div>
+</div>
+</div>
+
+  <h4 id="item-1-1">Local Installation</h4>
+  <p>LISA can be deployed as a command line version, which is installed using the following commands. The related chromatin profile dataset will be released later, use <a href="http://lisa.cistrome.org">LISA online</a> for now.</p>
 <code>
 <pre>
 wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -123,8 +189,6 @@ python setup.py install --user
 </hr>
 
   </p>
-  <h5 id="item-1-2">Usage</h5>
-<h6>Standalone version</h6>
 <p>The LISA framework has three pipeline represented with three sub-parsers, <cite>model</cite>, <cite>multiple_fastq2bigwig</cite>, and <cite>multiple_bigwig2hdf</cite>;
 The TF rank method is run through the <cite>model</cite> sub-parser.</p>
 <h6>Run all the methods</h6>
@@ -235,13 +299,10 @@ lisa model --method<span class="o">=</span><span class="s1">'beta'</span> <span 
 </table>
 
   <h5 id="item-2">FAQ</h5>
-<p>The FAQ introduces the usage of the web version. The LISA web version first need to get a copy and paste of gene list (one row a gene) to the input box, and submit your job.</p>
+<p>The LISA web version first need to get a copy and paste of gene list (one row a gene) to the input box, and submit your job.</p>
 
-<h6>1.What does LISA do? What do I need to run LISA?</h6>
-<p>LISA is short for Large scale In Silico Analysis. LISA is a computational method that uses chromatin data from a comprehensive database of human and mouse DNase-seq, and H3K27ac ChIP-seq profiles, to determine the transcription factors and chromatin regulators that are directly responsible for the perturbation of a differentially expressed gene set. To run LISA, the only thing you need is the differential gene list from whatever biological process you are interested in. Then you will be able to leverage the power of the most comprehensive DNase and ChIP-seq database (CistromeDB) to discover the underlying regulatory mechanisms, reveal the key transcription factors and chromatin regulators and also their binding sites!</p>
-
-<h6>2.How many datasets are there?</h6>
-<p>For now (May 3rd, 2018), the dataset statistics is as the table below.</p>
+<h6>How many datasets are there?</h6>
+<p>The 1st version of CistromeDB is incorporated, the dataset statistics is as the table below.</p>
 <table border="0" class="table">
 <colgroup>
 <col width="34%">
@@ -291,73 +352,11 @@ lisa model --method<span class="o">=</span><span class="s1">'beta'</span> <span 
 </table>
 <div align="center">Table 1. Chromatin profile data and TF/CR ChIP-seq dataset</div>
 
-<h6>3. How does LISA work?</h6>
-<p>First, LISA will bulid a chromatin environment model using the input gene list based on the comprehensive database of DNase-seq, ATAC-seq or histone modification profiles. The model would try to match the cell type specific chromatin environment as good as possible. Then, for each gene, LISA will probe the effect of transcription factors in these environments by simulating deletions of their binding sites. The binding sites could come from the ChIP-seq data in cistromeDB or the motif hit profile. Finally, LISA would assign every binding site profile(ChIP-seq data or motif hit profile) a significance value showing how important the set of binding sites is by evaluating the effect across all the input genes.</p>
-
-<h6>4. Which mark should I choose?</h6>
-Well, as we can see in the input interface (Figure 1), there are DNase-seq, and H3K27ac ChIP-seq profiles for us to choose. From the set of transcription factor perturbation experiments used as benchmarks in the paper, we found that DNase and H3K27ac would always show the best performance, so these two should be the default setting. If you know that the biological process you are looking at is associated with some other mark, it would be interesting to have a try using that mark.</p>
-<div class="figure" id="id1">
-<img alt="_images/1.png" src="http://cistrome.org/~qqin/1.png" height="370" width="800">
-</div>
-<div align="center">Figure 1. Input interface</div>
-
-<h6>5. How many differential genes should I use?</h6>
-<p>User can input one gene set or two gene set (Figure 1). If only one gene set is given, it should be placed in "Gene Set 1", and the TF ranking list of that one gene list would be provided. If two are given, the comparison figure will be generated, a typical scenario would input up and down regulated gene set from one expression profile experiment. We would recommend 50 to 300 genes, since few genes will lower the predictive power of chromatin profile modelling. To build a model that can best represent the cell type specific chromatin environment, the number of genes can not be too few. However, because of the time-consuming step of deleting binding sites for all the ChIP-seq profile and motif hit profile for all the input genes, the LISA running time would suffer from the number of genes when it goes beyond 300.</p>
-
-<h6>6. What kind of results LISA offer?</h6>
-1. a pairwise scatterplot for LISA cis-elements knockout (Figure 2), 2. direct prediction from TF ChIP-seq methodologies (Figure 3) will be generated if two gene sets are given(optional). The x axis and y axis shows the -log10(p-value) of the TF ranking significance for either gene set. Once user mouse over the points, the corresponding TF ChIP-seq sample will be shown by Cistrome ID and TF name.
-
-<div class="figure">
-<img alt="_images/2.png" src="http://cistrome.org/~qqin/2.png">
-</div>
-
-<div align="center">Figure 2. LISA in-silico knockout method demo</div>
-
-<div class="figure">
-<img alt="_images/3.png" src="http://cistrome.org/~qqin/3.png">
-</div>
-<div align="center">Figure 3. LISA prediction directly from TF ChIP-seq demo</div>
-2. The ranking table of the LISA cis-elements knockout and direct prediction from TF ChIP-seq methodologies for ChIP-seq based TF ranking from either of the gene sets (Figure 4). Click each of the p-value, the Cistrome dataset link will be shown below (Figure 5).
-</ol>
-<div class="figure">
-<img alt="_images/4.png" src="http://cistrome.org/~qqin/4.png">
-</div>
-<div align="center">Figure 4. LISA TF ranking based on ChIP-seq</div>
-<div class="figure">
-<img alt="_images/5.png" src="http://cistrome.org/~qqin/5.png">
-</div>
-<div align="center">Figure 5. Cistrome dataset link</div>
-
-<ol class="loweralpha simple" start="3">
-<li>The ranking table for Motif PWM based TF ranking.</li>
-</ol>
-<div class="figure">
-<img alt="_images/6.png" src="http://cistrome.org/~qqin/6.png">
-</div>
-<div align="center">Figure 6. TF ranking based on chromatin profile knockout of Cistrome Motif</div>
-
-<p>d. selected chromatin profile and model performance.
-The annotation and the coefficient of the selected chromatin profile is selected. In this panel, user can also select a row to view the Cistrome dataset. Along with the table, there is the ROCAUC curve to show the model performance. The selected chromatin profile can be also linked to Cistrome dataset.</p>
-<div class="figure">
-<img alt="_images/7.png" src="http://cistrome.org/~qqin/7.png">
-</div>
-<div align="center">Figure 7. selected chromatin profile and model performance</div>
-
-<p>e. WashU genome browser for gene set enrichment
-we randomly picked arbitrarily 20 genes from the differential gene set to generate the genome tracks for the top ranked TF ChIP-seq, selected chromatin profile ChIP-seq for both gene set 1 (e.g. up regulated) and gene set 2 (e.g. down regulated) gene set (Figure 8).</p>
-<div class="figure">
-<img alt="_images/8.png" src="http://cistrome.org/~qqin/8.png">
-</div>
-<div align="center">Figure 8. gene set enrichment view mode of Wash U genome browser</div>
-</div>
-</div>
-
 <nav class="navbar fixed-bottom navbar-dark">
   <div class="container">
     <a href="/" class="navbar-brand">
       <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
     </a>
-
     <ul class="navbar-nav bd-navbar-nav flex-row">
     <li class="nav-item active">
      <span>Copyright @2018 Liu lab</span>
@@ -365,7 +364,6 @@ we randomly picked arbitrarily 20 genes from the differential gene set to genera
     </ul>
   </div>
 </nav>
-
 {% endblock %}
 
 

@@ -64,25 +64,24 @@ def submit_lisa():
         labels = form.labels.data
         genes2 = form.genes2.data
         labels2 = form.labels2.data
+        ## fix space isssue
+        labels = labels.replace(' ', '_')
+        labels2 = labels2.replace(' ', '_')
+
+        job_name = form.name.data
+        job_name = job_name.replace(' ', '_')
+        method = form.method.data
+
+        species = form.species.data.encode('utf-8')
+        marks = form.mark.data.encode('utf-8')
 
         if genes2 == '':
-            job_name = form.name.data
-            ## fix space isssue
-            job_name = job_name.replace(' ', '_')
-            labels = labels.replace(' ', '_')
-            labels2 = labels2.replace(' ', '_')
-
-            method = form.method.data
-
-            species = form.species.data.encode('utf-8')
-            marks = form.mark.data.encode('utf-8')
-
             app.logger.info("%s %s %s at %s" % (str(genes), marks, species, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
             label = round(random.random(), 3)
             prefix = "%s_%s" % (job_name, secure_filename(time.strftime('%Y_%m_%d %H:%M:%S', time.localtime())) + str(label))
             app.logger.info("%s %s %s at %s from %s" % (str(genes), marks, species, prefix,
                                                         request.remote_addr))
-            gsf = os.path.join(upload, '%s.txt' % prefix)
+            gsf = os.path.join(upload, '%s.txt' % (prefix+"__"+species))
 
             if len(genes.split('\n')) > 300:
                 return render_template('index.html', form=form, message='inline-block')
@@ -98,24 +97,18 @@ def submit_lisa():
             # app.logger.info(target)
             app.logger.info("%s lisa modeling finished %s" % (prefix, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
 
-            task = run_lisa.apply_async(args=(method, species, marks, prefix, to_user), countdown=1, expires=3600)
+            task = run_lisa.apply_async(args=(method, species, marks, prefix+"__"+species, to_user), countdown=1, expires=3600)
             cc = render_template('display.html', epigenome=marks,
-                                 task_id=prefix, method=method)
-            with open('%s/%s%s' % (download, prefix, "_result.html"), 'w') as outf:
+                                 task_id=prefix+"__"+species, method=method)
+            with open('%s/%s%s' % (download, prefix+"__"+species, "_result.html"), 'w') as outf:
                 outf.write(cc)
             #return render_template('display.html', epigenome=marks, task_id=prefix)
-            return redirect('/download/%s_result.html'%prefix)
+            return redirect('/download/%s_result.html'%(prefix+"__"+species))
         else:
             if len(genes.split('\n')) > 300:
                 return render_template('index.html', form=form, message='inline-block')
             if len(genes2.split('\n')) > 300:
                 return render_template('index.html', form=form, message='inline-block')
-
-            job_name = form.name.data
-            method = form.method.data
-
-            species = form.species.data.encode('utf-8')
-            marks = form.mark.data.encode('utf-8')
 
             app.logger.info("%s %s %s at %s" % (str(genes), marks, species, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
             label = round(random.random(), 3)
@@ -123,7 +116,7 @@ def submit_lisa():
             prefix = "%s_%s" % (job_name, secure_filename(time.strftime('%Y_%m_%d %H:%M:%S', time.localtime())) + str(label))
             app.logger.info("%s %s %s at %s from %s" % (str(genes), marks, species, prefix,
                                                         request.remote_addr))
-            gsf1 = os.path.join(upload, '%s_gs1.txt' % prefix)
+            gsf1 = os.path.join(upload, '%s_gs1.txt' % (prefix+"__"+species))
             gene_set1 = open(gsf1, 'w')
             for i in genes.split('\n'):
                 i = i.strip().split(",") # comma is ok
@@ -131,7 +124,7 @@ def submit_lisa():
                     print >>gene_set1, j
             gene_set1.close()
 
-            gsf2 = os.path.join(upload, '%s_gs2.txt' % prefix)
+            gsf2 = os.path.join(upload, '%s_gs2.txt' % (prefix+"__"+species))
             gene_set2 = open(gsf2, 'w')
             for i in genes2.split('\n'):
                 i = i.strip().split(",") # comma is ok
@@ -139,15 +132,15 @@ def submit_lisa():
                     print >>gene_set2, j
             gene_set2.close()
 
-            task = multiple_run_lisa.apply_async(args=(method, species, marks, prefix, to_user, labels, labels2), countdown=1, expires=3600)
+            task = multiple_run_lisa.apply_async(args=(method, species, marks, prefix+"__"+species, to_user, labels, labels2), countdown=1, expires=3600)
 
             cc = render_template('multiple_display.html', epigenome=marks,
-                                 task_id=prefix, method=method)
+                                 task_id=prefix+"__"+species, method=method)
 
-            with open('%s/%s%s' % (download, prefix, "_result.html"), 'w') as outf:
+            with open('%s/%s%s' % (download, prefix+"__"+species, "_result.html"), 'w') as outf:
                 outf.write(cc)
             #return render_template('display.html', epigenome=marks, task_id=prefix)
-            return redirect('/download/%s_result.html'%prefix)
+            return redirect('/download/%s_result.html'%(prefix+"__"+species))
             # return
 
     return render_template('index.html', form = form, message="none")
@@ -370,7 +363,8 @@ def lisa_taskstatus(epigenome, task_id):
                         response['result2'] = os.path.join("/"+os.path.basename(upload), "%s.%s.motif.csv" % (task_id, epigenome))
                         ## upload/2017_10_12_2213360.84006.txt.H3K27ac.url
                         ## http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/upload/2017_10_12_2223360.31016.txt.H3K27ac.url&gftk=refGene,full
-                        response['resultl'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
+                        ## http://cistrome.org/browser/?genome=mm10wugb&datahub=http://lisa.cistrome.org//upload/mouse_test1_2019_01_03_0831000.263_gs1.txt.DNase.url&gftk=refGene,full
+                        response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
                     else:
                         response['state'] = 'PROGRESS'
                         response['status'] = "{0}%".format(str(f))
@@ -385,7 +379,7 @@ def lisa_taskstatus(epigenome, task_id):
                 response['result0'] = os.path.join("/"+os.path.basename(upload), '%s.%s.coefs.csv' % (task_id, epigenome))
                 response['result1'] = os.path.join("/"+os.path.basename(upload), "%s.%s.chip.csv" % (task_id, epigenome))
                 response['result2'] = os.path.join("/"+os.path.basename(upload), "%s.%s.motif.csv" % (task_id, epigenome))
-                response['resultl'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
+                response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
                 return jsonify(response)
     return jsonify(response)
 
@@ -435,7 +429,7 @@ def lisa_taskstatus2(epigenome, task_id):
 
                         ## upload/2017_10_12_2213360.84006.txt.H3K27ac.url
                         ## http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/upload/2017_10_12_2223360.31016.txt.H3K27ac.url&gftk=refGene,full
-                        response['resultl'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
+                        response['resultl'] = "http://cistrome.org/browser/?genome="+task_id.split('__')[-1]+"wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
                     else:
                         response['state'] = 'PROGRESS'
                         response['status'] = "{0}%".format(str(f))
@@ -476,8 +470,8 @@ def lisa_taskstatus2(epigenome, task_id):
                 else:
                     response['result2_fig'] = False
 
-                response['resultl'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
-                response['resultl_1'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
+                response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
+                response['resultl_1'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (task_id, epigenome)) + "&gftk=refGene,full"
                 return jsonify(response)
     return jsonify(response)
 
@@ -489,6 +483,10 @@ def get_docs():
 @app.route('/lisa_gallery', methods=['GET'])
 def get_gallery():
     return render_template('gallery.html')
+
+@app.route('/lisa_gallery_mm', methods=['GET'])
+def get_gallery2():
+    return render_template('gallery_mm.html')
 
 @app.route('/gallery/<path:filename>')
 def download_gallery(filename):

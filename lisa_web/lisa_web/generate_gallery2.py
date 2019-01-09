@@ -6,8 +6,15 @@ import pandas as pd
 import os
 import json
 
-df = pd.read_table('lisa_results_meta_table_human_with_gene_sets.xls')
+#df = pd.read_table('lisa_results_meta_table_human_with_gene_sets.xls')
+df = pd.read_table('lisa_results_meta_table_mouse_with_gene_sets.xls')
+
+#df = pd.read_table('lisa_results_meta_table_mouse_new_selected.xls')
+
+## /data5/home/jfan/projects/LISA/lisa_examples/lisa_results_meta_table_human_with_gene_sets.xls 
+
 df.drop('GEO_id', inplace=True, axis=1)
+df.drop('DE_col', inplace=True, axis=1)
 index = [ i for i in range(0, df.shape[0], 2)] 
 
 df = df.iloc[index,:]
@@ -44,7 +51,8 @@ def generate_page():
     x = template.render(header=df.columns, table=df.values)
     with open('gallery.html', 'w') as outf:
         outf.write(x)
-    os.system('cp gallery.html ../templates/')
+    #os.system('cp gallery.html ../templates/gallery.html')
+    os.system('cp gallery.html ../templates/gallery_mm.html')
 
 def clean_coef(x, mark, prefix):
     x.columns = ['id', 'coefficients', 'cell_type', 'cell_line', 'tissue']
@@ -88,7 +96,8 @@ def get_collapse_tf(z, prefix, mark, t):
     
 def generate_htmls(ids):
     #tcga = '/data5/home/jfan/projects/TCGA/lisa_results'
-    bench = '/data5/home/chenfei/JingyuFan/data_collection/MARGE/LISA_figures/human_ebi_random'
+    #bench = '/data5/home/chenfei/JingyuFan/data_collection/MARGE/LISA_figures/human_ebi_random'
+    bench = '/data5/home/chenfei/JingyuFan/data_collection/MARGE/LISA_figures/mouse_ebi_random'
    
     loader = FileSystemLoader('.')
     env = Environment(loader=loader) #autoescape=select_autoescape(['html']))
@@ -104,7 +113,7 @@ def generate_htmls(ids):
             print('%s not exists!' % d2)
             continue
 
-        os.system('python ../../plotly_scatter.py %s %s %s TFChIP-seq' % (d1, d2, '%s.fig1' % i))
+        os.system('python ../../plotly_scatter.py %s %s %s TFChIP-seq down-regulated up-regulated' % (d1, d2, '%s.fig1' % i))
         d1 = pd.read_csv(d1, header=None)
         d2 = pd.read_csv(d2, header=None)
         di1 = get_collapse_tf(d1, '%s_down' % i, 'direct', '')
@@ -134,7 +143,7 @@ def generate_htmls(ids):
                 print('%s not exists' % chipp2)
                 continue
           
-            os.system('python ../../plotly_scatter.py %s %s %s InSilicoChIP-seq' % (chipp1, chipp2, '%s.%s.fig2' % (i,j)))
+            os.system('python ../../plotly_scatter.py %s %s %s InSilicoChIP-seq down-regulated up-regulated' % (chipp1, chipp2, '%s.%s.fig2' % (i,j)))
             json_dict['result1_fig'] = '%s.%s.fig2.html' % (i, j)
 
             if (os.path.exists(os.path.join(bench, "%s_down.gene_symbol.%s.coefs.csv" %(i,j)))):
@@ -144,14 +153,16 @@ def generate_htmls(ids):
                 # 3_down.gene_symbol.foreground_gene
                 cmd1 = "./run_browser_local.sh %s %s %s" % (os.path.join(bench, "%s_down.gene_symbol.%s.coefs.csv" %(i,j)), chipp1, os.path.join(bench, '%s_down.gene_symbol.foreground_gene' % i))
                 os.system(cmd1)
-                json_dict['resultl'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/gallery/%s_down.gene_symbol.%s.url&gftk=refGene,full" % (i,j) 
+                #json_dict['resultl'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/gallery/%s_down.gene_symbol.%s.url&gftk=refGene,full" % (i,j) 
+                json_dict['resultl'] = "http://cistrome.org/browser/?genome=mm10wugb&datahub=http://lisa.cistrome.org/gallery/%s_down.gene_symbol.%s.url&gftk=refGene,full" % (i,j) 
             if (os.path.exists(os.path.join(bench, "%s_up.gene_symbol.%s.coefs.csv" %(i,j)))):
                 coef2 = pd.read_csv(os.path.join(bench, "%s_up.gene_symbol.%s.coefs.csv" %(i,j)))
                 clean_coef(coef2, j, "%s_up" % i)
 
                 cmd2 = "./run_browser_local.sh %s %s %s" % (os.path.join(bench, "%s_up.gene_symbol.%s.coefs.csv" %(i,j)), chipp2, os.path.join(bench, '%s_up.gene_symbol.foreground_gene' % i))
                 os.system(cmd2)
-                json_dict['resultl_1'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/gallery/%s_up.gene_symbol.%s.url&gftk=refGene,full" % (i,j) 
+                #json_dict['resultl_1'] = "http://cistrome.org/browser/?genome=hg38wugb&datahub=http://lisa.cistrome.org/gallery/%s_up.gene_symbol.%s.url&gftk=refGene,full" % (i,j) 
+                json_dict['resultl_1'] = "http://cistrome.org/browser/?genome=mm10wugb&datahub=http://lisa.cistrome.org/gallery/%s_up.gene_symbol.%s.url&gftk=refGene,full" % (i,j) 
 
             c1 = pd.read_csv(chipp1, header=None)
             ch1 = get_collapse_tf(c1, '%s_down' % i, j, 'chip.')
@@ -171,7 +182,7 @@ def generate_htmls(ids):
                 json.dump(json_dict, jsonf)
 #            return
 
-#generate_page()
+generate_page()
 print(df.head())
-#generate_htmls(df.iloc[:,0])
+###generate_htmls(df.iloc[:,0])
 generate_htmls(ids)

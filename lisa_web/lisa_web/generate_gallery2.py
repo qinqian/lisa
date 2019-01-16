@@ -9,8 +9,6 @@ import json
 #df = pd.read_table('lisa_results_meta_table_human_with_gene_sets.xls')
 df = pd.read_table('lisa_results_meta_table_mouse_with_gene_sets.xls')
 
-#df = pd.read_table('lisa_results_meta_table_mouse_new_selected.xls')
-
 ## /data5/home/jfan/projects/LISA/lisa_examples/lisa_results_meta_table_human_with_gene_sets.xls 
 
 df.drop('GEO_id', inplace=True, axis=1)
@@ -20,10 +18,12 @@ index = [ i for i in range(0, df.shape[0], 2)]
 df = df.iloc[index,:]
 df = df.iloc[:,:-2]
 
-exc = pd.read_table('exclude.ids', sep=',', header=None)
+inc = pd.read_table('lisa_results_meta_table_mouse_new_selected.xls')
+df = df.loc[df.ID.isin(inc.loc[:, 'ID']), :]
 
-print(exc)
-df = df.loc[~df.ID.isin(exc.iloc[0]), :]
+#exc = pd.read_table('exclude.ids', sep=',', header=None)
+#df = df.loc[~df.ID.isin(exc.iloc[0]), :]
+
 print(df.head())
 
 labels = [ "%s_%s" % (i, j) for i, j in zip(df.iloc[:, 0], df.iloc[:, -1]) ]
@@ -183,6 +183,6 @@ def generate_htmls(ids):
 #            return
 
 generate_page()
-print(df.head())
-###generate_htmls(df.iloc[:,0])
-generate_htmls(ids)
+#print(df.head())
+#generate_htmls(ids)
+#####generate_htmls(df.iloc[:,0])

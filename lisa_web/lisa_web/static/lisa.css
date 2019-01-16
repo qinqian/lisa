@@ -25,8 +25,8 @@
 }
 
 .body3 {
-    padding-top: 72px;
-    padding-bottom: 0px;
+    padding-top: 50px;
+    padding-bottom: 30px;
     font-family: lato, sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -35,7 +35,7 @@
 
 .body2 {
     padding-top: 35px;
-    padding-bottom: 0px;
+    padding-bottom: 30px;
     font-family: lato, sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -44,19 +44,18 @@
 
 .body {
     padding-top: 0px;
-    padding-bottom: 85px;
+    padding-bottom: 88px;
     font-family: lato, sans-serif;
     font-size: 14px;
     font-weight: normal;
-    height: 690px;
+    // height: 690px;
     background-color: #fff;
 }
 
 #navbar-example {
- //   position: relative;
     z-index: 998;
     position: fixed;
-    top: 248px;
+    top: 58px;
     margin-left: 35px;
     width: 220px;
     left: 101px;
@@ -169,3 +168,6 @@ background-color: #27ae60;
 background-color: #c0392b;
 }
 
+p.just {
+   text-align: justify;
+}

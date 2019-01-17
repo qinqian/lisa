@@ -201,9 +201,8 @@ function fetch(row) {
           var bookId = $(this).attr('data_id'); // this works
           $.getJSON('http://dc2.cistrome.org/api/inspector?id='+bookId, function(d) {
 
-          console.log($('.annotation').offset().top);
           $("body, html").animate({
-            scrollTop: $('.annotation').offset().top + 160
+            scrollTop: $('.annotation').offset().top - $('.dataTable').offset().top
           }, 600);
 
             $(".annotation").html("");
@@ -215,7 +214,6 @@ function fetch(row) {
             } else {
                browser_sp = "mm10"
             }
-
             modelc = $('<div class="card"><div class="card-header"><div class="card-title"><h3><b>Inspector</b></h3></div></div><div class="card-body"><div class="row"><div class="col-sm-9"><div class="row inspector_attrib_row"><div class="col"><b>Title:</b></div><div class="col">' + d.treats[0].name + '</div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 
@@ -278,7 +276,6 @@ function multiple_request(url, index) {
         }
 
         $(".tab-pane.active").ready(function() {
-            console.log("test2 ok...");
             tabulate(index, d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, index);
             fetch(false);
         });
@@ -473,6 +470,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
          d3.csv(data['result'], function(error, d) {
            tabulate('tf', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf');
            fetch(false);
+         $('.dataTable').on('draw.dt', function() {
+           console.log('test');
+           fetch(false)
+         });
          });
         }
         $(this).tab('show');
@@ -487,6 +488,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
          d3.csv(data['result_1'], function(error, d) {
            tabulate('tf_1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf_1');
            fetch(false);
+         $('.dataTable').on('draw.dt', function() {
+           console.log('test');
+           fetch(false)
+         });
          });
         }
         $(this).tab('show');
@@ -512,6 +517,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
             //tabulate('tf0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0');
             tabulate('tfcoef', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tfcoef');
             fetch(true);
+            $('.dataTable').on('draw.dt', function() {
+              console.log('test');
+              fetch(true)
+            });
           });
         }
         $(this).tab('show');
@@ -538,6 +547,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
            //tabulate('tf0_1', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0_1');
            tabulate('tfcoef0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tfcoef0');
            fetch(true);
+           $('.dataTable').on('draw.dt', function() {
+             console.log('test');
+             fetch(true)
+           });
          });
 
         }
@@ -579,6 +592,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         d3.csv(data['result1'], function(error, d) {
           tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
           fetch(false);
+          $('.dataTable').on('draw.dt', function() {
+            console.log('test');
+            fetch(false)
+          });
         });
       }
       $(this).tab('show');
@@ -593,6 +610,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
          d3.csv(data['result1_1'], function(error, d) {
            tabulate('tf1_1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1_1');
            fetch(false);
+           $('.dataTable').on('draw.dt', function() {
+             console.log('test');
+             fetch(false)
+           });
          });
        }
        $(this).tab('show');

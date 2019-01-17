@@ -117,6 +117,9 @@ function fetch(row) {
         $("td").click(function(e) {
           var bookId = $(this).attr('data_id'); // this works
           $.getJSON('http://dc2.cistrome.org/api/inspector?id='+bookId, function(d) {
+            $("body, html").animate({
+              scrollTop: $('.annotation').offset().top - $('.dataTable').offset().top
+            }, 600);
             $(".annotation").html("");
             conserv="http://dc2.cistrome.org/api/conserv?id="+bookId;
             color = {true: "green", false: "red", "NA": "gray"};
@@ -190,11 +193,19 @@ function multiple_request(url, index) {
         $(".tab-pane.active").ready(function() {
             tabulate(index, d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, index);
             fetch(false);
+                  $('.dataTable').on('draw.dt', function() {
+                    console.log('test');
+                    fetch(false)
+                  });
         });
 
         if ($('.tab'+index).length == 0) {
             tabulate(index, d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, index);
             fetch(false);
+                  $('.dataTable').on('draw.dt', function() {
+                    console.log('test');
+                    fetch(false)
+                  });
             multiple_request(url, index);
         }
         return true;
@@ -328,6 +339,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
               $(".tab-pane.active").ready(function() {
                   tabulate('tf', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf');
                   fetch(false);
+                  $('.dataTable').on('draw.dt', function() {
+                    console.log('test');
+                    fetch(false)
+                  });
               })
             }
           });
@@ -347,6 +362,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
               $(".tab-pane.active").ready(function() {
                   tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
                   fetch(false);
+                  $('.dataTable').on('draw.dt', function() {
+                    console.log('test');
+                    fetch(false)
+                  });
               })
             }
           });
@@ -362,6 +381,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
          d3.csv(data['result'], function(error, d) {
            tabulate('tf', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf');
            fetch(false);
+           $('.dataTable').on('draw.dt', function() {
+             console.log('test');
+             fetch(false)
+           });
          });
         }
         $(this).tab('show');
@@ -378,6 +401,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
             console.log(d);
             tabulate('tf0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0');
             fetch(true);
+            $('.dataTable').on('draw.dt', function() {
+              console.log('test');
+              fetch(true)
+            });
          });
         }
         $(this).tab('show');
@@ -460,6 +487,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         d3.csv(data['result1'], function(error, d) {
           tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
           fetch(false);
+          $('.dataTable').on('draw.dt', function() {
+            console.log('test');
+            fetch(false)
+          });
         });
       }
       $(this).tab('show');

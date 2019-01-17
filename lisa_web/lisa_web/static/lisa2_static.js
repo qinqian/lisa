@@ -35,7 +35,6 @@ function tabulate(cl, data, columns, interact) {
                   return "row";
                 }
               });
-
   console.log(rows);
 
   // create a cell in each row for each column
@@ -136,6 +135,7 @@ function auc_curve(root, dom) {
 
   var x = d3.scaleLinear().range([0, width]),
       y2 = d3.scaleLinear().range([height, 0]);
+
   x.domain([0,1]);
   y2.domain([0,1]);
   var data = new Array();
@@ -198,18 +198,24 @@ function fetch(row) {
     selector = "tr";
   }
         $(selector).click(function(e) {
+          console.log($(this).attr('data_id'));
           var bookId = $(this).attr('data_id'); // this works
           $.getJSON('http://dc2.cistrome.org/api/inspector?id='+bookId, function(d) {
 
           console.log($('.annotation').offset().top);
           $("body, html").animate({
-            scrollTop: $('.annotation').offset().top + 160
+            scrollTop: $('.annotation').offset().top - $('.dataTable').offset().top
           }, 600);
 
             $(".annotation").html("");
             conserv="http://dc2.cistrome.org/api/conserv?id="+bookId;
             color = {true: "green", false: "red", "NA": "gray"};
 
+            if (d.treats[0].species__name == "Homo sapiens") {
+               browser_sp = "hg38"
+            } else {
+               browser_sp = "mm10"
+            }
             modelc = $('<div class="card"><div class="card-header"><div class="card-title"><h3><b>Inspector</b></h3></div></div><div class="card-body"><div class="row"><div class="col-sm-9"><div class="row inspector_attrib_row"><div class="col"><b>Title:</b></div><div class="col">' + d.treats[0].name + '</div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 
@@ -230,7 +236,7 @@ function fetch(row) {
      '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"></div></div>' +
   '</div></div>' + 
   '<div class="row"><div class="col"><b>Visualize</b></div></div>' + 
-  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome=hg38&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU Browser</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=hg38">UCSC Browser</a></div></div></div>' + 
+  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU Browser</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC Browser</a></div></div></div>' + 
   '</div></div>');
   $(".annotation").append( modelc );
   modelc = $('<div class="card"><div class="card-header">Tool</div><div class="card-body"><table class="table">' +
@@ -272,7 +278,6 @@ function multiple_request(url, index) {
         }
 
         $(".tab-pane.active").ready(function() {
-            console.log("test2 ok...");
             tabulate(index, d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, index);
             fetch(false);
         });
@@ -323,8 +328,13 @@ function update_progress(status_url, status_div, div_heatmap_data) {
        d3.csv(data['result'], function(error, d) {
          tabulate('tf', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf');
          fetch(false);
+         $('.dataTable').on('draw.dt', function() {
+           console.log('test');
+           fetch(false)
+         });
        });
       }
+
       $(this).tab('show');
     });
 
@@ -337,6 +347,11 @@ function update_progress(status_url, status_div, div_heatmap_data) {
        d3.csv(data['result_1'], function(error, d) {
          tabulate('tf_1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf_1');
          fetch(false);
+         $('.dataTable').on('draw.dt', function() {
+           console.log('test');
+           fetch(false)
+         });
+
        });
       }
       $(this).tab('show');
@@ -363,6 +378,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
           //tabulate('tf0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0');
           tabulate('tfcoef', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tfcoef');
           fetch(true);
+          $('.dataTable').on('draw.dt', function() {
+            console.log('test');
+            fetch(true)
+          });
         });
       }
       $(this).tab('show');
@@ -389,8 +408,11 @@ function update_progress(status_url, status_div, div_heatmap_data) {
          //tabulate('tf0_1', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tf0_1');
          tabulate('tfcoef0', d,  ['coefficient', 'cell_type', 'cell_line', 'tissue', 'download'], false, 'tfcoef0');
          fetch(true);
+         $('.dataTable').on('draw.dt', function() {
+           console.log('test');
+           fetch(true)
+         });
        });
-
       }
       $(this).tab('show');
      });
@@ -431,6 +453,10 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       d3.csv(data['result1'], function(error, d) {
         tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
         fetch(false);
+        $('.dataTable').on('draw.dt', function() {
+          console.log('test');
+          fetch(false)
+        });
       });
     }
     $(this).tab('show');
@@ -445,8 +471,15 @@ function update_progress(status_url, status_div, div_heatmap_data) {
        d3.csv(data['result1_1'], function(error, d) {
          tabulate('tf1_1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1_1');
          fetch(false);
+         $('.dataTable').on('draw.dt', function() {
+           console.log('test');
+           fetch(false)
+         });
+
        });
+
      }
+
      $(this).tab('show');
    });
 

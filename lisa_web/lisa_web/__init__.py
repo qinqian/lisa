@@ -62,8 +62,13 @@ def submit_lisa():
 
         genes = form.genes.data
         labels = form.labels.data
+        if labels == '':
+            labels = 'gene_set_1'
+
         genes2 = form.genes2.data
         labels2 = form.labels2.data
+        if labels2 == '':
+            labels2 = 'gene_set_2'
         ## fix space isssue
         labels = labels.replace(' ', '_')
         labels2 = labels2.replace(' ', '_')
@@ -141,7 +146,6 @@ def submit_lisa():
                 outf.write(cc)
             #return render_template('display.html', epigenome=marks, task_id=prefix)
             return redirect('/download/%s_result.html'%(prefix+"__"+species))
-            # return
 
     return render_template('index.html', form = form, message="none")
 

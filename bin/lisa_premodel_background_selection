@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold
@@ -17,68 +18,89 @@ from lisa.model import Logit
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
+import random
+np.random.seed(999)
+random.seed(999)
 
-def get_background(species, epigenomes, gene_set, prefix, random):
+def generate_dedup_refseq(s, e, g):
+    epigenome = EpigenomeData(s, e)
+    feature = epigenome.get_cluster_median
+    refseq = feature.index.map(lambda x: x.split(':')[-2].upper())
+    symbol = feature.index.map(lambda x: x.split(':')[-1].upper())
+    gene_vec = binarize_gene_set(g, refseq, symbol)
+    feature.loc[:, 'Y'] = gene_vec
+    feature.loc[:, 'symbols'] = symbol
+    feature_symbols = feature.drop_duplicates(subset='symbols', keep='first', inplace=False)
+    feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
+    return feature_symbols
+
+def get_background(species, epigenomes, gene_set, prefix, random, background):
     """ get background information by using regression of all input data of epigenome types
     cluster center to get the predicted RP and get the 1000 nearest neighbors
+    background: background genes from user specified text file
     """
-    rank_dict = {}
-    for e in epigenomes:
-        epigenome = EpigenomeData(species, e)
-        feature = epigenome.get_cluster_median
-        refseq = feature.index.map(lambda x: x.split(':')[-2].upper())
-        symbol = feature.index.map(lambda x: x.split(':')[-1].upper())
-
-        gene_vec = binarize_gene_set(gene_set, refseq, symbol)
-        feature.loc[:, 'Y'] = gene_vec
-        feature.loc[:, 'symbols'] = symbol
-        feature_symbols = feature.drop_duplicates(subset='symbols', keep='first', inplace=False)
-        feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
+    if background != None:
+        # 'chrY:57214703:57214704:NR_110561:DDX11L16'
+        if background == 'auto_tad':
+            return
+        feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
         np.savetxt('%s.foreground_gene' % prefix,
                    feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
-        feature_symbols_x = feature_symbols.iloc[:, :(feature_symbols.shape[1]-1)]
-        feature_symbols_y = feature_symbols.Y
-        scale = StandardScaler(with_std=False)
-        feature_symbols_x = pd.DataFrame(scale.fit_transform(feature_symbols_x),
-                                         columns=feature_symbols_x.columns,
-                                         index=feature_symbols_x.index)
-        fold = KFold(n_splits=3, shuffle=True, random_state=777)
-        np.random.RandomState(777)
-        parameters = {'clf__C': np.random.uniform(1e3, 1e8, 5)}
-        logit = LogisticRegression(penalty='l1', tol=0.01, dual=False, random_state=999)
-        lisa_expression_gs = GridSearchCV(Pipeline([('clf', logit)]),
-                                          parameters, cv=fold, n_jobs=1,
-                                          scoring=make_scorer(roc_auc_score))
-        lisa_expression_gs.fit(feature_symbols_x, feature_symbols_y)
-
-        prediction = lisa_expression_gs.predict_log_proba(feature_symbols_x)[:, 1]
-        prauc = average_precision_score(feature_symbols_y, prediction)
-        auc = roc_auc_score(feature_symbols_y, prediction)
-        coefs = lisa_expression_gs.best_estimator_.named_steps['clf'].coef_[0]
-        best_params = lisa_expression_gs.best_params_.get('clf__C', None)
-        with open('%s.premodel_records.txt' % prefix, 'w') as cluster_regf:
-            cluster_regf.write("%s\t%s\t%s\n" % (prauc, auc, best_params))
-            cluster_regf.write('\t'.join(list(map(str, coefs))))
-
-        rank_dict[e] = prediction
-
-    rank_df = pd.DataFrame(rank_dict, index=feature_symbols_x.index)
-    rank_df = rank_df.rank(axis=0, ascending=False)
-    prediction_control = rank_df.ix[feature_symbols_y==0, :]
-    prediction_diff = rank_df.ix[feature_symbols_y==1, :]
-
-    # control gene number matching one differential gene
-    diff_gene = feature_symbols.index[feature_symbols.Y == 1]
-    if len(diff_gene) <= 3000:
-        control_gene_per_diff = 3000 // prediction_diff.shape[0]
-    else:
-        raise Exception('more genes than 3000...')
-    # |rank_j K4me3 - rank_i K4me3| + | rank_j K27ac - rank_i K27ac | +  | rank_j GC - rank_i GC |
-    np.random.RandomState(999)
+        background_ones = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
+        background_genes = np.unique(np.random.choice(feature_symbols.index[(background_ones.Y == 1) & (feature_symbols.Y == 0)], size=3000, replace=True))
+        np.savetxt('%s.background_gene.2000' % prefix,
+                   background_genes, fmt="%s")
+        sub_background_genes = np.random.choice(background_genes, size=300, replace=False)
+        np.savetxt('%s.background_gene.300' % prefix,
+                   sub_background_genes, fmt="%s")
+        return True
 
     if not random:
+        ## select background genes by using epigenome information of x marks
+        rank_dict = {}
+        for e in epigenomes:
+            feature_symbols = generate_dedup_refseq(species, e, gene_set)
+            feature_symbols_x = feature_symbols.iloc[:, :(feature_symbols.shape[1]-1)]
+            feature_symbols_y = feature_symbols.Y
+            scale = StandardScaler(with_std=False)
+            feature_symbols_x = pd.DataFrame(scale.fit_transform(feature_symbols_x),
+                                             columns=feature_symbols_x.columns,
+                                             index=feature_symbols_x.index)
+            fold = KFold(n_splits=3, shuffle=True, random_state=777)
+            rng = np.random.RandomState(999)
+            parameters = {'clf__C': rng.uniform(1e3, 1e8, 5)}
+            logit = LogisticRegression(penalty='l1', tol=0.01, dual=False, random_state=999)
+            lisa_expression_gs = GridSearchCV(Pipeline([('clf', logit)]),
+                                              parameters, cv=fold, n_jobs=1,
+                                              scoring=make_scorer(roc_auc_score))
+            lisa_expression_gs.fit(feature_symbols_x, feature_symbols_y)
+            prediction = lisa_expression_gs.predict_log_proba(feature_symbols_x)[:, 1]
+            prauc = average_precision_score(feature_symbols_y, prediction)
+            auc = roc_auc_score(feature_symbols_y, prediction)
+            coefs = lisa_expression_gs.best_estimator_.named_steps['clf'].coef_[0]
+            best_params = lisa_expression_gs.best_params_.get('clf__C', None)
+            with open('%s.premodel_records.txt' % prefix, 'w') as cluster_regf:
+                cluster_regf.write("%s\t%s\t%s\n" % (prauc, auc, best_params))
+                cluster_regf.write('\t'.join(list(map(str, coefs))))
+            rank_dict[e] = prediction
+
+        np.savetxt('%s.foreground_gene' % prefix,
+                   feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
+        rank_df = pd.DataFrame(rank_dict, index=feature_symbols_x.index)
+        rank_df = rank_df.rank(axis=0, ascending=False)
+        prediction_control = rank_df.ix[feature_symbols_y==0, :]
+        prediction_diff = rank_df.ix[feature_symbols_y==1, :]
+        # control gene number matching one differential gene
+        diff_gene = feature_symbols.index[feature_symbols.Y == 1]
+
+        if len(diff_gene) <= 3000:
+            control_gene_per_diff = 3000 // prediction_diff.shape[0]
+        else:
+            raise Exception('more genes than 3000...')
+
         background_genes = set()
         for fore_gene in diff_gene:
+            # |rank_j K4me3 - rank_i K4me3| + | rank_j K27ac - rank_i K27ac | +  | rank_j GC - rank_i GC |
             dist = prediction_control.sub(prediction_diff.loc[fore_gene], axis=1) \
                                      .abs() \
                                      .sum(axis=1)
@@ -86,17 +108,17 @@ def get_background(species, epigenomes, gene_set, prefix, random):
             background_genes = background_genes.union(dist.index[:control_gene_per_diff])
     else:
         #background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=2000, replace=False)
+        feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
+        np.savetxt('%s.foreground_gene' % prefix,
+                   feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
         background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=3000, replace=False)
 
     background_genes = np.array(list(background_genes))
-    print(background_genes)
-    print(len(background_genes))
-
     np.savetxt('%s.background_gene.2000' % prefix,
                background_genes, fmt="%s")
-
     np.savetxt('%s.background_gene.300' % prefix,
                np.random.choice(background_genes, size=300, replace=False), fmt="%s")
+    return True
 
 if __name__ == '__main__':
     fire.Fire(get_background)

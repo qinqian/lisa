@@ -214,8 +214,16 @@ function fetch(row) {
             } else {
                browser_sp = "mm10"
             }
+
+            if (d.treats[0].unique_id.startsWith('GSM')) {
+                link = 'https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id;
+            } else {
+                // https://www.encodeproject.org/experiments/ENCSR264RJX/
+                link = 'https://www.encodeproject.org/experiments/' + d.treats[0].unique_id.split('_')[0];
+            }
+
             modelc = $('<div class="card"><div class="card-header"><div class="card-title"><h3><b>Inspector</b></h3></div></div><div class="card-body"><div class="row"><div class="col-sm-9"><div class="row inspector_attrib_row"><div class="col"><b>Title:</b></div><div class="col">' + d.treats[0].name + '</div></div>' + 
-                       '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
+                       '<div class="row inspector_attrib_row"><div class="col"><b>GEO or ENCODE:</b></div><div class="col"><p class="tight-line">' + '<a href="' + link + '">' + d.treats[0].unique_id + '</a></div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>Citation:</b></div><div class="col"><p>' + d.treats[0].paper__reference + '</p>' +'PMID:' + '<a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=' + d.treats[0].paper__pmid + '">' + d.treats[0].paper__pmid + '</a></div></div>' + 
                        '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 

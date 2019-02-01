@@ -229,12 +229,12 @@ class LisaRank(object):
                 selection_ids = list(map(int, cols_new))
             except ValueError: ## imputation data without cistrome id to search
                 return cols
-            #meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, 
-            #                     encoding="ISO-8859-1",
-            #                     index_col=0)
-            meta = pd.read_table(self.epigenome.config.get_basic_meta,
+            meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, 
                                  encoding="ISO-8859-1",
                                  index_col=0)
+            #meta = pd.read_table(self.epigenome.config.get_basic_meta,
+            #                     encoding="ISO-8859-1",
+            #                     index_col=0)
             #selection = 'FactorName'
             selection = 'factor'
         else:

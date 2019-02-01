@@ -84,15 +84,19 @@ class LisaPipeline(object):
         os.system("snakemake -s Snakefile.hdf5 -j 4 --use-conda")
 
 
-    def model(self, method, threads, covariates, random, new_count_h5, new_rp_h5, *gene_sets):
+    def model(self, method, threads, covariates, random, new_count_h5, new_rp_h5, background, *gene_sets):
         """ modeling a batch of gene sets with multiple epigenome types
 
         covariates: True or False, use GC covariates or not
 
         new_count_h5 and new_rp_h5 must from the same epigenome mark, the same samples, and
         matched by sample names
+
+        background: a user-provided background gene list to replace random selected non-target genes
         """
         # generate snakemake config file
+        self.yml_data['background'] = background
+
         self.yml_data['method'] = method
         self.yml_data['model'] = True
         self.yml_data['gene_sets'] = gene_sets

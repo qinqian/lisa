@@ -14,7 +14,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
   <div class="container">
     <a href="/" class="navbar-brand">
-      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <img src="/static/lisa.jpg" height="55" width="40" alt="lisa">
       <span></span>LISA
     </a>
     <div id="navbar-nav-scroll">
@@ -213,23 +213,26 @@
                --species hg38 --epigenome <span class="s2">"['H3K27ac', 'DNase']"</span> <span class="se">\</span>
                --cluster<span class="o">=</span>True --covariates<span class="o">=</span>False <span class="se">\</span>
                --random<span class="o">=</span>True <span class="se">\</span>
+               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
                --prefix test_function1 <span class="se">\</span>
                --threads <span class="m">8</span> test.gene_symbol
     </pre>
     </td></tr></tbody></table>
     <p>Options:
     The <cite>test.gene_symbol</cite> is the gene set user input, which is a text file with one official gene symbol or refseq id per line, mixture of the both is not supported yet, this is used as a prefix for output, so put the file in a directory with written permission.</p>
-    <p>–epigenome controls the histone mark, DNase-seq or both to use in the features.</p>
-    
+    <p>-–epigenome option controls the histone mark, DNase-seq or both to use in the features.</p>
+    <p>--background option can specify user provided text file containing one gene a row to compare with the target gene set, --background=None to use random selected 3000 genes.</p>
     <h6>Run only one method</h6></h3>
     <p>run only the knockout or beta (direct from TF ChIP-seq) method:
-    –method option can control the method to run knockout or beta method, use it with the option –web=True to turn off the baseline method.</p>
+    --method option can control the method to run knockout or beta method, use it with the option –web=True to turn off the baseline method.</p>
+
     </td><td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'knockout'</span> <span class="se">\</span>
                --web<span class="o">=</span>True --new_rp_h5<span class="o">=</span>None <span class="se">\</span>
                --new_count_h5<span class="o">=</span>None --species hg38 <span class="se">\</span>
                --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
                --cluster<span class="o">=</span>False --covariates<span class="o">=</span>False <span class="se">\</span>
                --random<span class="o">=</span>True <span class="se">\</span>
+               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
                --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
     
     lisa model --method<span class="o">=</span><span class="s1">'beta'</span> <span class="se">\</span>
@@ -238,6 +241,7 @@
                --species hg38 --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
                --cluster<span class="o">=</span>False --covariates<span class="o">=</span>False <span class="se">\</span>
                --random<span class="o">=</span>True <span class="se">\</span>
+               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
                --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
     </pre>
     </td></tr></tbody></table>
@@ -247,6 +251,7 @@
                --web<span class="o">=</span>True --new_rp_h5<span class="o">=</span>None <span class="se">\</span>
                --new_count_h5<span class="o">=</span>None --species hg38 <span class="se">\</span>
                --epigenome <span class="s2">"['H3K27ac']"</span> --cluster<span class="o">=</span>True <span class="se">\</span>
+               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
                --covariates<span class="o">=</span>False --random<span class="o">=</span>True <span class="se">\</span>
                --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
     </pre>
@@ -316,7 +321,7 @@
 
     <h4 id="item-3">FAQ</h4>
     <h6>How many datasets are there?</h6>
-    <p>The 1st version of CistromeDB is incorporated, the dataset statistics is as the table below.</p>
+    <p>The 1st version of CistromeDB is incorporated, the dataset statistics is as the table below, NOTE: the data used for current LISA online is updated to CistromeDB (201801). </p>
     <div align="center">Table 1. Chromatin profile data and TF/CR ChIP-seq dataset</div>
     <table border="0" class="table">
     <colgroup>

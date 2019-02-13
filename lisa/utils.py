@@ -32,16 +32,16 @@ def mannwhitneyu_test(x,y,how="two-sided"):
 def binarize_gene_set(gene_set, *args):
     """ gene_set: one gene per line
     """
-    print(gene_set)
+    #print(gene_set)
     refseq, symbol = args
     with open(gene_set) as fin:
         gene_set = list(set([line.strip().upper() for line in fin]))
     gene_vec = np.zeros(len(refseq))
     if len(np.intersect1d(refseq, gene_set)) > 5:
-        print('input refseq ...')
+        #print('input refseq ...')
         gene_vec[np.in1d(refseq, gene_set)] = 1
     elif len(np.intersect1d(symbol, gene_set)) > 5:
-        print('input symbol ...')
+        #print('input symbol ...')
         gene_vec[np.in1d(symbol, gene_set)] = 1
     else:
         raise Exception("no genes found in referenence...")

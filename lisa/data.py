@@ -44,7 +44,7 @@ class EpigenomeData(object):
         TF: TF ChIP-seq or epigenome ChIP-seq
         """
         if not TF:
-            print(ids)
+            #print(ids)
             meta = pd.read_csv(self.config.get_meta, encoding="ISO-8859-1", index_col=0)
             meta.index = meta.index.astype('str')
             return meta.ix[ids, 3:6]

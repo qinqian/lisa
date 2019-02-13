@@ -1,0 +1,24 @@
+""" https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html 
+Input Functions and unpack
+"""
+import os
+
+def get_combine_command(label):
+    return "lisa_combine_ranks -prefix {wildcards.sample}_%s {input}" % label
+
+def get_inputs(method):
+    if method == 'beta':
+        return "{sample}.lisa_direct.csv"
+    elif method == 'knockout':
+        return expand("{{sample}}.{epigenome}.chipseq.p_value.csv", epigenome=config['epigenome'])
+    elif method == 'all':
+        return "{sample}.lisa_direct.csv", expand("{{sample}}.{epigenome}.chipseq.p_value.csv", epigenome=config['epigenome'])
+
+rule lisa_combine_chipseq_ranks:
+    input:
+        get_inputs(config['method'])
+    output:
+        "{sample}_chipseq_caucy_combine_dedup.csv" 
+    message: "combine p values of TF from ChIP-seq"
+    shell:
+        get_combine_command('chipseq')

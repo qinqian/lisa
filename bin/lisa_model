@@ -21,7 +21,6 @@ def model(sample_number, species, epigenome, gene_set, foreground, background, p
     epigenome: one epigenome type, e.g. DNase
     gene_set: a gene set file, one gene per line
     """
-    print(new_h5)
     epigenome = EpigenomeData(species, epigenome)
     feature = epigenome.get_RP
 

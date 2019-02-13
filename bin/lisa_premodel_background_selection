@@ -15,12 +15,17 @@ import fire
 from lisa.data import EpigenomeData
 from lisa.utils import binarize_gene_set
 from lisa.model import Logit
+from pkg_resources import resource_filename
+from collections import Counter, defaultdict
+from lisa import Config
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
 import random
+import sys
 np.random.seed(999)
 random.seed(999)
+
 
 def generate_dedup_refseq(s, e, g):
     epigenome = EpigenomeData(s, e)
@@ -34,25 +39,69 @@ def generate_dedup_refseq(s, e, g):
     feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
     return feature_symbols
 
+
+def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num=3000):
+    # 'chrY:57214703:57214704:NR_110561:DDX11L16'
+    background = df.loc[~df.geneName.isin(excl_genes), :]
+    if len(incl_genes) > 0:
+        background = background.loc[background.geneName.isin(incl_genes), :]
+
+    background.drop_duplicates('geneName', inplace=True)
+    tad_promoter_chr = background.loc[:, ['k4me3_order_cluster', 'tad_order_cluster']]
+    prop_dict = Counter()
+    prop_dict_genes = defaultdict(list)
+    for i in range(tad_promoter_chr.shape[0]):
+        prop_dict[tuple(tad_promoter_chr.iloc[i, :])] += 1
+        prop_dict_genes[tuple(tad_promoter_chr.iloc[i, :])].append(background.iloc[i, :].geneName)
+    n = 0
+    genes = []
+    for i in prop_dict:
+        prop_dict[i] /= background.shape[0]
+        gene_num = int(prop_dict[i] * 3000 * 1.2)
+        n += gene_num
+        genes += list(np.random.choice(np.unique(np.array(prop_dict_genes[i])), gene_num))
+    np.savetxt('%s.background_gene' % prefix,
+               list(set(genes)), fmt="%s")
+    background_ones  = generate_dedup_refseq(species, epigenomes[0], '%s.background_gene' % prefix)
+    background_genes = np.unique(np.random.choice(background_ones.index[background_ones.Y==1].values, size=num, replace=False))
+    return background_genes
+
+
 def get_background(species, epigenomes, gene_set, prefix, random, background):
     """ get background information by using regression of all input data of epigenome types
     cluster center to get the predicted RP and get the 1000 nearest neighbors
     background: background genes from user specified text file
     """
+    feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
     if background != None:
-        # 'chrY:57214703:57214704:NR_110561:DDX11L16'
         if background == 'auto_tad':
-            return
-        feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
-        np.savetxt('%s.foreground_gene' % prefix,
-                   feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
-        background_ones = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
-        background_genes = np.unique(np.random.choice(feature_symbols.index[(background_ones.Y == 1) & (feature_symbols.Y == 0)], size=3000, replace=True))
-        np.savetxt('%s.background_gene.2000' % prefix,
-                   background_genes, fmt="%s")
-        sub_background_genes = np.random.choice(background_genes, size=300, replace=False)
-        np.savetxt('%s.background_gene.300' % prefix,
-                   sub_background_genes, fmt="%s")
+            if species == 'hg38':
+                conf = Config(resource_filename("lisa", "lisa.ini"), species)
+                df = pd.read_table(conf.get_tad)
+                background_genes = sampling_by_tad(prefix, species, epigenomes, df, feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1]), [])
+                sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1]),
+                                                       list(map(lambda x: x.split(':')[-1], background_genes)), 300)
+
+                np.savetxt('%s.background_gene.3000' % prefix,
+                           background_genes, fmt="%s")
+                np.savetxt('%s.background_gene.300' % prefix,
+                           sub_background_genes, fmt="%s")
+                np.savetxt('%s.foreground_gene' % prefix,
+                           feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
+                return True
+            else:
+                raise Exception('mm10 TAD domain not available') 
+
+        elif os.path.exists(background):
+            np.savetxt('%s.foreground_gene' % prefix,
+                       feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
+            background_ones = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
+            background_genes = np.unique(np.random.choice(feature_symbols.index[(background_ones.Y == 1) & (feature_symbols.Y == 0)], size=3000, replace=True))
+            np.savetxt('%s.background_gene.3000' % prefix,
+                       background_genes, fmt="%s")
+            sub_background_genes = np.random.choice(background_genes, size=300, replace=False)
+            np.savetxt('%s.background_gene.300' % prefix,
+                       sub_background_genes, fmt="%s")
         return True
 
     if not random:
@@ -107,14 +156,13 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
             dist.sort_values(axis=0, ascending=True, inplace=True)
             background_genes = background_genes.union(dist.index[:control_gene_per_diff])
     else:
-        #background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=2000, replace=False)
         feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
         np.savetxt('%s.foreground_gene' % prefix,
                    feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
         background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=3000, replace=False)
 
     background_genes = np.array(list(background_genes))
-    np.savetxt('%s.background_gene.2000' % prefix,
+    np.savetxt('%s.background_gene.3000' % prefix,
                background_genes, fmt="%s")
     np.savetxt('%s.background_gene.300' % prefix,
                np.random.choice(background_genes, size=300, replace=False), fmt="%s")

@@ -19,7 +19,8 @@ rule lisa_in_silico_knockout_motif_99:
         background = "{sample}.background_gene.300",
         foreground="{sample}.foreground_gene"
     output:
-        "{sample}.{epigenome}.motif99.csv"
+        "{sample}.{epigenome}.motif99.csv",
+        "{sample}.{epigenome}.motif99.p_value.csv"
     message: "lisa In silico Knockout motif..."
     benchmark:
         "{sample}.{epigenome}.motif99.knockout.benchmark.txt"
@@ -35,7 +36,8 @@ rule lisa_in_silico_knockout_tf_chipseqpeak:
         background = "{sample}.background_gene.300",
         foreground="{sample}.foreground_gene"
     output:
-        "{sample}.{epigenome}.chipseq.csv"
+        "{sample}.{epigenome}.chipseq.csv",
+        "{sample}.{epigenome}.chipseq.p_value.csv"
     message: "lisa In silico Knockout chip-seq ..."
     benchmark:
         "{sample}.{epigenome}.chipseq.knockout.benchmark.txt"

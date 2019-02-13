@@ -82,5 +82,5 @@ genome_100bp_motif_index98 = /data/home/qqin/MARGE/scripts/lisa/db/marge2_motif_
 genome_100bp_motif_index95 = /data/home/qqin/MARGE/scripts/lisa/db/marge2_motif_100bp_95.h5
 genome_100bp_motif_index96 = /data/home/qqin/MARGE/scripts/lisa/db/marge2_motif_100bp_96.h5
 udhs_100bp_index = /data/home/qqin/MARGE/scripts/lisa/db/DHS_hg38.bed.index.npy
-tad_info = /data/home/qqin/MARGE/scripts/lisa/db/""
+tad_info = /data/home/qqin/MARGE/scripts/lisa/db/promoter_TADann_H3K4me3_enhance_k27me3_Using.xls
 

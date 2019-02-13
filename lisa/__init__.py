@@ -118,6 +118,13 @@ class Config(ConfigParser):
             return self.get(self.s, 'bwa_index')
 
     @property
+    def get_tad(self):
+        """genome index
+        """
+        if hasattr(self, "s"):
+            return self.get(self.s, 'tad_info')
+
+    @property
     def get_cluster(self):
         """only for hg38 now......"""
         if hasattr(self, "s"):

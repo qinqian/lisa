@@ -1,0 +1,17 @@
+import os
+
+def get_combine_command(label):
+    return "lisa_combine_ranks -prefix {wildcards.sample}_%s {input}" % label
+
+def get_inputs(method):
+    if method == 'knockout' or method == 'all':
+        return expand("{{sample}}.{epigenome}.motif99.p_value.csv", epigenome=config['epigenome'])
+
+rule lisa_combine_motif_ranks:
+    input:
+        get_inputs(config['method'])
+    output:
+        "{sample}_motif_caucy_combine_dedup.csv"
+    message: "combine p values of TF from motif"
+    shell:
+        get_combine_command('motif')

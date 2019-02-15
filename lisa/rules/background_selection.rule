@@ -4,7 +4,8 @@ rule lisa_select_background:
         "{sample}"
     output:
         "{sample}.background_gene.3000",
-        "{sample}.background_gene.300",
+        #"{sample}.background_gene.300",
+        "{sample}.background_gene.1000",
         "{sample}.foreground_gene"
         # "{sample}.fore_gene.rank.csv",
         # "{sample}.back_gene.rank.csv"

@@ -80,11 +80,11 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
                 df = pd.read_table(conf.get_tad)
                 background_genes = sampling_by_tad(prefix, species, epigenomes, df, feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1]), [])
                 sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1]),
-                                                       list(map(lambda x: x.split(':')[-1], background_genes)), 300)
+                                                       list(map(lambda x: x.split(':')[-1], background_genes)), 1000)
 
                 np.savetxt('%s.background_gene.3000' % prefix,
                            background_genes, fmt="%s")
-                np.savetxt('%s.background_gene.300' % prefix,
+                np.savetxt('%s.background_gene.1000' % prefix,
                            sub_background_genes, fmt="%s")
                 np.savetxt('%s.foreground_gene' % prefix,
                            feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
@@ -99,8 +99,8 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
             background_genes = np.unique(np.random.choice(feature_symbols.index[(background_ones.Y == 1) & (feature_symbols.Y == 0)], size=3000, replace=True))
             np.savetxt('%s.background_gene.3000' % prefix,
                        background_genes, fmt="%s")
-            sub_background_genes = np.random.choice(background_genes, size=300, replace=False)
-            np.savetxt('%s.background_gene.300' % prefix,
+            sub_background_genes = np.random.choice(background_genes, size=1000, replace=False)
+            np.savetxt('%s.background_gene.1000' % prefix,
                        sub_background_genes, fmt="%s")
         return True
 
@@ -164,8 +164,8 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
     background_genes = np.array(list(background_genes))
     np.savetxt('%s.background_gene.3000' % prefix,
                background_genes, fmt="%s")
-    np.savetxt('%s.background_gene.300' % prefix,
-               np.random.choice(background_genes, size=300, replace=False), fmt="%s")
+    np.savetxt('%s.background_gene.1000' % prefix,
+               np.random.choice(background_genes, size=1000, replace=False), fmt="%s")
     return True
 
 if __name__ == '__main__':

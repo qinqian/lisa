@@ -43,7 +43,8 @@ def get_targets():
             targets += expand("{sample}_chipseq_baseline.csv", sample=config["gene_sets"])
 
         if config['method'] == 'all' or config['method'] == 'beta':
-            targets += expand("{sample}.lisa_direct.csv", sample=config["gene_sets"])
+            targets += expand("{sample}.1000.lisa_direct.csv", sample=config["gene_sets"])
+            targets += expand("{sample}.3000.lisa_direct.csv", sample=config["gene_sets"])
 
         if config['method'] == 'all' or config['method'] == 'knockout':
             targets += expand("{sample}.{epigenome}.motif99.csv", sample=config["gene_sets"], epigenome=config["epigenome"])

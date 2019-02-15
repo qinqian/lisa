@@ -16,7 +16,8 @@ def get_knockout_command(cov, dtype, new_h5_rp, new_h5_count):
 rule lisa_in_silico_knockout_motif_99:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
-        background = "{sample}.background_gene.300",
+        #background = "{sample}.background_gene.300",
+        background = "{sample}.background_gene.1000",
         foreground="{sample}.foreground_gene"
     output:
         "{sample}.{epigenome}.motif99.csv",
@@ -33,7 +34,8 @@ rule lisa_in_silico_knockout_motif_99:
 rule lisa_in_silico_knockout_tf_chipseqpeak:
     input:
         coef="{sample}.{epigenome}.coefs.csv",
-        background = "{sample}.background_gene.300",
+        #background = "{sample}.background_gene.300",
+        background = "{sample}.background_gene.1000",
         foreground="{sample}.foreground_gene"
     output:
         "{sample}.{epigenome}.chipseq.csv",

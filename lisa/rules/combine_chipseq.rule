@@ -8,11 +8,12 @@ def get_combine_command(label):
 
 def get_inputs(method):
     if method == 'beta':
-        return "{sample}.lisa_direct.csv"
+        #return "{sample}.lisa_direct.csv"
+        return "{sample}.3000.lisa_direct.csv"
     elif method == 'knockout':
         return expand("{{sample}}.{epigenome}.chipseq.p_value.csv", epigenome=config['epigenome'])
     elif method == 'all':
-        return "{sample}.lisa_direct.csv", expand("{{sample}}.{epigenome}.chipseq.p_value.csv", epigenome=config['epigenome'])
+        return "{sample}.3000.lisa_direct.csv", expand("{{sample}}.{epigenome}.chipseq.p_value.csv", epigenome=config['epigenome'])
 
 rule lisa_combine_chipseq_ranks:
     input:

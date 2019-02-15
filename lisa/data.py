@@ -29,6 +29,7 @@ class EpigenomeData(object):
                  & (quality['PBC'] > 0.7) \
                  & (quality['FactorName'] == self.epigenome)
         sids = quality.ix[selector, 'X']
+        print(sids.shape)
         return list(set(map(str, list(sids))))
 
     @property

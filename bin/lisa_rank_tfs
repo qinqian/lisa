@@ -113,6 +113,7 @@ class LisaRank(object):
         self.epigenome.epigenome = epigenome
         # load raw regulatory potential
         raw_reg = self.epigenome.get_RP
+        # raw_reg.index = raw_reg.index.map(lambda x:x.upper())  # fix the symbol to uppercase, not necessary, comment
 
         if new_h5_rp != None: # add hdf5 from fastqs or bigwigs for raw rp
             with h5py.File(new_h5_rp) as st:

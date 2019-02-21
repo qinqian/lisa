@@ -19,7 +19,8 @@ rule lisa_combine_chipseq_ranks:
     input:
         get_inputs(config['method'])
     output:
-        "{sample}_chipseq_caucy_combine_dedup.csv" 
+        "{sample}_chipseq_cauchy_combine_dedup.csv",
+        "{sample}_chipseq_fisher_combine_dedup.csv"
     message: "combine p values of TF from ChIP-seq"
     shell:
         get_combine_command('chipseq')

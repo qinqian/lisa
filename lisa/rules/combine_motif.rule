@@ -11,7 +11,8 @@ rule lisa_combine_motif_ranks:
     input:
         get_inputs(config['method'])
     output:
-        "{sample}_motif_caucy_combine_dedup.csv"
+        "{sample}_motif_cauchy_combine_dedup.csv",
+        "{sample}_motif_fisher_combine_dedup.csv"
     message: "combine p values of TF from motif"
     shell:
         get_combine_command('motif')

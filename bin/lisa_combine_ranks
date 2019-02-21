@@ -54,9 +54,16 @@ def main():
     combine_p = rank.apply(lambda x: cauchy_p_value(x)[1], axis=1)
     combine_p.sort_values(inplace=True)
     combine_p = pd.DataFrame(combine_p)
-    combine_p.to_csv('%s_caucy_combine_raw.csv' % args.prefix)
+    combine_p.to_csv('%s_cauchy_combine_raw.csv' % args.prefix)
     combine_p = deduplicate(combine_p)
-    combine_p.to_csv('%s_caucy_combine_dedup.csv' % args.prefix)
+    combine_p.to_csv('%s_cauchy_combine_dedup.csv' % args.prefix)
+
+    combine_p2 = rank.apply(lambda x: stats.combine_pvalues(x, method='fisher')[1], axis=1)
+    combine_p2.sort_values(inplace=True)
+    combine_p2 = pd.DataFrame(combine_p2)
+    combine_p2.to_csv('%s_fisher_combine_raw.csv' % args.prefix)
+    combine_p2 = deduplicate(combine_p2)
+    combine_p2.to_csv('%s_fisher_combine_dedup.csv' % args.prefix)
 
 if __name__ == '__main__':
     main()

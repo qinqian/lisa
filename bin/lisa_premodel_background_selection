@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold
@@ -36,15 +35,22 @@ def generate_dedup_refseq(s, e, g):
     feature.loc[:, 'Y'] = gene_vec
     feature.loc[:, 'symbols'] = symbol
     feature_symbols = feature.drop_duplicates(subset='symbols', keep='first', inplace=False)
+    print(sum(gene_vec))
+    print(feature_symbols.Y.sum())
     feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
     return feature_symbols
 
 
 def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num=3000):
     # 'chrY:57214703:57214704:NR_110561:DDX11L16'
-    background = df.loc[~df.geneName.isin(excl_genes), :]
+    if len(excl_genes) > 0:
+        background = df.loc[~df.geneName.map(lambda x:x.upper()).isin(excl_genes), :]
+    else:
+        background = df
     if len(incl_genes) > 0:
-        background = background.loc[background.geneName.isin(incl_genes), :]
+        background = background.loc[background.geneName.map(lambda x:x.upper()).isin(incl_genes), :]
+    else:
+        background = df
 
     background.drop_duplicates('geneName', inplace=True)
     tad_promoter_chr = background.loc[:, ['k4me3_order_cluster', 'tad_order_cluster']]
@@ -52,63 +58,100 @@ def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num
     prop_dict_genes = defaultdict(list)
     for i in range(tad_promoter_chr.shape[0]):
         prop_dict[tuple(tad_promoter_chr.iloc[i, :])] += 1
-        prop_dict_genes[tuple(tad_promoter_chr.iloc[i, :])].append(background.iloc[i, :].geneName)
+        prop_dict_genes[tuple(tad_promoter_chr.iloc[i, :])].append(background.iloc[i, :].geneName.upper())
     n = 0
     genes = []
+    z = 0
     for i in prop_dict:
-        prop_dict[i] /= background.shape[0]
-        gene_num = int(prop_dict[i] * 3000 * 1.2)
+        gene_num = int(prop_dict[i] / background.shape[0] * num * 1.1) # sampling a bit more genes
         n += gene_num
-        genes += list(np.random.choice(np.unique(np.array(prop_dict_genes[i])), gene_num))
-    np.savetxt('%s.background_gene' % prefix,
-               list(set(genes)), fmt="%s")
-    background_ones  = generate_dedup_refseq(species, epigenomes[0], '%s.background_gene' % prefix)
-    background_genes = np.unique(np.random.choice(background_ones.index[background_ones.Y==1].values, size=num, replace=False))
-    return background_genes
+        z += prop_dict[i] / background.shape[0]
+        genes += list(np.random.choice(np.array(prop_dict_genes[i]), gene_num, replace=False)) # replace=False
+    return list(set(genes))
 
 
 def get_background(species, epigenomes, gene_set, prefix, random, background):
-    """ get background information by using regression of all input data of epigenome types
-    cluster center to get the predicted RP and get the 1000 nearest neighbors
-    background: background genes from user specified text file
+    """ 
+    background: background genes from user specified text file, one gene a row
+
+    different background strategy:
+    1. epigenetic background:  get background information by using regression of all input data of epigenome types
+                               cluster center to get the predicted RP and get the 1000 nearest neighbors
+
+    2. random background 
+    3. TAD+promoter background: only available for human now
     """
-    feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
+    if gene_set != None:
+        feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
+        #feature_symbols.index = feature_symbols.index.map(lambda x:x.upper())
+
     if background != None:
-        if background == 'auto_tad':
+        if background == 'dynamic_auto_tad':
             if species == 'hg38':
                 conf = Config(resource_filename("lisa", "lisa.ini"), species)
                 df = pd.read_table(conf.get_tad)
-                background_genes = sampling_by_tad(prefix, species, epigenomes, df, feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1]), [])
-                sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1]),
-                                                       list(map(lambda x: x.split(':')[-1], background_genes)), 1000)
-
-                np.savetxt('%s.background_gene.3000' % prefix,
-                           background_genes, fmt="%s")
-                np.savetxt('%s.background_gene.1000' % prefix,
-                           sub_background_genes, fmt="%s")
-                np.savetxt('%s.foreground_gene' % prefix,
-                           feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
+                if gene_set != None:
+                    all_rp_genes = feature_symbols.index.map(lambda x:x.split(':')[-1].upper())
+                    df = df.loc[df.geneName.map(lambda x:x.upper()).isin(all_rp_genes), :] ## overlap TAD annotation with our RP genes
+                    foreground = feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1].upper())
+                else:
+                    foreground = []
+                background = sampling_by_tad(prefix, species, epigenomes, df, foreground, [])
+                ## 3000 background genes in symbols
+                np.savetxt('%s.background_gene.1' % prefix,
+                           background, fmt="%s")
+                get_background(species, epigenomes, gene_set, prefix, random, '%s.background_gene.1' % prefix)
                 return True
             else:
                 raise Exception('mm10 TAD domain not available') 
-
         elif os.path.exists(background):
-            np.savetxt('%s.foreground_gene' % prefix,
-                       feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
-            background_ones = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
-            background_genes = np.unique(np.random.choice(feature_symbols.index[(background_ones.Y == 1) & (feature_symbols.Y == 0)], size=3000, replace=True))
+            if gene_set != None:
+                foreground = feature_symbols.index[feature_symbols.Y==1].values
+                np.savetxt('%s.foreground_gene' % prefix,
+                           foreground, fmt="%s")
+                foreground = np.array(list(map(lambda x:x.split(':')[-1].upper(), foreground)))
+            else:
+                foreground = []
+            background  = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
+            ##background.index = background.index.map(lambda x:x.upper())
+            if gene_set != None:
+                print(background.shape)
+                print(feature_symbols.shape)
+                print(((background.Y == 1) & (feature_symbols.Y==0)).sum())
+                print((background.index==feature_symbols.index).sum())
+                overlapped = ((background.Y == 1) & (feature_symbols.Y==1)).sum()
+                sampled_num = 3000 - overlapped # exclude overlapped 0.06% to 3% of background genes
+                background_genes = np.unique(np.random.choice(background.index[(background.Y == 1) & (feature_symbols.Y==0)].values, size=sampled_num, replace=False))
+            else:
+                background_genes = np.unique(np.random.choice(background.index[(background.Y == 1)].values, size=3000, replace=False))
+
+            if species == 'hg38': # use tad domain for sub-sampling on the genes
+                conf = Config(resource_filename("lisa", "lisa.ini"), species)
+                df = pd.read_table(conf.get_tad)
+                sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, foreground, 
+                                                       np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 1000)
+                sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
+                                                                sub_background_genes)]
+                print(len(sub_background_genes))
+                sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=1000, replace=False))
+            else:
+                #raise Exception('mm10 TAD domain not available') 
+                sub_background_genes = np.random.choice(background_genes, size=1000, replace=False)
             np.savetxt('%s.background_gene.3000' % prefix,
                        background_genes, fmt="%s")
-            sub_background_genes = np.random.choice(background_genes, size=1000, replace=False)
             np.savetxt('%s.background_gene.1000' % prefix,
                        sub_background_genes, fmt="%s")
         return True
+
+    if gene_set == None:
+        raise Exception('gene set must be specified with random and epigenetic background') 
 
     if not random:
         ## select background genes by using epigenome information of x marks
         rank_dict = {}
         for e in epigenomes:
             feature_symbols = generate_dedup_refseq(species, e, gene_set)
+            ## feature_symbols.index = feature_symbols.index.map(lambda x:x.upper())
             feature_symbols_x = feature_symbols.iloc[:, :(feature_symbols.shape[1]-1)]
             feature_symbols_y = feature_symbols.Y
             scale = StandardScaler(with_std=False)
@@ -157,6 +200,7 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
             background_genes = background_genes.union(dist.index[:control_gene_per_diff])
     else:
         feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
+        ## feature_symbols.index = feature_symbols.index.map(lambda x:x.upper())
         np.savetxt('%s.foreground_gene' % prefix,
                    feature_symbols.index[feature_symbols.Y==1].values, fmt="%s")
         background_genes = np.random.choice(feature_symbols.index[feature_symbols.Y == 0], size=3000, replace=False)

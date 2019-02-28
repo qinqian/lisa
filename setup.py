@@ -25,6 +25,7 @@ def main():
     setup(
         name='lisa',
         version='1.0',
+        url='http://lisa.cistrome.org',
         author='Qian Qin',
         description=__doc__,
         packages=find_packages(),
@@ -45,6 +46,7 @@ def main():
             "Programming Language :: Python :: 3",
             "Topic :: Scientific/Engineering :: Bio-Informatics"],
         keywords='epigenome rank TF',
+        license='OTHER',
         zip_safe=False)
 
 if __name__ == '__main__':

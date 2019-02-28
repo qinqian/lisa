@@ -29,7 +29,7 @@ class EpigenomeData(object):
                  & (quality['PBC'] > 0.7) \
                  & (quality['FactorName'] == self.epigenome)
         sids = quality.ix[selector, 'X']
-        print(sids.shape)
+        # print(sids.shape)
         return list(set(map(str, list(sids))))
 
     @property
@@ -130,22 +130,28 @@ class EpigenomeData(object):
         with h5py.File(hdf5) as store:
             return store['OrderCount'][:, 0]
 
-    def get_count(self, selected_ids, covariates, new_h5_count, only_newh5=False):
-        """ loading hdf5 data of 1kb read count """
+    def get_count(self, selected_ids, covariates, new_h5_count, only_newh5=False, selected_bins=[]):
+        """ loading hdf5 data of 1kb read count 
+        add sorted selected_bins list for faster IO loading
+        """
         hdf5 = self.config.genome_count(self.epigenome)
         if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
             with h5py.File(new_h5_count) as st:
                 eids = np.array(list(map(lambda x: x.decode('utf-8'), st["IDs"][...])))
 
-        with h5py.File(hdf5) as store:
+        with h5py.File(hdf5, mode='r') as store:
             ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
                                     store['IDs'][...])))
             if not isinstance(selected_ids, list):
                 return ids
 
+            print(ids)
             count = np.zeros((store['OrderCount'].shape[0],
                               len(list(selected_ids))), dtype=np.float32)
+            print(count.shape)
             for i, sid in enumerate(selected_ids):
+                print(i, sid)
+                print(type(sid))
                 if covariates and sid == 'GC':
                     val = self.gc_covariates_count
                     count[:, i] = val
@@ -157,15 +163,23 @@ class EpigenomeData(object):
                         index = []
                     if len(index) != 0:
                         index = index[0]              # fix by using the first one
-                        val = store['OrderCount'][:, index]
-                        count[:, i] = val
+                        print(index)
+                        if len(selected_bins) == 0:
+                            val = store['OrderCount'][:, index]
+                            count[:, i] = val
+                        else:
+                            val = store['OrderCount'][selected_bins, index]   ## selected_bins should be sorted in ascending order
+                            count[selected_bins, i] = val
+                        print(val.shape)
                     else: # search hdf5
                         if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
                             index, = np.where(eids == sid)
                             with h5py.File(new_h5_count) as st:
                                 if len(index) != 0:
                                     index = index[0]              # fix by using the first one
+                                    print(index)
                                     val = store['OrderCount'][:, index]
+                                    print(val.shape)
                                     count[:, i] = val
                                 else: # not found read count ....
                                     print('not found samples in matching samples in read count hdf5')

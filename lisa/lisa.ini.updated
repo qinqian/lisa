@@ -43,6 +43,7 @@ genome_100bp_motif_index97 = /data/home/qqin/MARGE/scripts/lisa/db/mm10_marge2_m
 genome_100bp_motif_index98 = /data/home/qqin/MARGE/scripts/lisa/db/mm10_marge2_motif_100bp_98.h5
 cluster = /data/home/qqin/MARGE/scripts/lisa/db/cluster_mouse
 udhs_100bp_index = /data/home/qqin/MARGE/scripts/lisa/db/DHS_mm10.bed.index.npy
+tad_info = /data/home/qqin/MARGE/scripts/lisa/db/promoter_TADann_H3K4me3Using_zscore_enhance.xls
 
 [hg38]
 bwa_index = /data/home/qqin/MARGE/scripts/lisa/db/hg38.fa

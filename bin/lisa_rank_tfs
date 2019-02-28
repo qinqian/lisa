@@ -5,12 +5,20 @@ expression model and whole genome 1kb read count of the samples
 from sklearn.cluster import MiniBatchKMeans
 from lisa.rank import get_insilico_knockout_tensor_op, rank_by_entropy
 from lisa.data import EpigenomeData
-from lisa.utils import Weight, one_side_ks_test, convert_name, mannwhitneyu_test
+from lisa.utils import Weight, one_side_ks_test, convert_name, mannwhitneyu_test, multiple_apply
 import h5py
 
 import pandas as pd
 import numpy as np
+from functools import wraps
 import fire
+import time
+from multiprocessing import Pool, cpu_count
+#from pathos.multiprocessing import ProcessingPool as Pool2
+
+def test(args):
+    x, y = args
+    return mannwhitneyu_test(x,y,how="greater")
 
 class LisaRank(object):
     """rank the TFs given the gene sets
@@ -48,12 +56,19 @@ class LisaRank(object):
         # pvalue = beta_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
         #                                                   x[self.diff_gene_num:]),
         #                        axis=0)
-        pvalue = beta_df.apply(lambda x: mannwhitneyu_test(x[:self.diff_gene_num],
-                                                           x[self.diff_gene_num:],
-                                                           how="greater"),
-                               axis=0)
+
+        #pvalue = beta_df.apply(lambda x: mannwhitneyu_test(x[:self.diff_gene_num],
+        #                                                   x[self.diff_gene_num:],
+        #                                                   how="greater"),
+        #                       axis=0)
+
+
+        pvalue = multiple_apply(test, beta_df, 
+                                np.arange(self.diff_gene_num), np.arange(self.diff_gene_num, beta_df.shape[0]), 5)
+
         pvalue.index = self._get_tfbs_annotation(pvalue.index, 'chipseq')
-        pvalue.sort_values(ascending=True, inplace=True)
+        pvalue = pvalue.iloc[:, 0]
+        pvalue = pvalue.sort_values(ascending=True, inplace=False)
         pvalue.to_csv('%s.lisa_direct.csv' % self.prefix)
 
     def _prepare_data(self, bin_length):
@@ -110,13 +125,15 @@ class LisaRank(object):
         dtype: choose from 'motif97', 'motif98', 'motif99' or 'chipseq'
                different TF binding data to knock out
         """
+        start = time.time()
+
         self.epigenome.epigenome = epigenome
         # load raw regulatory potential
         raw_reg = self.epigenome.get_RP
         # raw_reg.index = raw_reg.index.map(lambda x:x.upper())  # fix the symbol to uppercase, not necessary, comment
 
         if new_h5_rp != None: # add hdf5 from fastqs or bigwigs for raw rp
-            with h5py.File(new_h5_rp) as st:
+            with h5py.File(new_h5_rp, mode='r') as st:
                 eids = list(map(lambda x: x.decode('utf-8'), st["IDs"][...]))
                 df = pd.DataFrame(st["RP"][...], index=raw_reg.index,
                                   columns=eids)
@@ -136,23 +153,36 @@ class LisaRank(object):
         # select foreground and background selected genes
         # and reorder the sample names as the coefficient order
         raw_reg = raw_reg.loc[self.all_genes, list(coef.index)]
+        print(raw_reg.shape)
 
         # lisa prediction
         normalized_reg = np.log2(raw_reg.values+1)
         original_median = np.mean(normalized_reg, axis=0)
         normalized_reg = normalized_reg - original_median
         lisa_prediction = np.dot(normalized_reg, coef.iloc[:, 0].values)
-
-        # load 1kb average read count
-        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5_count)
+        print(time.time()-start)
 
         # load chromatin boundary mask array
         bin_length = 1000
+        print(bin_length)
         # get refseq information array
         # bin_2d (genes x 200bin, already masked the bins out of chrom end)
         # weight (genes x 200bin, already masked the bins out of chrom end)
         bin_2d, weight = \
             self._prepare_data(bin_length)
+        print(bin_2d.shape)
+        print(weight.shape)
+        print(time.time()-start)
+
+        print('loading read count')
+        # add sorted selected_bins list for faster IO loading
+        selected_bins = np.unique(bin_2d.reshape(-1))  ## only preserve the bins around gene tss with > 0 read count
+        print(selected_bins[:10])
+
+        # load 1kb average read count
+        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5_count, selected_bins=selected_bins[1:])  ## TODO: check only_newh5 option
+        print(time.time()-start)
+        print('read count loaded')
 
         # extract signals in bins for all samples
         # gene x bin x sample
@@ -176,34 +206,64 @@ class LisaRank(object):
         offset = -1 if dtype == 'chipseq' else 0
         delta_rps = []
         sids = []
+
         # IO do not use function calls
-        with h5py.File(self.get_hdf(dtype)) as store:
+        with h5py.File(self.get_hdf(dtype), mode='r', swmr=True) as store:  ## add swmr > 2.5.0, h5py.version.hdf5_version_tuple > 1.10
+        #with h5py.File(self.get_hdf(dtype), mode='r') as store:  ## add swmr > 2.5.0, h5py.version.hdf5_version_tuple > 1.10
             IDs = store['IDs'][...]
             for sid in IDs:
-                tfbs_index = store[sid][...]
-                tfbs_binary = np.zeros(bin_100_to_1kb[-1] + 1, dtype=np.int32)
-                # map 100bp windows back to 1kb windows
-                # TODO: add DNase-seq peak filter
+                sids.append(convert_name(sid))
+
+            def get_ISDRP(sid):
+                tfbs_index = store[sid][...]  # 100 bp window index vector
+                tfbs_binary = np.zeros(bin_100_to_1kb[-1] + 1, dtype=np.uint8)
                 tfbs_binary[bin_100_to_1kb[tfbs_index+offset]] = 1
                 # gene x bin
                 E = tfbs_binary[bin_2d]
                 E = E.reshape(1, -1) # 1 x (gene, bin)
                 E = np.logical_not(E)
-                delta_rps.append(theano_deltarp_function(E))
-                sids.append(convert_name(sid))
+                return theano_deltarp_function(E)
+
+            ## using 4 threads
+            # any original python Pool neds the function to be pickled
+            # not work for nested functions
+            # with Pool(4) as pool: 
+            #     delta_rps = pool.map(get_ISDRP, IDs) 
+
+            # try pathos dill to serialize python function
+            # with Pool2(4) as pool: 
+            #     delta_rps = pool.map(get_ISDRP, IDs) 
+
+            for sid in IDs:
+                 delta_rps.append(get_ISDRP(sid))
+            #    tfbs_index = store[sid][...]
+            #    tfbs_binary = np.zeros(bin_100_to_1kb[-1] + 1, dtype=np.int32)
+            #    # map 100bp windows back to 1kb windows
+            #    # TODO: add DNase-seq peak filter
+            #    tfbs_binary[bin_100_to_1kb[tfbs_index+offset]] = 1
+            #    # gene x bin
+            #    E = tfbs_binary[bin_2d]
+            #    E = E.reshape(1, -1) # 1 x (gene, bin)
+            #    E = np.logical_not(E)
+            #    delta_rps.append(theano_deltarp_function(E))
+            #    sids.append(convert_name(sid))
 
         delta_rps = np.vstack(delta_rps).T # gene x tfbs (motif or peak)
         delta_rp_df = pd.DataFrame(delta_rps, columns=sids, index=self.all_genes)
-
+        print('statistics done')
+        print(time.time()-start)
         delta_rp_df.columns = self._get_tfbs_annotation(delta_rp_df.columns, dtype)
         # pvalue = delta_rp_df.apply(lambda x: one_side_ks_test(x[:self.diff_gene_num],
         #                                                       x[self.diff_gene_num:]),
         #                            axis=0)
-
-        pvalue = delta_rp_df.apply(lambda x: mannwhitneyu_test(x[:self.diff_gene_num],
-                                                               x[self.diff_gene_num:],
-                                                               how="greater"),
-                                   axis=0)
+        #pvalue = delta_rp_df.apply(lambda x: mannwhitneyu_test(x[:self.diff_gene_num],
+        #                                                       x[self.diff_gene_num:],
+        #                                                       how="greater"),
+        #                           axis=0)
+        # 4 processes to apply statistical test across ISD-RP
+        pvalue = multiple_apply(test, delta_rp_df, 
+                                np.arange(self.diff_gene_num), np.arange(self.diff_gene_num, delta_rp_df.shape[0]), 4)
+        pvalue = pvalue.iloc[:, 0]
 
         delta_rp_df.loc['pvalue', :] = pvalue
         delta_rp_df = delta_rp_df.iloc[:, np.argsort(pvalue)]
@@ -213,7 +273,7 @@ class LisaRank(object):
 
         delta_rp_df.loc[:, 'diff_status'] = diff_binary
         delta_rp_df.to_csv("%s.%s.%s.csv" % (self.prefix, self.epigenome.epigenome, dtype))
-        pvalue.sort_values(inplace=True)
+        pvalue = pvalue.sort_values(inplace=False)
         pvalue.to_csv("%s.%s.%s.p_value.csv" % (self.prefix, self.epigenome.epigenome, dtype))
 
     def _get_tfbs_annotation(self, cols, dtype):
@@ -293,7 +353,7 @@ class LisaRank(object):
         # load 100bp to 1kb mapping files
         bin_100_to_1kb = np.load(self.epigenome.config.genome_window_map) # 0-based
         offset = -1 if dtype == 'chipseq' else 0
-        with h5py.File(self.get_hdf(dtype)) as store:
+        with h5py.File(self.get_hdf(dtype), mode='r') as store:
             ids = store['IDs']
             for tfbs_id in ids:
                 # TODO: add DNase-seq peak filter

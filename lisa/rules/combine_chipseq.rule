@@ -1,5 +1,4 @@
-""" https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html 
-Input Functions and unpack
+""" https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html Input Functions and unpack
 """
 import os
 

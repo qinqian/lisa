@@ -62,15 +62,27 @@ def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num
     n = 0
     genes = []
     z = 0
+    print(len(prop_dict.keys()))
     for i in prop_dict:
+        # NOTE: class ratio < 1 will be ignored, add back below
         gene_num = int(prop_dict[i] / background.shape[0] * num * 1.1) # sampling a bit more genes
-        n += gene_num
+        #print(prop_dict[i] / background.shape[0])
         z += prop_dict[i] / background.shape[0]
+        if gene_num == 0: ## in case TAD+promoter activity class ratio < 1, add one back
+            gene_num += 1
+        n += gene_num
+        print(gene_num)
         genes += list(np.random.choice(np.array(prop_dict_genes[i]), gene_num, replace=False)) # replace=False
+    print('*--------')
+    print(n)
+    print(num)
+    print(background.shape)
+    print(tad_promoter_chr.shape)
+    print('*--------')
     return list(set(genes))
 
 
-def get_background(species, epigenomes, gene_set, prefix, random, background):
+def get_background(species, epigenomes, gene_set, prefix, random, background, stat_step_background_number):
     """ 
     background: background genes from user specified text file, one gene a row
 
@@ -81,29 +93,28 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
     2. random background 
     3. TAD+promoter background: only available for human now
     """
+    assert stat_step_background_number >= 20, 'background gene number for statistics should be larger than 20'
+
     if gene_set != None:
         feature_symbols = generate_dedup_refseq(species, epigenomes[0], gene_set)
         #feature_symbols.index = feature_symbols.index.map(lambda x:x.upper())
 
     if background != None:
         if background == 'dynamic_auto_tad':
-            if species == 'hg38':
-                conf = Config(resource_filename("lisa", "lisa.ini"), species)
-                df = pd.read_table(conf.get_tad)
-                if gene_set != None:
-                    all_rp_genes = feature_symbols.index.map(lambda x:x.split(':')[-1].upper())
-                    df = df.loc[df.geneName.map(lambda x:x.upper()).isin(all_rp_genes), :] ## overlap TAD annotation with our RP genes
-                    foreground = feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1].upper())
-                else:
-                    foreground = []
-                background = sampling_by_tad(prefix, species, epigenomes, df, foreground, [])
-                ## 3000 background genes in symbols
-                np.savetxt('%s.background_gene.1' % prefix,
-                           background, fmt="%s")
-                get_background(species, epigenomes, gene_set, prefix, random, '%s.background_gene.1' % prefix)
-                return True
+            conf = Config(resource_filename("lisa", "lisa.ini"), species)
+            df = pd.read_table(conf.get_tad)
+            if gene_set != None:
+                all_rp_genes = feature_symbols.index.map(lambda x:x.split(':')[-1].upper())
+                df = df.loc[df.geneName.map(lambda x:x.upper()).isin(all_rp_genes), :] ## overlap TAD annotation with our RP genes
+                foreground = feature_symbols.index[feature_symbols.Y==1].map(lambda x:x.split(':')[-1].upper())
             else:
-                raise Exception('mm10 TAD domain not available') 
+                foreground = []
+            background = sampling_by_tad(prefix, species, epigenomes, df, foreground, [])
+            ## 3000 background genes in symbols
+            np.savetxt('%s.background_gene.1' % prefix,
+                       background, fmt="%s")
+            get_background(species, epigenomes, gene_set, prefix, random, '%s.background_gene.1' % prefix, stat_step_background_number)
+            return True
         elif os.path.exists(background):
             if gene_set != None:
                 foreground = feature_symbols.index[feature_symbols.Y==1].values
@@ -120,23 +131,24 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
                 print(((background.Y == 1) & (feature_symbols.Y==0)).sum())
                 print((background.index==feature_symbols.index).sum())
                 overlapped = ((background.Y == 1) & (feature_symbols.Y==1)).sum()
-                sampled_num = 3000 - overlapped # exclude overlapped 0.06% to 3% of background genes
+                sampled_num = 3000 - overlapped # exclude 0.06% to 3% of background genes overlapped with input genes
                 background_genes = np.unique(np.random.choice(background.index[(background.Y == 1) & (feature_symbols.Y==0)].values, size=sampled_num, replace=False))
             else:
                 background_genes = np.unique(np.random.choice(background.index[(background.Y == 1)].values, size=3000, replace=False))
 
-            if species == 'hg38': # use tad domain for sub-sampling on the genes
-                conf = Config(resource_filename("lisa", "lisa.ini"), species)
-                df = pd.read_table(conf.get_tad)
-                sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, foreground, 
-                                                       np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 1000)
-                sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
-                                                                sub_background_genes)]
-                print(len(sub_background_genes))
-                sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=1000, replace=False))
-            else:
-                #raise Exception('mm10 TAD domain not available') 
-                sub_background_genes = np.random.choice(background_genes, size=1000, replace=False)
+            conf = Config(resource_filename("lisa", "lisa.ini"), species)
+            df = pd.read_table(conf.get_tad)
+            sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, foreground, 
+                                                   np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), stat_step_background_number)
+
+            ## keep exactly stat_step_background_number number of background genes
+            sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
+                                                            sub_background_genes)]
+            print('#--------')
+            print(stat_step_background_number)
+            print(len(sub_background_genes))
+            print('#--------')
+            sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=stat_step_background_number, replace=False))
             np.savetxt('%s.background_gene.3000' % prefix,
                        background_genes, fmt="%s")
             np.savetxt('%s.background_gene.1000' % prefix,
@@ -209,7 +221,7 @@ def get_background(species, epigenomes, gene_set, prefix, random, background):
     np.savetxt('%s.background_gene.3000' % prefix,
                background_genes, fmt="%s")
     np.savetxt('%s.background_gene.1000' % prefix,
-               np.random.choice(background_genes, size=1000, replace=False), fmt="%s")
+               np.random.choice(background_genes, size=stat_step_background_number, replace=False), fmt="%s")
     return True
 
 if __name__ == '__main__':

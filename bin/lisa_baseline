@@ -114,12 +114,12 @@ class LisaBaseLine(object):
         bin_100_to_1kb = np.load(self.epigenome.config.genome_window_map) # 0-based
         offset = -1 if dtype == 'chipseq' else 0
         pval = []
-        with h5py.File(self.get_hdf(dtype)) as store:
+        with h5py.File(self.get_hdf(dtype), mode='r') as store:
             ids = store['IDs'][...]
             #ids = ids[:3]
             for tfbs_id in ids:
                 tfbs_index = store[tfbs_id][...] + offset
-                tfbs_bin = np.zeros(len(bin_100_to_1kb), dtype=np.int32)
+                tfbs_bin = np.zeros(len(bin_100_to_1kb), dtype=np.uint8)
                 # 1kb 0-1 vector
                 tfbs_bin[tfbs_index] = 1
                 motif_hit_diff = np.sum(tfbs_bin[bins_diff_2d], axis=1)

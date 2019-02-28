@@ -1,6 +1,6 @@
 rule lisa_baseline_motif_99:
     input:
-        background = "{sample}.background_gene.300",
+        background = "{sample}.background_gene.1000",
         foreground="{sample}.foreground_gene"
     output:
         #../PhaseQ_Figures/AR_motif99_baseline.csv
@@ -16,7 +16,7 @@ rule lisa_baseline_motif_99:
 
 rule lisa_baseline_chipseqpeak:
     input:
-        background = "{sample}.background_gene.300",
+        background = "{sample}.background_gene.1000",
         foreground="{sample}.foreground_gene"
     output:
         "{sample}_chipseq_baseline.csv"

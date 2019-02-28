@@ -1,9 +1,28 @@
 """ lisa utlity functions """
+from multiprocessing import Pool, cpu_count
 import math
 import numpy as np
 
 from scipy.stats import wilcoxon, ks_2samp
 import scipy
+import pandas as pd
+
+def multiple_apply(func, df, x, y, num_processes=None):
+    ''' Apply a function separately to each column in a dataframe, in parallel.'''
+    # If num_processes is not specified, default to minimum(#columns, #machine-cores)
+    if num_processes==None:
+        #num_processes = min(df.shape[1], cpu_count())
+        num_processes = 5
+    
+    # 'with' context manager takes care of pool.close() and pool.join() for us
+    with Pool(num_processes) as pool:
+        # we need a sequence of columns to pass pool.map
+        seq = [[df[col_name][x].values, df[col_name][y].values] for col_name in df.columns]
+        # pool.map returns results as a list
+        results_list = pool.map(func, seq)
+        # return list of processed columns, concatenated together as a new dataframe
+        return pd.DataFrame(results_list, index=df.columns)
+
 
 def convert_name(name):
     try:

@@ -32,8 +32,12 @@ def main():
     rank_dedup = deduplicate(rank)
    
     if len(args.rankcsv) == 1:
-        rank_dedup.to_csv('%s_caucy_combine_dedup.csv' % args.prefix)
-        return
+        rank.to_csv('%s_cauchy_combine_raw.csv' % args.prefix)
+        rank_dedup.to_csv('%s_cauchy_combine_dedup.csv' % args.prefix)
+
+        rank.to_csv('%s_fisher_combine_raw.csv' % args.prefix)
+        rank_dedup.to_csv('%s_fisher_combine_dedup.csv' % args.prefix)
+        return True
     else:
         rank_dedup.to_csv('%s_dedup.csv' % args.rankcsv[0].replace('.csv', ''))
         #rank_dedup.index = rank_dedup.TF
@@ -67,4 +71,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

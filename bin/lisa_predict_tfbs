@@ -50,7 +50,7 @@ def predict_tfbs(species, epigenome, prefix, coefficients, chip_seq_id=None):
     prs = []
     dtype = 'chipseq'
     offset = -1 if dtype == 'chipseq' else 0
-    with h5py.File(_get_hdf(epigenome, dtype)) as store:
+    with h5py.File(_get_hdf(epigenome, dtype), mode='r') as store:
         ids = store['IDs'][...]
         for tfbs_id in ids:
             try:

@@ -11,6 +11,7 @@ def get_knockout_command(cov, dtype, new_h5_rp, new_h5_count):
         frame+=" --new_h5_rp=None --new_h5_count=None "
 
     frame += " --only_newhdf5=%s" % (str(config['only_newhdf5']))
+    frame += ' >> {log} '
     return frame
 
 rule lisa_in_silico_knockout_motif_99:

@@ -17,6 +17,7 @@ rule lisa_select_background:
             cov=config["covariates"],
             epigenomes=str(config["epigenome"]),
             random=config['random'],
-            user_background=config['background']
+            user_background=config['background'],
+            stat_background_num=config['stat_background_num']
     shell:
-        "lisa_premodel_background_selection --species {params.species} --epigenomes '{params.epigenomes}' --gene_set {input} --prefix={params.prefix} --random={params.random} --background={params.user_background} 2>&1>>{log}"
+        "lisa_premodel_background_selection --species {params.species} --epigenomes '{params.epigenomes}' --gene_set {input} --prefix={params.prefix} --random={params.random} --background={params.user_background} --stat_step_background_number={params.stat_background_num} 2>&1>>{log}"

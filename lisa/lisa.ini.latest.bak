@@ -2,8 +2,7 @@
 motif = /data/home/qqin/seqpos2/cistrome.txt
 motif_similarity = /data/home/qqin/MARGE/PhaseA_motif_deltarp/APE_pwm_id_similarity.xls
 ## corrected tissue version of the annotations
-## meta = /data/home/qqin/01_Projects/Programming/dc2/scripts/dc_samples_latest_20170720.xls
-meta = /data/home/qqin/db_table/dc_meta_lisa_20180102.xls
+meta = /data/home/qqin/01_Projects/Programming/dc2/scripts/dc_samples_latest_20170720.xls
 
 [mm10]
 bwa_index = /data/home/qqin/public_html/chilin/html/_downloads/mm10/mm10.fa
@@ -56,23 +55,22 @@ genome_100bp_motif_index98 = /data/home/qqin/seqpos2/mm10_marge2_motif_100bp_98.
 #genome_motif99 = /data/home/qqin/seqpos2/mm10_marge2_motif_100to1kb_to_gene99.h5
 cluster = /data/home/qqin/12_data/cluster_mouse
 udhs_100bp_index = /data/home/qqin/MARGE/UDHS/DHS_mm10.bed.index.npy
-tad_info = /data6/home/rongbin2/project/data/mouse_TAD/promoter_TADann_H3K4me3Using_zscore_enhance.xls
 
 [hg38]
 # if you want to start from fastq, fill in the genome bwa index
 bwa_index = /data/home/qqin/public_html/chilin/html/_downloads/hg38/hg38.fa
-meta = /data/home/qqin/12_data/margeFactor.csv
-#meta = /data5/home/rongbin/projects/LISA/db/dc_meta_lisa_20180102.xls
+#meta = /data/home/qqin/12_data/margeFactor.csv
+meta = /data5/home/rongbin/projects/LISA/db/dc_meta_lisa_20180102.xls
 chrom_len = /data/home/qqin/MARGE/PhaseA_motif_deltarp/hg38.genome
 tssbin = /data/home/qqin/12_data/hg38_window1kb_tss.bed
 tss = /data/home/qqin/MARGE/scripts/marge2/histonerp/hg38.tss
 
 #H3K27ac_RP = /data5/home/qqin/MARGEData/margeRP_H3K27ac.h5
-H3K27ac_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_H3K27ac.h5
-#H3K27ac_RP = /data5/home/rongbin/projects/LISA/db/H3K27ac_hs.H3K27ac.reg.h5
+#H3K27ac_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_H3K27ac.h5
+H3K27ac_RP = /data5/home/rongbin/projects/LISA/db/H3K27ac_hs.H3K27ac.reg.h5
 #DNase_RP = /data5/home/qqin/MARGEData/margeRP_DNase.h5
-#DNase_RP = /data5/home/rongbin/projects/LISA/db/dnase_hs.DNase.reg.h5
-DNase_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_DNase.h5
+#DNase_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_DNase.h5
+DNase_RP = /data5/home/rongbin/projects/LISA/db/dnase_hs.DNase.reg.h5
 #ATAC-seq_RP = /data5/home/qqin/MARGEData/margeRP_ATAC-seq.h5
 #H3K4me3_RP = /data5/home/qqin/MARGEData/margeRP_H3K4me3.h5
 H3K4me3_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_H3K4me3.h5
@@ -83,7 +81,7 @@ H3K4me2_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP
 H3K4me1_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_H3K4me1.h5
 H3K9ac_RP = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/margeRP_H3K9ac.h5
 
-H3K27me3_RP = /data5/home/qqin/MARGEData/margeRP_H3K27me3.h5
+#H3K27me3_RP = /data5/home/qqin/MARGEData/margeRP_H3K27me3.h5
 #H3K9me3_RP = /data5/home/qqin/MARGEData/margeRP_H3K9me3.h5
 #H3K36me3_RP = /data5/home/qqin/MARGEData/margeRP_H3K36me3.h5
 #GC_RP = /data/home/qqin/MARGE/PhaseL_refactor_lisa/hg38_gc5Base.bw.Covariates.GC.reg_potential.h5
@@ -96,14 +94,12 @@ genome_100bp_window = /data/home/qqin/seqpos2/hg38_window100bp.bed
 # 0-based
 genome_window_map = /data/home/qqin/MARGE/PhaseA_motif_deltarp/hg38_100to1000window.out.npy
 
-#H3K27ac_count = /data5/home/rongbin/projects/LISA/db/H3K27ac_hs.H3K27ac.readcount.h5
-H3K27ac_count = /data5/home/qqin/ReadCount/hg38_window1kb_H3K27ac.h5
+#H3K27ac_count = /data5/home/qqin/ReadCount/hg38_window1kb_H3K27ac.h5
+H3K27ac_count = /data5/home/rongbin/projects/LISA/db/H3K27ac_hs.H3K27ac.readcount.h5
 #H3K27ac_200bpcount = /data/home/qqin/12_data/hg38_window200bp_H3K27ac.h5
-
-#DNase_count = /data5/home/rongbin/projects/LISA/db/dnase_hs.DNase.readcount.h5
 #DNase_count = /data5/home/qqin/ReadCount/hg38_window1kb_DNase.h5
-DNase_count = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_window1kb_DNase.h5
-
+#DNase_count = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_window1kb_DNase.h5
+DNase_count = /data5/home/rongbin/projects/LISA/db/dnase_hs.DNase.readcount.h5
 #ATAC-seq_count = /data5/home/qqin/ReadCount/hg38_window1kb_ATAC-seq.h5
 #H3K4me3_count = /data5/home/qqin/ReadCount/hg38_window1kb_H3K4me3.h5 
 H3K4me3_count = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_window1kb_H3K4me3.h5
@@ -119,15 +115,15 @@ H3K36me3_count = /data5/home/qqin/ReadCount/hg38_window1kb_H3K36me3.h5
 #GC_count = /data/home/qqin/MARGE/PhaseL_refactor_lisa/hg38_gc5Base.bw.Covariates.GC.1kb_read_count.h5
 GC_count = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_gc5Base.bw.Covariates.GC.1kb_read_count.h5
 
-## version 1
-#tf_chipseq_meta = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_best_dc_tfcr_basedon_frip_peak_dhs_all_nonhm_nonca.xls
-#tf_chipseq = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_lisa_tf_100bp_all_nonhm_nonca_peak5fold.h5
-#tf_chipseq_beta = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_beta_peak5fold.h5
-
-## latest version
+# tf chip-seq peak in 100 bp window 1-based index 
 tf_chipseq_meta = /data5/home/rongbin/projects/LISA/db/hs_tf_meta_qc.xls
 tf_chipseq = /data5/home/rongbin/projects/LISA/db/hs_tf_new_peak_loct.h5
 tf_chipseq_beta = /data5/home/rongbin/projects/LISA/db/hs_tf_new_beta_rp.h5
+
+## latest ones
+#tf_chipseq_meta = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_best_dc_tfcr_basedon_frip_peak_dhs_all_nonhm_nonca.xls
+#tf_chipseq_beta = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_beta_peak5fold.h5
+#tf_chipseq = /data5/home/chenfei/JingyuFan/data_collection/MARGE/lisa_db/hg38_lisa_tf_100bp_all_nonhm_nonca_peak5fold.h5
 
 ## imputated ones
 ## do not need meta ids
@@ -147,4 +143,3 @@ genome_100bp_motif_index96 = /data/home/qqin/seqpos2/marge2_motif_100bp_96.h5
 # will replace with tfbs and udhs union overlap with 100bp window 1-based
 #udhs_100bp_index = /data/home/qqin/MARGE/Phase-1_motif_fdr/hg38_100bp_uDHS.bed.index.npy
 udhs_100bp_index = /data/home/qqin/MARGE/UDHS/DHS_hg38.bed.index.npy
-tad_info = /data/home/qqin/lisa_explore/background_genes/promoter_TADann_H3K4me3_enhance_k27me3_Using.xls

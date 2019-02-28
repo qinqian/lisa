@@ -53,7 +53,7 @@ class Logit(object):
                 low = mid + 1
             else:
                 break
-        print('feature ready...', snum)
+        #print('feature ready...', snum)
         self.reg_log2 = self.reg_log2.ix[:, sel]
 
     def _select_k_feature(self, n_samp=200):
@@ -80,8 +80,8 @@ class Logit(object):
         best_params, coefs, prauc, auc = self.evaluate(lisa_expression_rs)
         select = np.abs(coefs) >= 1e-6
         self.reg_log2 = self.reg_log2.ix[:, select]
-        print(best_params, coefs, prauc, auc)
-        print(self.reg_log2.shape)
+        #print(best_params, coefs, prauc, auc)
+        #print(self.reg_log2.shape)
         if np.sum(select) >= 10:
             self._select_feature2(upper_bound/1.5)
 
@@ -105,7 +105,7 @@ class Logit(object):
         self.select_feature(sample_number)   # original feature selection with binary search lambda
         # self._select_feature2()     # anova 200~300 samples with cross validation of lambda search
 
-        print('final shape:---', self.reg_log2.shape)
+        #print('final shape:---', self.reg_log2.shape)
         # add back covariates
         if isinstance(self.covariates, pd.Series):
             self.reg_log2 = pd.concat([self.reg_log2, self.covariates], axis=1)
@@ -122,5 +122,5 @@ class Logit(object):
         coefs = pd.DataFrame(coefs, index=self.reg_log2.columns, columns=["coefficients"])
         coefs = coefs[np.abs(coefs.values) >= 1e-6]
         coefs = coefs.iloc[np.argsort(np.abs(coefs.iloc[:, 0]))[::-1], :]
-        print(best_params)
+        #print(best_params)
         return auc, prauc, coefs

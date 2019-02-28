@@ -1,40 +1,54 @@
-{% set data = load_setup_py_data() %}
 package:
   name: lisa
-  version: {{ data.get('version') }}
-
-source:
-  git_url: https://github.com/qinqian/lisa
+  version: 1.0
 
 build:
   number: 1
-  entry_points:
-    - lisa = ../bin/lisa
+  #entry_points:
+  #  - lisa = ../bin/lisa
 
 requirements:
   build:
     - python
+    - fire
     - setuptools
-    - gcc
+    - numpy
+    - patchelf
+    - {{ compiler('c') }}
+  host:
+    - python
+    - zlib
     - numpy
   run:
     - python
-    - numpy
-    - theano
-    - scipy
+    - zlib
+    - mkl-service
+    - curl
     - fire
-    - h5py
-    - sklearn
+    - scikit-learn
+    - theano
     - pandas
-    - yappi
-    - snakemake
-    - matplotlib
-    - seaborn
+    - h5py
     - PyYAML >=3.12
+    - snakemake
+    - yappi
+    - bwa
+    - samtools=0.1.19 
+    - bedtools=2.17.0 
+    - seqtk 
+    - ucsc-bedclip 
+    - ucsc-bedgraphtobigwig 
+    - ucsc-wigcorrelate 
+    - ucsc-wigtobigwig
+    - deeptools
+    - openssl=1.0
+
+    #- matplotlib
+    #- seaborn
 
 about:
-  home: {{ data.get('url') }}
-  license: {{ data.get('license') }}
+  home: http://lisa.cistrome.org
+  license: EULA
   license_family: OTHER
-  license_file: LICENSE
-  summary: {{ data.get('description') }}
+  license_file: ../LICENSE
+  summary: 'ChIP-seq/DNase-seq data-driven TF and CR prioritization tool'

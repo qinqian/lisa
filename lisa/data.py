@@ -154,7 +154,10 @@ class EpigenomeData(object):
                 print(type(sid))
                 if covariates and sid == 'GC':
                     val = self.gc_covariates_count
-                    count[:, i] = val
+                    if len(selected_bins) == 0:
+                        count[:, i] = val
+                    else:
+                        count[selected_bins, i] = val[selected_bins]
                     continue
                 if sid != 'GC':
                     if not only_newh5:
@@ -163,24 +166,24 @@ class EpigenomeData(object):
                         index = []
                     if len(index) != 0:
                         index = index[0]              # fix by using the first one
-                        print(index)
                         if len(selected_bins) == 0:
                             val = store['OrderCount'][:, index]
                             count[:, i] = val
                         else:
                             val = store['OrderCount'][selected_bins, index]   ## selected_bins should be sorted in ascending order
                             count[selected_bins, i] = val
-                        print(val.shape)
                     else: # search hdf5
                         if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
                             index, = np.where(eids == sid)
                             with h5py.File(new_h5_count) as st:
                                 if len(index) != 0:
                                     index = index[0]              # fix by using the first one
-                                    print(index)
-                                    val = store['OrderCount'][:, index]
-                                    print(val.shape)
-                                    count[:, i] = val
+                                    if len(selected_bins) == 0:
+                                        val = store['OrderCount'][:, index]
+                                        count[:, i] = val
+                                    else:
+                                        val = store['OrderCount'][selected_bins, index]   ## selected_bins should be sorted in ascending order
+                                        count[selected_bins, i] = val
                                 else: # not found read count ....
                                     print('not found samples in matching samples in read count hdf5')
                                     sys.exit(1)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """ Lisa interface to rank TFs based on the differential
 expression model and whole genome 1kb read count of the samples
 """
@@ -177,10 +178,8 @@ class LisaRank(object):
         print('loading read count')
         # add sorted selected_bins list for faster IO loading
         selected_bins = np.unique(bin_2d.reshape(-1))  ## only preserve the bins around gene tss with > 0 read count
-        print(selected_bins[:10])
-
         # load 1kb average read count
-        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5_count, selected_bins=selected_bins[1:])  ## TODO: check only_newh5 option
+        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5_count, only_newh5=self.only_newhdf5, selected_bins=selected_bins[1:])  ## TODO: check only_newh5 option
         print(time.time()-start)
         print('read count loaded')
 
@@ -317,10 +316,6 @@ class LisaRank(object):
         coef = pd.read_csv(coefficient, encoding="ISO-8859-1", index_col=0)
         coef.index = coef.index.astype(str)
 
-        # load 1kb average read count
-
-        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5, only_newh5=self.only_newhdf5)
-
         # load chromatin boundary mask array
         bin_length = 1000
         # get refseq information array
@@ -332,7 +327,11 @@ class LisaRank(object):
         bin_1d = bin_2d.reshape(-1)
         bin_1d = np.unique(bin_1d, return_index=False)        # remove duplicates of bins
         bin_1d = bin_1d[1:]                                   # the first element is the masked bin
-        read_count = read_count[bin_1d]
+
+        # load 1kb average read count
+
+        read_count = self.epigenome.get_count(list(coef.index), covariates, new_h5, only_newh5=self.only_newhdf5, selected_bins=bin_1d)
+        #### read_count = read_count[bin_1d]
 
         norm = np.log2(read_count+1)
         norm = norm - np.mean(norm)

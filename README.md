@@ -1,6 +1,19 @@
 ### LISA
 Web version and documentation is hosted at http://lisa.cistrome.org.
 
+### Preparation of Anaconda environment
+wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+export PATH="${HOME}/miniconda3/bin:$PATH"
+conda create -n lisa python=3.6 && conda config --add channels conda-forge && conda config --add channels bioconda
+conda activate lisa
+
+### Installation
+conda install -c qinqian lisa 
+
+### Remove LISA
+conda env remove -n lisa
+
 ### LICENSE
 LISA is freely available for non-commercial use. If you may use it for a
 commercial application, please inquire at qinqian89@outlook.com. By

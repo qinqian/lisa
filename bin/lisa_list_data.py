@@ -19,4 +19,4 @@ for s in c.sections():
             print(c.get(s, k))
         else:
             print(c.get(s, k))
-            raise Exception
+            raise Exception('File not exists %s' % (c.get(s, k)))

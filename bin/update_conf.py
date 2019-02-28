@@ -1,21 +1,31 @@
+#!/usr/bin/env python
+
 """update local data directory for .ini configuration file
 """
 import fire
+from pkg_resources import resource_filename
 
-def update(folder):
+def update(folder, species):
     """ update the config given a folder
     """
     import os
     import configparser
     folder = os.path.abspath(folder)
+    
+    in_out = resource_filename("lisa", "lisa.ini")
+    print(in_out)
     conf = configparser.ConfigParser()
-    conf.read('lisa/lisa.ini')
+    conf.read(in_out)
+    assert species in ['hg38', 'mm10'], 'species not support'
 
-    for key in conf.sections():
-        for i in conf[key].keys():
-            conf.set(key, i, os.path.join(folder, os.path.basename(conf.get(key, i))))
+    # common files
+    conf.set('basics', 'motif', os.path.join(folder, os.path.basename(conf.get('basics', 'motif'))))
+    conf.set('basics', 'meta',  os.path.join(folder, os.path.basename(conf.get('basics', 'meta'))))
+    # species specific files
+    for i in conf[species].keys():
+        conf.set(species, i, os.path.join(folder, os.path.basename(conf.get(species, i))))
 
-    with open('lisa/lisa.ini.updated', 'w') as configfile:
+    with open(in_out, 'w') as configfile:
         conf.write(configfile)
 
 if __name__ == '__main__':

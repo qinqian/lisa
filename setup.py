@@ -31,10 +31,10 @@ def main():
         packages=find_packages(),
         ext_modules=[get_extension(), ],
         include_dirs=['lisa/regpotential'] + get_numpy_include_dirs(),
-        install_requires=['numpy', 'matplotlib',
-                          'sklearn', 'theano', 'fire',
+        install_requires=['numpy', #'matplotlib', 'seaborn', 
+                          'scikit-learn', 'theano', 'fire',
                           'h5py', 'pandas',
-                          'seaborn', 'scipy',
+                          'scipy',
                           'snakemake', 'PyYAML', 'yappi'
                           ],
         include_package_data=True,
@@ -45,7 +45,7 @@ def main():
             'Operating System:: POSIX',
             "Programming Language :: Python :: 3",
             "Topic :: Scientific/Engineering :: Bio-Informatics"],
-        keywords='epigenome rank TF',
+        keywords='ChIP-seq',
         license='OTHER',
         zip_safe=False)
 

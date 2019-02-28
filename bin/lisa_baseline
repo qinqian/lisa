@@ -1,4 +1,4 @@
-#!/data/home/qqin/miniconda3/envs/lisa2/bin/python
+#!/usr/bin/env python
 """ Lisa interface to rank TFs based on the differential
 expression model and whole genome 1kb read count of the samples
 """

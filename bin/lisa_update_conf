@@ -2,8 +2,8 @@
 
 """update local data directory for .ini configuration file
 """
-import fire
 from pkg_resources import resource_filename
+import fire
 
 def update(folder, species):
     """ update the config given a folder

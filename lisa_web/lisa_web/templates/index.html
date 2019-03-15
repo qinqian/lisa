@@ -16,7 +16,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
   <div class="container">
     <a href="/" class="navbar-brand">
-      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <img src="/static/lisa.jpg" height="55" width="40" alt="lisa">
       <span></span>LISA
     </a>
     <div id="navbar-nav-scroll">
@@ -56,7 +56,7 @@
    <div class="col-sm-12">
 <div class="jumbotron jumbotron-fluid shadow-sm">
   <div class="container">
-    <h1 class="display-4"><b><abbr title="epigenetic Landscape In silico Subtraction Analysis">LISA</abbr></b> online</h1>
+    <h3 class="display-4"><b><abbr title="epigenetic Landscape In silico Subtraction Analysis">LISA</abbr></b> online</h3>
     <!--
     <p class="lead">TF ranking inference and enhancer identification from large scale epigenome data</p>
     -->
@@ -89,41 +89,54 @@
      <div class="card shadow">
   <div class="card-body">
   <form action="{{ url_for('submit_lisa') }}" method="post">
-      {{ form.csrf_token() }} {{ wtf.form_errors(form, hiddens='only') }}
+        {{ form.csrf_token() }} {{ wtf.form_errors(form, hiddens='only') }}
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-12">
             <label>{{form.species.label}}</label>
-            {{form.species(class="form-control")}}
+            {{form.species(class="form-control-sm form-control")}}
           </div>
-          <div class="form-group col-md-6">
-            <label>{{form.mark.label}}</label>
-            {{form.mark(class="form-control")}}
-          </div>
-        </div>
-        <div class="form-group">
-            <label>{{form.method.label}}</label>
-            {{form.method(class="form-control")}}
         </div>
 
         <div class="form-row">
         <div class="form-group col-md-6">
             <label>Gene Set 1</label>
-            {{form.genes(class="form-control genes", placeholder="input less than 200 genes (refseq or symbol); for more genes, user can refer to the documentation to install the local version  ")}}
+            {{form.labels(class="form-control", placeholder="gene set 1 label")}}
+            {{form.genes(class="form-control genes", placeholder="input less than 500 genes (refseq or symbol); for more genes, user can refer to the documentation to install the local version ")}}
         </div>
         <div class="form-group col-md-6">
             <label>Gene Set 2 (optional)</label>
+            {{form.labels2(class="form-control", placeholder="gene set 2 label")}}
             {{form.genes2(class="form-control genes2", placeholder="another gene set run in parallel to compare with gene set 1")}}
         </div>
         </div>
 
-        <div class="form-row">
-        <div class="form-group col-md-6">
-            <!--<label>label 1 (optional:default gene set 1)</label>-->
-            {{form.labels(class="form-control", placeholder="gene set 1 label")}}
+        <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h6 class="panel-title">
+                <a class="btn btn-secondary dropdown-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Show hidden options
+                </a>
+            </h6>
         </div>
-        <div class="form-group col-md-6">
-            <!--<label>label 2 (optional:default gene set 2)</label>-->
-            {{form.labels2(class="form-control", placeholder="gene set 2 label")}}
+
+        <div id="collapseOne" class="panel-collapse collapse in">
+           <div class="panel-body">
+      
+  <!--
+        <div class="form-row">
+        <div class="form-group col-md-12">
+            <label>Background Gene Set (optional)</label>
+            {{form.background(class="form-control genes2", placeholder="user-provided background gene set for gene set1 and gene set2 to compare with")}}
+        </div>
+        </div>
+   -->
+        <div class="form-row">
+        <div class="form-group col-md-12">
+            <label>{{form.method.label}}</label>
+            {{form.method(class="form-control")}}
+        </div>
+        </div>
+        </div>
         </div>
         </div>
 
@@ -137,7 +150,7 @@
         </div>
         <div class="form-row">
         <button type="submit" class="btn btn-primary">Run</button>
-        <p style="color:red; display: {{message}}; font:italic bold 12px/20px arial,sans-serif;">too many genes!</p>
+        <p style="color:red; display: {{message}}; font:italic bold 12px/20px arial,sans-serif;">genes number not allowed < 20 or > 500 !</p>
         </div>
       <!-- {% for message in get_flashed_messages() %} -->
       <!-- <div class="alert alert-warnings"> -->
@@ -149,7 +162,6 @@
 </div>
 </div>
 
-
 <nav class="navbar fixed-bottom navbar-dark">
   <div class="container">
     <a href="/" class="navbar-brand">
@@ -158,7 +170,7 @@
 
     <ul class="navbar-nav bd-navbar-nav flex-row">
     <li class="nav-item active">
-     <span>Copyright @2018 Liu lab</span>
+     <span>Copyright @2019 Liu lab</span>
     </li>
     </ul>
   </div>

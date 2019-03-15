@@ -23,8 +23,8 @@ def _get_hdf(epigenome, dtype):
     """
     tfbs_dict = dict(
         motif99=epigenome.config.get_motif_index(99),
-        motif98=epigenome.config.get_motif_index(98),
-        motif97=epigenome.config.get_motif_index(97),
+        #motif98=epigenome.config.get_motif_index(98),
+        #motif97=epigenome.config.get_motif_index(97),
         chipseq=epigenome.config.tf_chipseq
     )
     return tfbs_dict[dtype]
@@ -37,7 +37,7 @@ def predict_tfbs(species, epigenome, prefix, coefficients, chip_seq_id=None):
     """
     epigenome = EpigenomeData(species, epigenome)
     bin_100_to_1kb = np.load(epigenome.config.genome_window_map)
-    meta = pd.read_table(epigenome.config.get_basic_meta,
+    meta = pd.read_table(epigenome.config.get_meta,
                          encoding="ISO-8859-1",
                          index_col=0)
     selection = 'factor'

@@ -15,13 +15,6 @@ class Config(ConfigParser):
 
     @property
     def get_meta(self):
-        """ get annotation
-        """
-        if hasattr(self, "s"):
-            return self.get(self.s, 'meta')
-
-    @property
-    def get_basic_meta(self):
         if hasattr(self, "s"):
             return self.get('basics', 'meta')
 
@@ -69,11 +62,6 @@ class Config(ConfigParser):
     def tf_chipseq(self):
         if hasattr(self, "s"):
             return self.get(self.s, 'tf_chipseq')
-
-    @property
-    def tf_chipseq_meta(self):
-        if hasattr(self, "s"):
-            return self.get(self.s, 'tf_chipseq_meta')
 
     @property
     def chrom(self):

@@ -7,7 +7,6 @@
 {% block metas %}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 {% endblock %}
 
 {% block title %}LISA{% endblock %}
@@ -18,7 +17,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
   <div class="container-fluid">
     <a href="/" class="navbar-brand">
-      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <img src="/static/lisa.jpg" height="55" width="40" alt="lisa">
       <span></span>LISA
     </a>
     <div id="navbar-nav-scroll">
@@ -48,12 +47,9 @@
 
 {% block styles %}
 
-<!--
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/> -->
 <link rel="stylesheet" href="{{ url_for('.static', filename='font-awesome.min.css') }}">
 <link rel="stylesheet" href="{{ url_for('.static', filename='custom.css') }}">
 
-<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
@@ -65,37 +61,77 @@
 <div class="container-fluid body3">
   <div class="row">
   <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-       <div class="sidebar-sticky">
-           <ul class="nav flex-column leftpanel">
-              <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" aria-expanded="true" href="#tf1_fig">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                  Compare gene sets <span class="sr-only">(current)</span>
-                </a>
-              </li>
+  <div class="sidebar-sticky">
+  <ul class="nav flex-column leftpanel">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" aria-expanded="true" href="#tf1_fig">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Compare two gene sets <span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    {% if method =='knockout' or method == 'all' %}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#tf1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Combined LISA models based on CistromeDB TR ChIP-seq {{labels1}}
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="#tf1_1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Combined LISA models based on Cistrome motif {{labels1}}
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#tf2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Combined LISA models based on CistromeDB TR ChIP-seq {{labels2}}
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="#tf2_1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Combined LISA models based on Cistrome motif {{labels2}}
+      </a>
+    </li>
+    {% endif %}
 
 
-              {% if method =='knockout' or method == 'all' %}
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#tf1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                 {{epigenome}} knockout of ChIP-seq 1
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#tf1_1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                  {{epigenome}} knockout of ChIP-seq 2
-                </a>
-              </li>
-              {% endif %}
+    {% if method == 'beta' %}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#tf1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        CistromeDB TR ChIP-seq Peak-RP {{labels1}}
+      </a>
+    </li>
 
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#tf2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        CistromeDB TR ChIP-seq Peak-RP {{labels2}}
+      </a>
+    </li>
+    {% endif %}
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{download_zip}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+             Download all results
+      </a>
+    </li>
+
+   <!--
               <li class="nav-item">
                 <a class="nav-link" href="#tfl">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 WashU browser
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="#tf0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
@@ -106,39 +142,9 @@
                 <a class="nav-link" href="#tf0_1">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 Selected {{epigenome}} profile coefficients 2
-                </a>
-              </li>
+                </a>     -->
 
-     {% if method == 'all' or method == 'beta' %}
-              <li class="nav-item">
-                <a class="nav-link" href="#tf">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                  TF ChIP-seq direct 1
-                </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#tf_1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                  TF ChIP-seq direct 2
-                </a>
-              </li>
-     {% endif %}
-
-     {% if method =='knockout' or method == 'all' %}
-              <li class="nav-item">
-                <a class="nav-link" href="#tf2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                  {{epigenome}} Motif knockout 1
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#tf2_1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                  {{epigenome}} Motif knockout 2
-                </a>
-              </li>
-     {% endif %}
-
             </ul>
           </div>
 </nav>
@@ -146,117 +152,47 @@
 <div class="col-md-9 ml-sm-auto col-lg-10 px-4">
   <div class="row">
     {% if task_id %}
-    <h4>Lisa is running. Output html will be: <a href="/download/{{task_id}}_result.html">{{task_id}}</a>. Refresh if necessary</h4>
+    <h4>LISA is running. Output html will be: <a href="/download/{{task_id}}_result.html">{{task_id}}</a>. Refresh if necessary</h4>
     {% endif %}
   </div>
 
   <div class="row lisa_progress">
   </div>
 
-
-   <!-- Nav tabs -->
-   <!-- <ul class="nav result nav-tabs" role="tablist" style="display: none;">
-     <li class="nav-item">
-       <a class="nav-link active" data-toggle="tab" href="#tf1_fig" role="tab" aria-controls="home" aria-expanded="true">TF ranking comparison between gene set 1 and 2</a>
-     </li>
-
-     {% if method =='knockout' or method == 'all' %}
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf1" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} ChIP-seq knockout of gene set 1</a>
-     </li>
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf1_1" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} ChIP-seq knockout of gene set 2</a>
-     </li>
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf2" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} motif knockout of gene set 1</a>
-     </li>
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf2_1" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} motif knockout of gene set 2</a>
-     </li>
-     {% endif %}
-
-     {% if method == 'all' %}
-     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 1</a>
-     </li>
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf_1" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 2</a>
-     </li>
-
-     {% elif method =='beta' %}
-     <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#tf" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 1</a>
-     </li>
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf_1" role="tab" aria-controls="home" aria-expanded="true">LISA TF ChIP-seq only gene set 2</a>
-     </li>
-     {% endif %}
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf0" role="tab" aria-controls="home" aria-expanded="true">gene set 1 {{epigenome}} sample coefficients</a>
-     </li>
-
-     <li class="nav-item">
-       <a class="nav-link" data-toggle="tab" href="#tf0_1" role="tab" aria-controls="home" aria-expanded="true">gene set 2 {{epigenome}} sample coefficients</a>
-     </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#tfl" role="tab" aria-controls="home" aria-expanded="true">{{epigenome}} gene set enrichment on genome browser</a></li>
-      </li>
-  </ul> -->
-
   <div class="tab-content result" style="display: none;">
-     <div role="tabpanel" class="tab-pane fade show active tf1_fig" id="tf1_fig">
-     </div>
-
-     {% if method == 'knockout' or method == 'all' %}
-     <div role="tabpanel" class="tab-pane fade tf1" id="tf1">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tf1_1" id="tf1_1">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tf2" id="tf2">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tf2_1" id="tf2_1">
-     </div>
-     {% endif %}
-
-     {% if method == 'all' %}
-     <div role="tabpanel" class="tab-pane fade tf" id="tf">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tf_1" id="tf_1">
-     </div>
-
-     {% elif method =='beta' %}
-     <div role="tabpanel" class="tab-pane fade tf" id="tf">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tf_1" id="tf_1">
-     </div>
-     {% endif %}
-
-     <div role="tabpanel" class="tab-pane fade tf0" id="tf0">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tf0_1" id="tf0_1">
-     </div>
-
-     <div role="tabpanel" class="tab-pane fade tfl" id="tfl">
-     </div>
-<!--
-    <div role="tabpanel" class="tab-pane fade tfheat" id="tfheat">
-      <div id='container-id-1'>
-        <h1 class='wait_message'>Please wait ...</h1>
-      </div>
+    <div role="tabpanel" class="tab-pane fade show active tf1_fig" id="tf1_fig">
     </div>
--->
+
+    {% if method == 'knockout' or method == 'all' %}
+    <div role="tabpanel" class="tab-pane fade tf1" id="tf1">
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade tf1_1" id="tf1_1">
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade tf2" id="tf2">
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade tf2_1" id="tf2_1">
+    </div>
+    {% endif %}
+
+    {% if method == 'beta' %}
+    <div role="tabpanel" class="tab-pane fade tf1" id="tf1">
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade tf2" id="tf2">
+    </div>
+    {% endif %}
+
+     <!-- <div role="tabpanel" class="tab-pane fade tf0" id="tf0"> -->
+     <!-- </div> -->
+
+     <!-- <div role="tabpanel" class="tab-pane fade tf0_1" id="tf0_1"> -->
+     <!-- </div> -->
+
+     <!-- <div role="tabpanel" class="tab-pane fade tfl" id="tfl"> -->
+     <!-- </div> -->
   </div>
 
   <div class="annotation" style="display: none;">
@@ -266,26 +202,18 @@
 </div>
 </div>
 
-<!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"> -->
-<!--   <div class="modal-dialog modal-lg"> -->
-<!--     <div class="modal-content"> -->
-<!--     </div> -->
-<!--   </div> -->
-<!-- </div> -->
 <nav class="navbar fixed-bottom navbar-dark">
   <div class="container-fluid">
     <a href="/" class="navbar-brand">
       <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
     </a>
-
     <ul class="navbar-nav bd-navbar-nav flex-row">
     <li class="nav-item active">
-     <span>Copyright @2018 Liu lab</span>
+     <span>Copyright @2019 Liu lab</span>
     </li>
     </ul>
   </div>
 </nav>
-
 {% endblock %}
 
 

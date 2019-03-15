@@ -40,50 +40,35 @@
 {% block styles %}
 <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
 <link rel="stylesheet" href="{{ url_for('.static', filename='lisa.css') }}">
 {% endblock %}
 
 {% block content %}
-<!--
-<div class="row body2">
-   <div class="col-sm-12">
-<div class="jumbotron jumbotron-fluid shadow-sm">
-  <div class="container">
-    <h1 class="display-4"><b><abbr title="Large scale In Silico Analysis">LISA</abbr></b> documentation</h1>
-  </div>
-</div>
-  </div>
-</div>
--->
-
 <div class="row">
-<div class="col-sm-3 body">
-<nav id="navbar-example" class="navbar navbar-light bg-light">
-  <nav class="nav nav-pills flex-column">
-    <a class="nav-link" href="#item-0">About</a>
-    <nav class="nav nav-pills flex-column">
-        <a class="nav-link" href="#item-1">Website version</a>
-        <nav class="nav nav-pills flex-column">
-          <a class="nav-link ml-3 my-1" href="#item-1-1">Website Usage</a>
-          <a class="nav-link ml-3 my-1" href="#item-1-2">Website Output</a>
-        </nav>
-    </nav>
-    <nav class="nav nav-pills flex-column">
-        <a class="nav-link" href="#item-2">Local command version</a>
-        <nav class="nav nav-pills flex-column">
-          <a class="nav-link ml-3 my-1" href="#item-2-1">Local Installation</a>
-          <a class="nav-link ml-3 my-1" href="#item-2-2">Local Usage</a>
-          <a class="nav-link ml-3 my-1" href="#item-2-3">Local Output</a>
-        </nav>
-    </nav>
-    <a class="nav-link" href="#item-3">FAQ</a>
-  </nav>
-</nav>
+<div class="d-none d-xl-block col-xl-2 bd-toc">
+<ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#item-0">About</a></li>
+<li class="toc-entry toc-h2"><a href="#item-1">Online version</a></li>
+<ul>
+<li class="toc-entry toc-h3"><a href="#item-1-1">Online usage</a></li>
+<li class="toc-entry toc-h3"><a href="#item-1-2">Online output</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#item-2">Local command version</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#item-2-1">Local installation</a></li>
+<li class="toc-entry toc-h3"><a href="#item-2-2">Local usage</a></li>
+<li class="toc-entry toc-h3"><a href="#item-2-3">Local output</a></li>
+</ul>
+<li class="toc-entry toc-h2"><a href="#item-3">FAQ</a></li>
+</li>
+</ul>
 </div>
 
 <div class="col-sm-8 body3">
 <div data-target="#navbar-example" data-offset="0">
+  <h1 id="item-0">LISA</h2>
+
   <h4 id="item-0">About</h4>
   <p class="just">LISA is short for epigenetic Landscape In silico Subtraction analysis. LISA is a computational biology method that uses chromatin data from a comprehensive database of human and mouse DNase-seq, and H3K27ac ChIP-seq profiles, to determine the transcription factors and chromatin regulators that are directly responsible for the perturbation of a differentially expressed gene set. To run LISA online, the only thing you need is the differential gene set derived from differential gene expresion analysis for microarray and RNA-seq. Then you will be able to leverage the power of the most comprehensive DNase-seq, ATAC-seq and ChIP-seq database (<a href="http://cistrome.org/db/">CistromeDB</a>) to discover the underlying regulatory mechanisms, reveal the key transcription factors and chromatin regulators.</p>
   </p>
@@ -161,48 +146,22 @@
    <h4 id="item-2">Local command version</h4>
    <h4 id="item-2-1">Local installation</h4>
    <p class="just">LISA can be deployed as a command line version, which is installed using the following commands. </p>
-   <code>
+   <figure class='highlight'>
    <pre>
+    <code class="language-bash" data-lang="bash">
+   ### Preparation of Anaconda environment
    wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
    bash Miniconda3-latest-Linux-x86_64.sh
-   
    export PATH="${HOME}/miniconda3/bin:$PATH"
-   conda install anaconda-client
+   conda create -n lisa python=3.6 && conda config --add channels conda-forge && conda config --add channels bioconda
+   conda activate lisa
    
-   conda create -n lisa_impute anaconda python=3
-   source activate lisa_impute
-   
-   conda config --add channels defaults
-   conda config --add channels conda-forge
-   conda config --add channels bioconda
-   conda install blas mkl-service
-   conda install -c anaconda openssl
-   conda install -c anaconda curl 
-   
-   # this is for curl and openssl header files 
-   export C_INCLUDE_PATH=${C_INCLUDE_PATH}:/usr/include/:${HOME}/.local/include:${HOME}/miniconda3/envs/lisa_impute/include
-   
-   pip install deeptools
-   pip install fire
-   pip install psutil
-   pip install numpy
-   pip install scipy
-   pip install sklearn
-   pip install theano
-   
-   git clone https://github.com/qinqian/lisa
-   cd lisa
-   conda env update -n lisa_impute -f environment.yml
+   ### Installation
+   conda install -c qinqian lisa
+    </code>
    </pre>
-   </code>
+   </figure>
    </hr>
-
-   <p class="just">To run local version, user needs to download the pre-computed and annotation files, and fill in the <cite>lisa/lisa.ini</cite> file with downloaded file path. The download links would be released after the accept of the manuscript. At last, the installatin would be done with:</p>
-   <code>
-   <pre>
-   python setup.py install --user
-   </pre>
-   </code>
 
    <h4 id="item-2-2">Local usage</h4>
     <p class="just">The LISA framework has three pipeline represented with three sub-parsers, <cite>model</cite>, <cite>multiple_fastq2bigwig</cite>, and <cite>multiple_bigwig2hdf</cite>;

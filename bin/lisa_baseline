@@ -34,8 +34,8 @@ class LisaBaseLine(object):
         """
         tfbs_dict = dict(
             motif99=self.epigenome.config.get_motif_index(99),
-            motif98=self.epigenome.config.get_motif_index(98),
-            motif97=self.epigenome.config.get_motif_index(97),
+            #motif98=self.epigenome.config.get_motif_index(98),
+            #motif97=self.epigenome.config.get_motif_index(97),
             chipseq=self.epigenome.config.tf_chipseq
         )
         return tfbs_dict[dtype]
@@ -50,7 +50,7 @@ class LisaBaseLine(object):
             gene_chrs.append(gene.split(":")[0])
         return np.array(gene_bins), gene_chrs
 
-    def _get_tfbs_annotation(self, cols, dtype):
+    def _get_tfbs_annotation(self, cols, dtype, is_qc=False):
         cols_new = []
         for i in cols:
             try:
@@ -62,13 +62,12 @@ class LisaBaseLine(object):
                 selection_ids = list(map(int, cols_new))
             except ValueError:
                 return cols
-            #meta = pd.read_table(self.epigenome.config.tf_chipseq_meta,
-            #                     encoding="ISO-8859-1",
-            #                     index_col=0)
-            meta = pd.read_table(self.epigenome.config.get_basic_meta,
+
+            meta = pd.read_table(self.epigenome.config.get_meta,
                                  encoding="ISO-8859-1",
                                  index_col=0)
-            #selection = 'FactorName'
+            if is_qc:
+                meta = meta.loc[meta.loc[:, 'qc']==1, :]
             selection = 'factor'
         else:
             selection_ids = cols_new

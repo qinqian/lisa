@@ -42,8 +42,8 @@ class LisaRank(object):
         """
         tfbs_dict = dict(
             motif99=self.epigenome.config.get_motif_index(99),
-            motif98=self.epigenome.config.get_motif_index(98),
-            motif97=self.epigenome.config.get_motif_index(97),
+            #motif98=self.epigenome.config.get_motif_index(98),
+            #motif97=self.epigenome.config.get_motif_index(97),
             chipseq=self.epigenome.config.tf_chipseq
         )
         return tfbs_dict[dtype]
@@ -134,7 +134,7 @@ class LisaRank(object):
         # raw_reg.index = raw_reg.index.map(lambda x:x.upper())  # fix the symbol to uppercase, not necessary, comment
 
         if new_h5_rp != None: # add hdf5 from fastqs or bigwigs for raw rp
-            with h5py.File(new_h5_rp, mode='r') as st:
+            with h5py.File(new_h5_rp, mode='r', swmr=True) as st:
                 eids = list(map(lambda x: x.decode('utf-8'), st["IDs"][...]))
                 df = pd.DataFrame(st["RP"][...], index=raw_reg.index,
                                   columns=eids)
@@ -275,7 +275,7 @@ class LisaRank(object):
         pvalue = pvalue.sort_values(inplace=False)
         pvalue.to_csv("%s.%s.%s.p_value.csv" % (self.prefix, self.epigenome.epigenome, dtype))
 
-    def _get_tfbs_annotation(self, cols, dtype):
+    def _get_tfbs_annotation(self, cols, dtype, is_qc=False):
         # annotation of chipseq dc ids or motif ids
         cols_new = []
         for i in cols:
@@ -288,13 +288,11 @@ class LisaRank(object):
                 selection_ids = list(map(int, cols_new))
             except ValueError: ## imputation data without cistrome id to search
                 return cols
-            meta = pd.read_table(self.epigenome.config.tf_chipseq_meta, 
+            meta = pd.read_table(self.epigenome.config.get_meta,
                                  encoding="ISO-8859-1",
                                  index_col=0)
-            #meta = pd.read_table(self.epigenome.config.get_basic_meta,
-            #                     encoding="ISO-8859-1",
-            #                     index_col=0)
-            #selection = 'FactorName'
+            if is_qc:
+                meta = meta.loc[meta.loc[:, 'qc']==1, :]
             selection = 'factor'
         else:
             selection_ids = cols_new

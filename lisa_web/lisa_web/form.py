@@ -12,20 +12,24 @@ class LISAForm(FlaskForm):
     genes2 = TextAreaField('Genes2', validators=[optional()])
     labels2 = StringField('labels 2', validators=[optional()])
 
+    background = TextAreaField('Background', validators=[optional()])
+
     name = StringField('Job Name', validators=[Required()])
     mail = EmailField('Optional email', validators=[optional(), Email()])
     method = SelectField("Methods",
-                         choices=[('knockout', 'In Silico Knockout'),
-                                  ('beta', 'TF ChIP-seq directly'),
+                         choices=[('knockout', 'ISD-RP for both motif and ChIP-seq'),
+                                  ('beta', 'TF ChIP-seq Peak-RP'),
                                   ('all', 'All')],
-                         default='knockout')
-    mark = SelectField("Epigenome Mark",
+                         default='all')
+    mark = SelectField("Chromatin profile",
                        choices=[('H3K27ac', 'H3K27ac'),
                                 ('DNase', 'DNase-seq'),
+                                ('All', 'All'),
                                 #('H3K4me3', 'H3K4me3'),
                                 #('H3K27me3', 'H3K27me3'),
                                 #('H3K4me1', 'H3K4me1')
                                 #('ATAC-seq', 'ATAC-seq'),
-                               ], validators=[Required()], default='H3K27ac')
+                               ], validators=[Required()], default='All')
 
     species = SelectField("Species", choices=[('hg38', 'Human'), ('mm10', 'Mouse')], default='hg38')
+    #species = SelectField("Species", choices=[('hg38', 'Human')], default='hg38')

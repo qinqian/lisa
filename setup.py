@@ -21,7 +21,6 @@ def get_extension():
 def main():
     """setup entry
     """
-    os.system("mkdir -p db && python bin/update_conf.py --folder db")
     setup(
         name='lisa',
         version='1.0',
@@ -38,7 +37,7 @@ def main():
                           'snakemake', 'PyYAML', 'yappi'
                           ],
         include_package_data=True,
-        package_data={'lisa': ['rules/*', 'workflows/*', 'lisa.ini', 'lisa.ini.updated']},
+        package_data={'lisa': ['rules/*', 'workflows/*', 'lisa.ini']},
         scripts=glob('bin/*'),
         classifiers=[
             'Environment::Console',

@@ -25,13 +25,12 @@
 }
 
 .body3 {
-    padding-top: 42px;
-    padding-bottom: 35px;
+    padding-top: 32px;
+    padding-bottom: 30px;
     font-family: lato, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     background-color: #fff;
-    margin: 30px;
 }
 
 .body2 {
@@ -45,7 +44,7 @@
 
 .body {
     padding-top: 0px;
-    padding-bottom: 90px;
+    padding-bottom: 85px;
     font-family: lato, sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -54,6 +53,7 @@
 }
 
 #navbar-example {
+ //   position: relative;
     z-index: 998;
     position: fixed;
     top: 248px;
@@ -72,8 +72,7 @@
 .tf0,
 .tf,
 {
-    height: 360px;
-    padding-bottom: 30px;
+    height: 480px;
     overflow: auto;
 }
 
@@ -170,80 +169,3 @@ background-color: #27ae60;
 background-color: #c0392b;
 }
 
-p.just {
-   text-align: justify;
-}
-
-.bd-toc {
-    -ms-flex-order: 0;
-    order: 0;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    font-size: .900rem
-}
-
-@supports ((position:-webkit-sticky) or (position:sticky)) {
-    .bd-toc {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 2.5rem;
-        height: calc(100vh - 4rem);
-        overflow-y: auto
-    }
-}
-
-
-.toc-entry {
-    display: block
-}
-
-.toc-entry a {
-    display: block;
-    padding: .125rem 1.5rem;
-    color: #77757a
-}
-
-.toc-entry a:hover {
-    color: #007bff;
-    text-decoration: none
-}
-
-
-.highlight {
-    padding: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    background-color: #f8f9fa;
-    -ms-overflow-style: -ms-autohiding-scrollbar
-}
-
-@media (min-width:576px) {
-    .highlight {
-        padding: 1.5rem
-    }
-}
-
-.bd-content .highlight {
-    margin-right: -15px;
-    margin-left: -15px
-}
-
-@media (min-width:576px) {
-    .bd-content .highlight {
-        margin-right: 0;
-        margin-left: 0
-    }
-}
-
-.highlight pre {
-    padding: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    background-color: transparent;
-    border: 0
-}
-
-.highlight pre code {
-    font-size: inherit;
-    color: #212529
-}

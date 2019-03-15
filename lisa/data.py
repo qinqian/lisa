@@ -19,17 +19,34 @@ class EpigenomeData(object):
         self.covariates_h5 = None
 
     @property
+    def tr_high_quality_ids(self):
+        """ load ChiLin quality metrics and filter by cutoff
+        """
+        quality = pd.read_table(self.config.get_meta, encoding="ISO-8859-1", index_col=0)
+        selector = (quality['UniquelyMappedRatio'] > 0.3) \
+                 & (quality['MappedReadsNumber'] > 3e6) \
+                 & (quality['AllPeaksNumber'] > 50) \
+                 & (quality['PBC'] > 0.5) \
+                 & (quality['FRiP'] > 0.003) \
+                 #& (quality['UnionDHSRatio'] > 0.3)
+        sids = quality.ix[selector, 'X']
+        # print(sids.shape)
+        return list(set(map(str, list(sids))))
+
+    @property
     def high_quality_ids(self):
         """ load ChiLin quality metrics and filter by cutoff
         """
-        quality = pd.read_csv(self.config.get_meta, encoding="ISO-8859-1")
-        selector = (quality['UniquelyMappedRatio'] > 0.4) \
-                 & (quality['MappedReadsNumber'] > 4e6) \
-                 & (quality['AllPeaksNumber'] > 1000) \
-                 & (quality['PBC'] > 0.7) \
-                 & (quality['FactorName'] == self.epigenome)
-        sids = quality.ix[selector, 'X']
-        # print(sids.shape)
+        meta = pd.read_csv(self.config.get_meta, sep='\t', encoding="ISO-8859-1", index_col=0)
+        #selector = (quality['UniquelyMappedRatio'] > 0.3) \
+        #         & (quality['MappedReadsNumber'] > 3e6) \
+        #         & (quality['AllPeaksNumber'] > 1000) \
+        #         & (quality['PBC'] > 0.6) \
+        #         & (quality['FRiP'] > 0.003) \
+        #         & (quality['FactorName'] == self.epigenome)
+        #sids = quality.ix[selector, 'X']
+        sids = meta.index[((meta.qc==1) & (meta.factor==self.epigenome))]   ## qc is a column defined by above metrics cutoffs
+        print(sids.shape)
         return list(set(map(str, list(sids))))
 
     @property
@@ -45,12 +62,10 @@ class EpigenomeData(object):
         TF: TF ChIP-seq or epigenome ChIP-seq
         """
         if not TF:
-            #print(ids)
-            meta = pd.read_csv(self.config.get_meta, encoding="ISO-8859-1", index_col=0)
+            meta = pd.read_csv(self.config.get_meta, sep='\t', encoding="ISO-8859-1", index_col=0)
             meta.index = meta.index.astype('str')
             return meta.ix[ids, 3:6]
-        else:
-            return
+        return
 
     def create_RP_h5(self, bigwig, prefix):
         """ create hdf5 from text file for regulatory potential
@@ -94,7 +109,7 @@ class EpigenomeData(object):
         """
         high_quality_ids = self.get_intersect_ids
         h5 = self.config.get_rp(self.epigenome)
-        with h5py.File(h5) as store:
+        with h5py.File(h5, mode='r', swmr=True) as store:
             gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),
                                                 store['RefSeq'][...])))
             ids = list(map(lambda x: x.decode('utf-8').split('_')[0],
@@ -116,7 +131,7 @@ class EpigenomeData(object):
         """ get GC Covaraites of regulatory potential to build the model
         """
         h5 = self.config.get_rp('GC')
-        with h5py.File(h5) as store:
+        with h5py.File(h5, mode='r', swmr=True) as store:
             gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),
                                                 store['RefSeq'][...])))
             return pd.DataFrame(store['RP'][:, 0], columns=['GC'],
@@ -136,10 +151,10 @@ class EpigenomeData(object):
         """
         hdf5 = self.config.genome_count(self.epigenome)
         if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
-            with h5py.File(new_h5_count) as st:
+            with h5py.File(new_h5_count, mode='r', swmr=True) as st:
                 eids = np.array(list(map(lambda x: x.decode('utf-8'), st["IDs"][...])))
 
-        with h5py.File(hdf5, mode='r') as store:
+        with h5py.File(hdf5, mode='r', swmr=True) as store:
             ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
                                     store['IDs'][...])))
             if not isinstance(selected_ids, list):
@@ -175,7 +190,7 @@ class EpigenomeData(object):
                     else: # search hdf5
                         if new_h5_count != None: # add hdf5 from fastqs or bigwigs for read count
                             index, = np.where(eids == sid)
-                            with h5py.File(new_h5_count) as st:
+                            with h5py.File(new_h5_count, mode='r', swmr=True) as st:
                                 if len(index) != 0:
                                     index = index[0]              # fix by using the first one
                                     if len(selected_bins) == 0:
@@ -185,7 +200,7 @@ class EpigenomeData(object):
                                         val = store['OrderCount'][selected_bins, index]   ## selected_bins should be sorted in ascending order
                                         count[selected_bins, i] = val
                                 else: # not found read count ....
-                                    print('not found samples in matching samples in read count hdf5')
+                                    print('not found samples in matching samples in read count hdf5, weird..')
                                     sys.exit(1)
         return count
 
@@ -248,7 +263,7 @@ class EpigenomeData(object):
         """ get beta score for all TF ChIP-seq data
         get foreground and background gene TF RP
         """
-        with h5py.File(self.config.get_beta) as store:
+        with h5py.File(self.config.get_beta, mode='r', swmr=True) as store:
             #ids = np.array(list(map(lambda x: x.decode('utf-8').split('_')[0],
             #                        store['IDs'][...])))
             ids = np.array(list(map(lambda x: x.decode('utf-8'),
@@ -263,7 +278,7 @@ class EpigenomeData(object):
         """ get cluster for the 7 cluster for each of the marks """
         folder = self.config.get_cluster
         f = os.path.join(folder, '%s_median_for_each_cluster.h5' % self.epigenome)
-        with h5py.File(f) as store:
+        with h5py.File(f,  mode='r', swmr=True) as store:
             vals = store['median_log2RP_minus_1'][...].T
             clusters = store['K_means_cluster_index'][...]
             gene_annotation = np.array(list(map(lambda x: x.decode('utf-8'),

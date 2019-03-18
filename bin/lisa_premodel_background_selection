@@ -124,6 +124,8 @@ def get_background(species, epigenomes, gene_set, prefix, random, background, st
             else:
                 foreground = []
             background  = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
+            assert (background.Y == 1).sum() >= 3000, 'Unique background gene number is too small !'
+
             ##background.index = background.index.map(lambda x:x.upper())
             if gene_set != None:
                 print(background.shape)
@@ -144,10 +146,8 @@ def get_background(species, epigenomes, gene_set, prefix, random, background, st
             ## keep exactly stat_step_background_number number of background genes
             sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
                                                             sub_background_genes)]
-            print('#--------')
             print(stat_step_background_number)
             print(len(sub_background_genes))
-            print('#--------')
             sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=stat_step_background_number, replace=False))
             np.savetxt('%s.background_gene.3000' % prefix,
                        background_genes, fmt="%s")

@@ -15,9 +15,8 @@ def deduplicate(df):
 def cauchy_p_value(p_vals, wi=None):
     """https://arxiv.org/abs/1808.09011"""
     if wi is None:
-        stat = np.sum(1 * np.tan((0.5-p_vals) * np.pi))
-    else:
-        stat = np.sum(wi * np.tan((0.5-p_vals) * np.pi))
+        wi = 1.0 / len(p_vals)
+    stat = np.sum(wi * np.tan((0.5-p_vals) * np.pi))
     return stat, 0.5 - np.arctan(stat)/np.pi
 
 def main():

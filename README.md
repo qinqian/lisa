@@ -27,7 +27,7 @@ wget --user=lisa --password='xxx'  http://lisa.cistrome.org/cistromedb_data/lisa
 
 # or
 
-wget --user=lisa --password='xxx'  http://lisa.cistrome.org/cistromedb_data/lisa_v1.0_mm10.tar.gz
+wget --user=lisa --password='xxx'  http://lisa.cistrome.org/cistromedb_data/lisa_v1.1_mm10.tar.gz
 ```
 
 Then, user need to uncompress the datasets, and update the configuration for lisa. 
@@ -47,7 +47,7 @@ lisa_update_conf --folder mm10/ --species mm10
 Given multiple gene set file `gene_set1`, `gene_set2`, `gene_set3` et al., each file has one gene (RefSeq id or gene symbol) for each row, user can predict transcriptional regulator ranking using the following commands with random background genes
 
 ``` sh 
-time lisa model --method="all" --web=True --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix first_run --background=None --stat_background_number=500 --threads 4 gene_set1 gene_set2 gene_set3 ...
+time lisa model --method="all" --web=True --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix first_run --background=None --stat_background_number=1000 --threads 4 gene_set1 gene_set2 gene_set3 ...
 ```
 
 Alternatively, user can generate a fixed background genes based on TAD and promoter activity, and input it to lisa,
@@ -56,7 +56,17 @@ Alternatively, user can generate a fixed background genes based on TAD and promo
 lisa_premodel_background_selection --species hg38 --epigenomes="['DNase']" --gene_set=None --prefix=test --random=None --background=dynamic_auto_tad
 cut -f 5 -d: test.background_gene.3000 > test.fixed.background_gene
 
-time lisa model --method="all" --web=True --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix first_run --background=test.fixed.background_gene --stat_background_number=500 --threads 4 gene_set1 gene_set2 gene_set3 ...
+time lisa model --method="all" --web=True --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix first_run --background=test.fixed.background_gene --stat_background_number=1000 --threads 4 gene_set1 gene_set2 gene_set3 ...
+```
+
+### Update LISA
+
+``` sh
+git clone http://github.com/qinqian/lisa/
+source activate lisa
+cd lisa && python setup.py develop
+lisa_update_conf --folder hg38/ --species hg38
+lisa_update_conf --folder mm10/ --species mm10
 ```
 
 ### Remove LISA

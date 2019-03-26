@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """ Lisa interface to rank TFs based on the differential
 expression model and whole genome 1kb read count of the samples
 """
@@ -70,6 +71,7 @@ class LisaRank(object):
         pvalue.index = self._get_tfbs_annotation(pvalue.index, 'chipseq')
         pvalue = pvalue.iloc[:, 0]
         pvalue = pvalue.sort_values(ascending=True, inplace=False)
+        beta_df.to_csv('%s.lisa_peak_rp.csv' % self.prefix)
         pvalue.to_csv('%s.lisa_direct.csv' % self.prefix)
 
     def _prepare_data(self, bin_length):

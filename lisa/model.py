@@ -104,8 +104,6 @@ class Logit(object):
         """
         self.select_feature(sample_number)   # original feature selection with binary search lambda
         # self._select_feature2()     # anova 200~300 samples with cross validation of lambda search
-
-        #print('final shape:---', self.reg_log2.shape)
         # add back covariates
         if isinstance(self.covariates, pd.Series):
             self.reg_log2 = pd.concat([self.reg_log2, self.covariates], axis=1)

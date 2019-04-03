@@ -4,7 +4,6 @@ from wtforms import TextAreaField, BooleanField, SubmitField, SelectMultipleFiel
 from wtforms.validators import DataRequired, Required, length, optional, Email
 from wtforms.fields.html5 import EmailField
 
-
 class LISAForm(FlaskForm):
     genes = TextAreaField('Genes', validators=[Required()])
     labels = StringField('labels', validators=[optional()])
@@ -32,4 +31,3 @@ class LISAForm(FlaskForm):
                                ], validators=[Required()], default='All')
 
     species = SelectField("Species", choices=[('hg38', 'Human'), ('mm10', 'Mouse')], default='hg38')
-    #species = SelectField("Species", choices=[('hg38', 'Human')], default='hg38')

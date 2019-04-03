@@ -307,104 +307,9 @@ function update_progress(status_url, status_div, div_heatmap_data) {
   // send GET request to status URL
   $.getJSON(status_url, function(data) {
     // update UI
-    $(status_div.childNodes[0]).css("width", data['status']);
-    $(status_div.childNodes[0]).text(data['status']+ " " + data['state']);
-    if (data['state'] == 'finished') {
-      $("h4").hide();
-      $('.progress').hide();
-      $(".result").show(1500);
-      $('.leftpanel a[href="#tfheat"]').click(function(e){
-        $(".annotation").html("");
-        $('.active').removeClass("active");
-        var hzome = ini_hzome();
-        make_clust(div_heatmap_data); // 'mult_view.json'
-
-        var about_string = 'Zoom, scroll, and click buttons'; //  to interact with the clustergram. <a href="http://amp.pharm.mssm.edu/clustergrammer/help"> <i class="fa fa-question-circle" aria-hidden="true"></i> </a>';
-
-        function make_clust(inst_network){
-
-          d3.json(inst_network, function(network_data){
-
-            // define arguments object
-            var args = {
-              root: '#container-id-1',
-              'Network_data': network_data,
-              'about':about_string,
-              'row_tip_callback':hzome.gene_info,
-              'col_tip_callback':test_col_callback,
-              'tile_tip_callback':test_tile_callback,
-              'dendro_callback':dendro_callback,
-              'matrix_update_callback':matrix_update_callback,
-              'cat_update_callback': cat_update_callback,
-              'sidebar_width':150
-              // 'ini_view':{'N_row_var':20}
-              // 'ini_expand':true
-            };
-
-            resize_container(args);
-
-            d3.select(window).on('resize',function(){
-              resize_container(args);
-              cgm.resize_viz();
-            });
-
-            cgm = Clustergrammer(args);
-
-            check_setup_enrichr(cgm);
-
-            d3.select(cgm.params.root + ' .wait_message').remove();
-          });
-
-        }
-
-        function matrix_update_callback(){
-
-          if (genes_were_found[this.root]){
-            enr_obj[this.root].clear_enrichr_results(false);
-          }
-        }
-
-        function cat_update_callback(){
-          console.log('callback to run after cats are updated');
-        }
-
-        function test_tile_callback(tile_data){
-          var row_name = tile_data.row_name;
-          var col_name = tile_data.col_name;
-
-        }
-
-        function test_col_callback(col_data){
-          var col_name = col_data.name;
-        }
-
-        function dendro_callback(inst_selection){
-
-          var inst_rc;
-          var inst_data = inst_selection.__data__;
-
-          // toggle enrichr export section
-          if (inst_data.inst_rc === 'row'){
-            d3.select('.enrichr_export_section')
-              .style('display', 'block');
-          } else {
-            d3.select('.enrichr_export_section')
-              .style('display', 'none');
-          }
-
-        }
-
-        function resize_container(args){
-
-          var screen_width = window.innerWidth;
-          var screen_height = window.innerHeight - 20;
-
-          d3.select(args.root)
-            .style('width', screen_width+'px')
-            .style('height', screen_height+'px');
-        }
-        $(this).tab('show');
-      });
+    $('.progress').hide();
+    $(".result").show(500);
+    $("h4").remove();
 
       // show figure results by default
       $(".tab-pane.active").ready(function() {
@@ -499,7 +404,6 @@ function update_progress(status_url, status_div, div_heatmap_data) {
         $(".annotation").hide();
         $(".annotation").html("");
 
-        //if ($('.tabtf0_1').length == 0) {
         if ($('.tabtfcoef0').length == 0) {
           $(".tf0_1").html($('<div class="col"><a href="' + data['result0_1'] +'">download epigenome sample coefficients</a></div>'));
           $(".tf0_1").append($('<div class="row tfcoef0"><svg class="auc2"></svg></div>'));
@@ -643,39 +547,24 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       //     }
       //   });
       // });
-
-    } else {
-      setTimeout(function() {
-        update_progress(status_url, status_div, div_heatmap_data);
-      }, 9000);  // extend to 9000ms for post-process the snakemake results to avoid dataTable issues
-    }
-  });
+   })
 }
 
 function start_lisa_task(id, div_heatmap_data) {
   // $(".result").hide();
   // add task status elements
-  div = $('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div><hr>');
+  div = $('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><hr>');
 
   $('.lisa_progress').append(div);
 
   $.ajax({
-    type: 'POST',
+    type: 'GET',
     url: id,
     success: function(data, status, request) {
-      update_progress(id, div[0], div_heatmap_data);
+      update_progress(id, div[0]);
     },
     error: function() {
       alert('Unexpected error');
     }
   });
-  // search interface
-  // http://dc2.cistrome.org/api/main_filter_ng?cellinfos=all&completed=false&curated=false&factors=all&keyword=34330&page=1&run=false&species=all
-  // http://dc2.cistrome.org/api/main_filter_ng?cellinfos=all&completed=false&curated=false&factors=all&keyword=&page=1&run=false&species=Homo%20sapiens&factors=AR
-  // conservation interface
-  // http://dc2.cistrome.org/api/conserv?id=2816
-  // information interface
-  // http://dc2.cistrome.org/api/inspector?id=2816
-  // genome browser
-  // http://dc2.cistrome.org/api/batchview/h/1792_8448/w/
 }

@@ -57,7 +57,7 @@
 {% block content %}
 <div class="container-fluid body3">
   <div class="row">
-  <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <nav class="col-md-3 d-none d-md-block bg-light sidebar">
        <div class="sidebar-sticky">
            <ul class="nav flex-column leftpanel">
               {% if method =='knockout' or method == 'all' %}
@@ -96,7 +96,7 @@
 </nav>
 
 <!-- <div class="container-fluid body3"> -->
-<div class="col-md-9 ml-sm-auto col-lg-10 px-4">
+<div class="col-md-9 ml-sm-auto col-lg-9 px-4">
   <div class="row">
     {% if task_id %}
     <h4>LISA is running. Output html will be: <a href="/download/{{task_id}}_result.html">{{task_id}}</a>. Refresh if necessary</h4>

@@ -32,6 +32,7 @@ from .form import LISAForm
 app.secret_key = 's3cr3t' # crsf
 download = '/data/home/qqin/lisa_web/download'
 gallery = '/data/home/qqin/lisa_web/lisa_web/gallery'
+new_gallery = '/data/home/qqin/lisa_web/lisa_web/new_gallery'
 upload = '/data/home/qqin/lisa_web/upload'
 
 # debug mode on
@@ -520,6 +521,10 @@ def get_gallery2():
 def download_gallery(filename):
     return send_from_directory(gallery, filename)
 
+@app.route('/new_gallery/<path:filename>')
+def download_new_gallery(filename):
+    return send_from_directory(new_gallery, filename)
+
 @app.route('/upload/<path:filename>')
 def custom_upload(filename):
     return send_from_directory(upload, filename)
@@ -552,4 +557,3 @@ def custom_download(filename):
 #    return "Hello, %s!" % auth.username()
 
 Bootstrap(app)
-

@@ -3,7 +3,7 @@ package:
   version: 1.0
 
 build:
-  number: 4
+  number: 5
   #entry_points:
   #  - lisa = ../bin/lisa
 
@@ -42,6 +42,7 @@ requirements:
     - ucsc-wigtobigwig
     - deeptools
     - openssl=1.0
+    - mpmath
 
     #- matplotlib
     #- seaborn

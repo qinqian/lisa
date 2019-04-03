@@ -34,7 +34,7 @@ def main():
                           'scikit-learn', 'theano', 'fire',
                           'h5py', 'pandas',
                           'scipy',
-                          'snakemake', 'PyYAML', 'yappi'
+                          'snakemake', 'PyYAML', 'yappi', 'mpmath'
                           ],
         include_package_data=True,
         package_data={'lisa': ['rules/*', 'workflows/*', 'lisa.ini']},

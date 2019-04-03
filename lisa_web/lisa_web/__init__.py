@@ -243,8 +243,7 @@ def multiple_run_lisa(self, method, species, mark, prefix, background_file, to_u
         fout.flush()
 
     download_zip = os.path.join(download, '%s.zip' % prefix)
-    os.system('zip -r %s %s*' % (download_zip, os.path.join(upload, prefix)))
-
+    os.system('cd %s && zip -r %s %s*' % (upload, download_zip, prefix))
     send_localhost_mail('html', 'LISA Result', to_user, 'Hi %s, the LISA results is ready at http://lisa.cistrome.org/download/%s_result.html.' % (to_user.split('@')[0], prefix), '')
 
 @celery.task(bind=True)
@@ -294,7 +293,7 @@ def run_lisa(self, method, species, mark, prefix, background_file, to_user):
 
     #zip test.zip upload//test1_2019_03_12_0018340.666__hg38*
     download_zip = os.path.join(download, '%s.zip' % prefix)
-    os.system('zip -r %s %s*' % (download_zip, os.path.join(upload, prefix)))
+    os.system('cd %s && zip -r %s %s*' % (upload, download_zip, prefix))
 
     ## turn off the heatmap
     # cmd = "/data/home/qqin/lisa_web/run_heatmap.sh %s" % (os.path.join(upload, '%s.txt.%s.chipseq.csv' % (prefix, mark)))
@@ -365,10 +364,7 @@ def lisa_taskstatus(epigenome, task_id):
                         response['status'] = '%s%%' % percent
                         response['result'] = os.path.join("/"+os.path.basename(upload), '%s.combined.chipseq.csv' % (task_id))
                         response['result2'] = os.path.join("/"+os.path.basename(upload), '%s.combined.motif.csv' % (task_id))
-
                         response['result_zip'] = os.path.join("/"+os.path.basename(download), '%s.zip' % (task_id))
-
-
                         # response['result'] = os.path.join("/"+os.path.basename(upload), '%s.direct.csv' % (task_id))
                         # response['result0'] = os.path.join("/"+os.path.basename(upload), '%s.%s.coefs.csv' % (task_id, epigenome))
                         # response['result1'] = os.path.join("/"+os.path.basename(upload), "%s.%s.chip.csv" % (task_id, epigenome))

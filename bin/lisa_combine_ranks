@@ -8,16 +8,28 @@ import copy
 
 def deduplicate(df):
     out = copy.deepcopy(df)
-    out.loc[:, 'TF'] = df.index.map(lambda x: x.split('|')[1])
-    out = out.drop_duplicates('TF', inplace=False)
+    #do not deduplicate, since row names is not consistent for cistromedb and imputed TFBS
+    #out.loc[:, 'TF'] = df.index.map(lambda x: x.split('|')[1]) 
+    #out.loc[:, 'TF'] = df.index.map(lambda x: x.split('_')[0])
+    #out = out.drop_duplicates('TF', inplace=False)
     return out
 
 def cauchy_p_value(p_vals, wi=None):
     """https://arxiv.org/abs/1808.09011"""
-    if wi is None:
-        wi = 1.0 / len(p_vals)
-    stat = np.sum(wi * np.tan((0.5-p_vals) * np.pi))
-    return stat, 0.5 - np.arctan(stat)/np.pi
+    p_vals = np.array(p_vals, np.float64)
+    if np.any(p_vals <= 1e-15): # np.finfo(np.float64) 1e-15
+        from mpmath import mp
+        mp.dps = 150
+        mp.pretty = True
+        p_vals = [mp.mpf(i) for i in p_vals]
+        t0 = sum([mp.tan((mp.mpf(0.5)-i)*mp.pi())/mp.mpf(3) for i in p_vals])
+        p =  mp.mpf(0.5)-mp.atan(t0)/mp.pi()
+        return t0, p
+    else:
+        if wi is None:
+            wi = 1.0 / len(p_vals)
+        stat = np.sum(wi * np.tan((0.5-p_vals) * np.pi))
+        return stat, 0.5 - np.arctan(stat)/np.pi
 
 def main():
     parser = argparse.ArgumentParser()
@@ -62,6 +74,8 @@ def main():
     combine_p.to_csv('%s_cauchy_combine_dedup.csv' % args.prefix)
 
     combine_p2 = rank.apply(lambda x: stats.combine_pvalues(x, method='fisher')[1], axis=1)
+    ## load meta data
+
     combine_p2.sort_values(inplace=True)
     combine_p2 = pd.DataFrame(combine_p2)
     combine_p2.to_csv('%s_fisher_combine_raw.csv' % args.prefix)

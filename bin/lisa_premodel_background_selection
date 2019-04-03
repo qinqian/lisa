@@ -73,12 +73,10 @@ def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num
         n += gene_num
         print(gene_num)
         genes += list(np.random.choice(np.array(prop_dict_genes[i]), gene_num, replace=False)) # replace=False
-    print('*--------')
     print(n)
     print(num)
     print(background.shape)
     print(tad_promoter_chr.shape)
-    print('*--------')
     return list(set(genes))
 
 
@@ -124,35 +122,38 @@ def get_background(species, epigenomes, gene_set, prefix, random, background, st
             else:
                 foreground = []
             background  = generate_dedup_refseq(species, epigenomes[0], background) ## only use Y here
-            assert (background.Y == 1).sum() >= 3000, 'Unique background gene number is too small !'
 
-            ##background.index = background.index.map(lambda x:x.upper())
-            if gene_set != None:
-                print(background.shape)
-                print(feature_symbols.shape)
-                print(((background.Y == 1) & (feature_symbols.Y==0)).sum())
-                print((background.index==feature_symbols.index).sum())
-                overlapped = ((background.Y == 1) & (feature_symbols.Y==1)).sum()
-                sampled_num = 3000 - overlapped # exclude 0.06% to 3% of background genes overlapped with input genes
-                background_genes = np.unique(np.random.choice(background.index[(background.Y == 1) & (feature_symbols.Y==0)].values, size=sampled_num, replace=False))
+            if (background.Y == 1).sum() >= 3000*1.05:
+                if gene_set != None:
+                    overlapped = ((background.Y == 1) & (feature_symbols.Y==1)).sum()
+                    sampled_num = 3000 - overlapped # exclude 0.06% to 3% of background genes overlapped with input genes
+                    background_genes = np.unique(np.random.choice(background.index[(background.Y == 1) & (feature_symbols.Y==0)].values, size=sampled_num, replace=False))
+                else:
+                    background_genes = np.unique(np.random.choice(background.index[(background.Y == 1)].values, size=3000, replace=False))
+
+                conf = Config(resource_filename("lisa", "lisa.ini"), species)
+                df = pd.read_table(conf.get_tad)
+                sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, foreground, 
+                                                       np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), stat_step_background_number)
+                ## keep exactly stat_step_background_number number of background genes
+                sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
+                                                                sub_background_genes)]
+                sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=stat_step_background_number, replace=False))
+                np.savetxt('%s.background_gene.3000' % prefix,
+                           background_genes, fmt="%s")
+                np.savetxt('%s.background_gene.1000' % prefix,
+                           sub_background_genes, fmt="%s")
             else:
-                background_genes = np.unique(np.random.choice(background.index[(background.Y == 1)].values, size=3000, replace=False))
+                if gene_set != None:
+                    assert ((background.Y == 1) & (feature_symbols.Y==0)).sum() >= 30, 'too few background genes, or background overlapped too much with target genes!'
+                    background_genes = np.unique(background.index[(background.Y == 1) & (feature_symbols.Y==0)].values)
+                else:
+                    background_genes = np.unique(background.index[(background.Y == 1)])
 
-            conf = Config(resource_filename("lisa", "lisa.ini"), species)
-            df = pd.read_table(conf.get_tad)
-            sub_background_genes = sampling_by_tad(prefix, species, epigenomes, df, foreground, 
-                                                   np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), stat_step_background_number)
-
-            ## keep exactly stat_step_background_number number of background genes
-            sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
-                                                            sub_background_genes)]
-            print(stat_step_background_number)
-            print(len(sub_background_genes))
-            sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=stat_step_background_number, replace=False))
-            np.savetxt('%s.background_gene.3000' % prefix,
-                       background_genes, fmt="%s")
-            np.savetxt('%s.background_gene.1000' % prefix,
-                       sub_background_genes, fmt="%s")
+                np.savetxt('%s.background_gene.3000' % prefix,
+                           background_genes, fmt="%s")
+                np.savetxt('%s.background_gene.1000' % prefix,
+                           background_genes, fmt="%s")
         return True
 
     if gene_set == None:

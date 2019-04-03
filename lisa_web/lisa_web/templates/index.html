@@ -122,14 +122,13 @@
         <div id="collapseOne" class="panel-collapse collapse in">
            <div class="panel-body">
       
-  <!--
         <div class="form-row">
         <div class="form-group col-md-12">
             <label>Background Gene Set (optional)</label>
-            {{form.background(class="form-control genes2", placeholder="user-provided background gene set for gene set1 and gene set2 to compare with")}}
+            {{form.background(class="form-control genes2", placeholder="user-provided background gene set for gene set1 and gene set2 to compare with, this should not overlap with target genes, and input at least 30 unique genes")}}
         </div>
         </div>
-   -->
+
         <div class="form-row">
         <div class="form-group col-md-12">
             <label>{{form.method.label}}</label>

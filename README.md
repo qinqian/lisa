@@ -9,7 +9,10 @@ bash Miniconda3-latest-Linux-x86_64.sh
 export PATH="${HOME}/miniconda3/bin:$PATH"
 
 conda create -n lisa python=3.6 && conda config --add channels conda-forge && conda config --add channels bioconda
+
 conda activate lisa
+# or for old conda
+source activate lisa
 ```
 
 ### Installation
@@ -57,6 +60,12 @@ lisa_premodel_background_selection --species hg38 --epigenomes="['DNase']" --gen
 cut -f 5 -d: test.background_gene.3000 > test.fixed.background_gene
 
 time lisa model --method="all" --web=True --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix first_run --background=test.fixed.background_gene --stat_background_number=1000 --threads 4 gene_set1 gene_set2 gene_set3 ...
+```
+
+User can also input a customized background genes, which should include more than 30 unique RefSeq genes, all input genes are used for modeling and computing statistics, so `--stat_background_number` is ignored.
+
+``` sh
+time lisa model --method="all" --web=True --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix first_run --background=test.fixed.background_gene --threads 4 gene_set1 gene_set2 gene_set3 ...
 ```
 
 ### Update LISA

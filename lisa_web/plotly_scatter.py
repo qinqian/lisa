@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import sys
 import pandas as pd
 import numpy as np
@@ -16,29 +15,31 @@ labels2 = sys.argv[6]
 
 up=pd.read_csv(up_r, header=0)
 up=up.sort_values(by='0.1')
-print(up.head())
 up.loc[:, 'name'] = up.iloc[:, 0].map(lambda x:x.split('|')[1])
+up.drop_duplicates('name', inplace=True, keep='first')
+print(up.head())
 
 dn=pd.read_csv(dn_r, header=0)
 dn=dn.sort_values(by='0.1')
 dn.loc[:, 'name'] = dn.iloc[:, 0].map(lambda x:x.split('|')[1])
-up.drop_duplicates('name', inplace=True, keep='first')
 dn.drop_duplicates('name', inplace=True, keep='first')
+print(dn.head())
 
-final = up.merge(dn, on='0', how='outer')
-final = final.loc[(final.iloc[:, 1]<=0.01) | (final.iloc[:, 3]<=0.01), :]
-xlim = -np.log10(np.min(final.iloc[:, 1]))*1.25
-ylim = -np.log10(np.min(final.iloc[:, 3]))*1.25
+final = up.merge(dn, on='name', how='outer')
+final = final.loc[(final.iloc[:, 1]<=0.05) | (final.iloc[:, 4]<=0.05), :]
+xlim = -np.log10(np.min(final.iloc[:, 1]))*1.2
+ylim = -np.log10(np.min(final.iloc[:, 4]))*1.2
+print(xlim)
+print(ylim)
 
-final.iloc[np.where(pd.isnull(final.iloc[:, 3]))[0], 3] = 1
-final.iloc[np.where(pd.isnull(final.iloc[:, 1]))[0], 1] = 1
-
-top_index = np.union1d(np.argsort(final.iloc[:, 1])[:5], np.argsort(final.iloc[:, 3])[:5])
+#final.iloc[np.where(pd.isnull(final.iloc[:, 4]))[0], 3] = 1
+#final.iloc[np.where(pd.isnull(final.iloc[:, 1]))[0], 1] = 1
+top_index = np.union1d(np.argsort(final.iloc[:, 1])[:10], np.argsort(final.iloc[:, 4])[:10])
 final_top = final.iloc[top_index, :]
 
 final = final.drop(final.index[top_index])
-x = -np.log10(final.iloc[:, 1]+1e-20)
-y = -np.log10(final.iloc[:, 3]+1e-20)
+x = -np.log10(final.iloc[:, 1])
+y = -np.log10(final.iloc[:, 4])
 
 top_trace0 = Scatter(x=x,
                      y=y, 
@@ -49,15 +50,15 @@ top_trace0 = Scatter(x=x,
                                   opacity= 0.7,
                                   ))
 
-x = -np.log10(final_top.iloc[:, 1]+1e-20)
-y = -np.log10(final_top.iloc[:, 3]+1e-20)
+x = -np.log10(final_top.iloc[:, 1])
+y = -np.log10(final_top.iloc[:, 4])
 trace1 = Scatter(x=x,
                  y=y,
                  name='top TFs',
                  # mode='markers+text',
                  mode='markers',
                  marker=dict(size= 6,
-                             opacity= 0.90),
+                             opacity= 0.8),
                  textfont=dict(
                     family='sans serif',
                     size=18,
@@ -76,7 +77,7 @@ layout = Layout(
             family='Arial',
             size=18),
         rangemode='tozero',
-        #range=[-0.5, xlim]
+        range=[0, xlim]
     ),
     yaxis=dict(
         title='-log10(p-value) of Gene Set 2' if labels2.strip() == '' else '-log10(p-value) of %s' % labels2,
@@ -86,7 +87,7 @@ layout = Layout(
             size=18
         ),
         rangemode='tozero',
-        #range=[-0.5, ylim]
+        range=[0, ylim]
     ),
     hovermode = 'closest',
     width=850,

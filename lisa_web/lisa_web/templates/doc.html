@@ -22,12 +22,14 @@
         <li class="nav-item active">
           <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
         </li>
+
         <li class="nav-item active">
-          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery">Human Gallery</a>
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/new_gallery/new_gallery.html">Combined Human Gallery</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link nav-a" href="http://lisa.cistrome.org/lisa_gallery_mm">Mouse Gallery</a>
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/new_gallery_mm/new_gallery_mm.html">Combined Mouse Gallery</a>
         </li>
+
         <li class="nav-item active">
           <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
         </li>
@@ -70,83 +72,77 @@
   <h1 id="item-0">LISA</h2>
 
   <h4 id="item-0">About</h4>
-  <p class="just">LISA is short for epigenetic Landscape In silico Subtraction analysis. LISA is a computational biology method that uses chromatin data from a comprehensive database of human and mouse DNase-seq, and H3K27ac ChIP-seq profiles, to determine the transcription factors and chromatin regulators that are directly responsible for the perturbation of a differentially expressed gene set. To run LISA online, the only thing you need is the differential gene set derived from differential gene expresion analysis for microarray and RNA-seq. Then you will be able to leverage the power of the most comprehensive DNase-seq, ATAC-seq and ChIP-seq database (<a href="http://cistrome.org/db/">CistromeDB</a>) to discover the underlying regulatory mechanisms, reveal the key transcription factors and chromatin regulators.</p>
+  <p class="just">Transcriptional regulators (TRs), including transcription factors and chromatin regulators, play central role in gene regulation, and are essential in many biological processes. To rank TRs given geneset, we develop a computational biology framework, LISA, to evaluate and rank TRs effect by integrative modelling of chromatin landscapes and cistromes from Cistrome Data Browser (<a href="http://cistrome.org/db/">CistromeDB</a>). To run LISA online application or local command line, the only thing you need is the differential gene set derived from differential gene expression analysis of microarray and RNA-seq. Then you will be able to leverage the power of the most comprehensive TR ChIP-seq, DNase-seq, H3K27ac ChIP-seq database to discover the underlying regulatory TRs.</p>
   </p>
   </hr>
 
-  <p class="just">First, LISA will build a chromatin landscape model using the input gene set based on the comprehensive database of DNase-seq, or histone modification profiles. The model selects a subset of the cell type specific chromatin landscape. Then, for each gene, LISA will probe the effect of transcription factors in these landscapes by simulating deletions of their binding sites. The binding sites could come from the ChIP-seq data in CistromeDB or the motif hit profile. Finally, LISA would assign every binding site profile(ChIP-seq data or motif hit profile) a score showing essentiality of the set of transcriptional regulator binding sites by evaluating the effect across all the input genes.</p>
+  <p class="just">LISA combines two models, epigenetics landscape in silico subtraction model and the cistrome regulatory potential model. The first model integrates epigenetics landscape with cistromes through in silico deletion strategy. First, the model will build a chromatin landscape model using the input gene set based on the comprehensive database of DNase-seq, or H3K27ac ChIP-seq. The model selects a subset of the cell type specific chromatin landscape. Then, the model will probe the effect of TRs on a gene in these landscapes by simulating deletions of chromatin signals on TR binding sites. These binding sites can come from the ChIP-seq experiment-derived data in CistromeDB, or the motif scan, or imputed TR binding sites from DREAM challenge. The second model uses only cistromes to model the TR regulatory potential on each gene. Finally, LISA would assign every binding site profile(ChIP-seq data, motif hit profile or imputed TF binding site) a score showing essentiality of the set of transcriptional regulator binding sites by comparing the effect between all the input genes and a fixed/user-customized background genes, and combined all the statistics from both models for each TR.</p>
   </hr>
 </div>
 
   <h4 id="item-1">Website version</h4>
   <h5 id="item-1-1">Website Usage</h5>
-  <p class="just">The input fields and options is shown in the input interface(Figure 1). User can input one or two gene set by using RefSeq ids or gene official symbols, usually the two gene sets can be obtained from up and down-regulated gene set from differential gene expression analysis,and select the species the gene set originates from. If one gene set is given, it should be placed in "Gene Set 1", and the TF ranking list of that one gene list would be provided. If two are given, an additional figure of comparison between the two gene set analysis will be generated, a typical scenario would be input up and down regulated gene set from a set of expression profiles, the label for each gene set can be customized optionally. For gene set size, we would recommend 50 to 500 genes, since few genes will lower the predictive power of chromatin profile modelling. To build a model that can best represent the cell type specific chromatin landscape, the number of genes can not be too few. However, because in-silico deleting binding sites are time-consuming step for all the ChIP-seq profile and motif hit profile for all the input genes, the LISA running time would suffer from the number of genes when it goes beyond 500. There are DNase-seq, and H3K27ac ChIP-seq profiles for us to choose. From the set of transcription factor perturbation experiments used as benchmarks in the paper (see in <a href="http://lisa.cistrome.org/lisa_gallery">Human</a>/<a href="http://lisa.cistrome.org/lisa_gallery_mm">Mouse</a> Gallery), we found that DNase-seq and H3K27ac are generally better than other chromatin profile, use can choose either to explore their gene set. User can select method based on TF ChIP-seq peak, based on in-silico knockout method, or both. A single run takes 5-10 minutes depending on the size of the gene set, user can optionally set an email to receive the result link.</p>
+  <p class="just">The input fields and options is shown in the input interface(Figure 1). User can input one or two gene set by using RefSeq ids or gene official symbols, usually the two gene sets can be obtained from up and down-regulated gene set from a differential gene expression analysis,and select the species the gene set originates from, for example, here are two gene sets for MYC knockdown in brain tumors: <a href="http://lisa.cistrome.org/gallery/83_up.txt">up-regulated gene set</a>, and <a href="http://lisa.cistrome.org/gallery/83_down.txt">down-regulated geneset</a>. If one gene set is given, it should be placed in "Gene Set 1", and the TF ranking list of that one gene list would be provided. If two are given, an additional figure of comparison between the two gene set analysis will be generated, a typical scenario would be input up and down regulated gene set from a set of expression profiles, the label for each gene set can be customized optionally. For gene set size, we would recommend 50 to 500 genes, since few genes will lower the predictive power of chromatin profile modelling. To build a model that can best represent the cell type specific chromatin landscape, the number of genes can not be too few. By default, LISA samples 3000 background genes for comparison, user can also specify customized background gene set. However, because in-silico deleting binding sites are time-consuming step for all the ChIP-seq profile and motif hit profile for all the input genes, the LISA running time would suffer from the number of genes when it goes beyond 3000. By using the default backgroudn gene set based on TAD and promoter activity, we prepared a set of transcription factor perturbation experiments used as benchmarks in the paper (see in <a href="http://lisa.cistrome.org/new_gallery/new_gallery.html">Human</a>/<a href="http://lisa.cistrome.org/new_gallery_mm/new_gallery_mm.html">Mouse</a> Gallery). In addition, user can select method based on TR ChIP-seq peak, based on in-silico knockout method, or both. A single run takes 5-10 minutes depending on the size of the gene set, user can optionally set an email to receive the result link.</p>
   </hr>
 
   <div class="figure1" id="id1" align="center">
-  <img src="http://cistrome.org/~qqin/1.png" height="380" width="400">
+  <img src="http://lisa.cistrome.org/static/Figure1.png" height="550" width="430">
   </div>
   <div align="center">Figure 1. LISA input interface</div>
   </hr>
 
   <h5 id="item-1-2">Website Output</h5>
-  <p class="just">LISA output several results about TF ranking, if two gene sets are given, the output is as follows:</p>
-  <li>a pairwise scatterplot for comparison of the two gene set TF rankings based on LISA cis-elements knockout method (Figure 2).</li>
-  <li>a pairwise scatterplot for comparison of the two gene set based on TF ChIP-seq peak regulatory potential (Figure 3). </li>
-  <p class="just">NOTE: These two figures can be saved to local disk, The x axis and y axis shows the -log10(p-value) of the TF ranking significance for either gene set. Once user mouse over the points, the corresponding TF ChIP-seq sample will be shown by Cistrome ID and TF name, user can see details information about the sample by searching CistromeDB with Cistrome ID.</p>
+  <p class="just">With two gene sets input, the MYC knockdown demo outputs <a href="http://lisa.cistrome.org/download/MYC_LISA_2019_04_30_0017080.114__hg38_result.html">the page</a>, which lists the following results as in Figure 2:</p>
+  <div class="figure2" align="center">
+  <img alt="_images/2.png" src="http://lisa.cistrome.org/static/Figure2.png" height="340" width="420">
+  <div align="center">Figure 2. LISA result list of MYC knockdown gene set</div>
+  </div>
 
-  <li>The TF ranking table of the LISA cis-elements knockout method based on ChIP-seq(Figure 4). </li>
-  <li>The TF ranking table of the TF ranking from TF ChIP-seq peak(Figure 5). </li>
-  <li>Selected chromatin profile and model performance. The annotation and the coefficient of the selected chromatin profile is selected (Figure 6). Along with the table, there is a ROCAUC curve to show the model performance.</li>
+  <li>A pairwise scatterplot for comparison of the two gene set TF rankings with combined p-values based on TF ChIP-seq(Figure 3).</li>
+  <div class="figure3" align="center">
+  <img alt="_images/3.png" src="http://lisa.cistrome.org/static/Figure3.png" height="500" width="650">
+  <div align="center">Figure 3. LISA result based on TF ChIP-seq</div>
+  </div>
 
-  <p class="just">NOTE: Click on each of the p-value for TF ranking or each sample for chromatin profile, the Cistrome dataset link will be shown below (Figure 5).</p>
-  <li>The ranking table for Motif PWM based TF ranking (Figure 6).</li>
+  <li>A pairwise scatterplot for comparison of the two gene set based on TF motif (Figure 4). </li>
+  <div class="figure4" align="center">
+  <img alt="_images/4.png" src="http://lisa.cistrome.org/static/Figure4.png" height="500" width="650">
+  <div align="center">Figure 4. LISA TF ranking based on motif</div>
+  </div>
+
+  <p class="just">NOTE: These two figures can be saved to local disk, The x axis and y axis shows the -log10(p-value) of the TF ranking significance for either gene set. Once user moves mouse over the points, the corresponding TF ChIP-seq sample will be shown by Cistrome ID and TF name, user can see details information about the sample by searching CistromeDB with Cistrome ID.</p>
+
+  <li>The TF ranking table is computed by combining Peak-RP method, H3K27ac, DNase-seq in silico deletion of TF ChIP-seq peaks(Figure 5). </li>
+  <div class="figure5" align="center">
+  <img alt="_images/5.png" src="http://lisa.cistrome.org/static/Figure5.png" height="400" width="760">
+  </div>
+  <div align="center">Figure 5. LISA TF ranking for down-regulated gene set based on ChIP-seq</div>
+
+  <p class="just">NOTE: Click on each of the p-value for TF ranking, the Cistrome dataset link will be shown below (Figure 6).</p>
+  <div class="figure6" align="center">
+  <img alt="_images/6.png" src="http://lisa.cistrome.org/static/Figure6.png" height="400" width="760">
+  </div>
+  <div align="center">Figure 6. TF ranking linked to CistromeDB</div>
+
+  <li>The TF ranking table is computed by combining H3K27ac and DNase-seq in silico deletion methods (Figure 7).</li>
+  <div class="figure7" align="center">
+  <img alt="_images/7.png" src="http://lisa.cistrome.org/static/Figure7.png" height="400" width="760">
+  </div>
+  <div align="center">Figure 7. TF ranking based on chromatin profile knockout of motif hit site</div>
   <p class="just">NOTE: These tables above can be exported to csv or pdf to local disk. </p>
 
-  <li>WashU genome browser for gene set enrichment.We randomly picked arbitrarily 20 genes from the differential gene set to generate the genome tracks for the top ranked TF ChIP-seq, selected chromatin profile ChIP-seq for both gene set 1 (e.g. up regulated) and gene set 2 (e.g. down regulated) gene set (Figure 8).</li>
-  
-  <p class="just"></p>
+  <li>Clicking on the 'Download all results', all the intermediate and final results of LISA will be downloaded as a zip file. Uncompressing the zip files, all the files are named by using job name and timestamp as the prefix, the result list are shown in the <a href="http://lisa.cistrome.org/doc#item-2-3">table</a>. Except for the scatterplot, another special output from the online version of LISA is the gene set enrichment view on WashU genome browser, user can open the links in the MYC_LISA*browser_link.txt in the downloaded files. We randomly picked arbitrarily 20 genes from the differential gene set to generate the genome tracks for the top ranked TF ChIP-seq, selected chromatin profile ChIP-seq for both gene set 1 (e.g. up regulated) and gene set 2 (e.g. down regulated) gene set (Figure 8).</li>
   </hr>
 
   <div class="figure1" align="center">
-  <img alt="_images/2.png" src="http://cistrome.org/~qqin/2.png" height="500" width="650">
+  <img alt="_images/8.png" src="http://lisa.cistrome.org/static/Figure8.png" height="400" width="760">
   </div>
-  <div align="center">Figure 2. demo for LISA ranking of TF comparion between gene sets by in-silico knockout method</div>
+  <div align="center">Figure 8. gene set enrichment view mode on Wash U genome browser</div>
 
-  <div class="figure1" align="center">
-  <img alt="_images/3.png" src="http://cistrome.org/~qqin/3.png" height="500" width="650">
-  </div>
-  <div align="center">Figure 3. demo for LISA ranking of TF comparison directly from TF ChIP-seq peak</div>
-
-  <div class="figure1" align="center">
-  <img alt="_images/4.png" src="http://cistrome.org/~qqin/4.png" height="300" width="650">
-  </div>
-  <div align="center">Figure 4. LISA TF ranking based on TF-ChIP-seq in silico knockout method</div>
-
-  <div class="figure1" align="center">
-  <img alt="_images/5.png" src="http://cistrome.org/~qqin/5.png" height="300" width="650">
-  </div>
-  <div align="center">Figure 5. LISA TF ranking based on TF-ChIP-seq peak method</div>
-
-  <div class="figure1" align="center">
-  <img alt="_images/7.png" src="http://cistrome.org/~qqin/7.png" height="310" width="650">
-  </div>
-  <div align="center">Figure 6. Selected chromatin profile, model performance, and demo for link to CistromeDB</div>
-
-  <div class="figure1" align="center">
-  <img alt="_images/6.png" src="http://cistrome.org/~qqin/6.png" height="400" width="650">
-  </div>
-  <div align="center">Figure 7. TF ranking based on chromatin profile knockout of motif hit site</div>
-
-   <div class="figure1" align="center">
-   <img alt="_images/8.png" src="http://cistrome.org/~qqin/8.png" height="400" width="650">
-   </div>
-   <div align="center">Figure 8. gene set enrichment view mode on Wash U genome browser</div>
-
-   <h4 id="item-2">Local command version</h4>
-   <h4 id="item-2-1">Local installation</h4>
-   <p class="just">LISA can be deployed as a command line version, which is installed using the following commands. </p>
-   <figure class='highlight'>
+  <h4 id="item-2">Local command version</h4>
+  <h4 id="item-2-1">Local installation</h4>
+  <p class="just">LISA can be deployed as a command line version, which is installed using the following commands. </p>
+  <figure class='highlight'>
    <pre>
     <code class="language-bash" data-lang="bash">
    ### Preparation of Anaconda environment
@@ -164,58 +160,27 @@
    </hr>
 
    <h4 id="item-2-2">Local usage</h4>
-    <p class="just">The LISA framework has three pipeline represented with three sub-parsers, <cite>model</cite>, <cite>multiple_fastq2bigwig</cite>, and <cite>multiple_bigwig2hdf</cite>;
-    The TF rank method is run through the <cite>model</cite> sub-parser.</p>
-    <h6>Run all the methods</h6>
-    <td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'all'</span> --web<span class="o">=</span>False <span class="se">\</span>
-               --new_rp_h5<span class="o">=</span>None --new_count_h5<span class="o">=</span>None <span class="se">\</span>
-               --species hg38 --epigenome <span class="s2">"['H3K27ac', 'DNase']"</span> <span class="se">\</span>
-               --cluster<span class="o">=</span>True --covariates<span class="o">=</span>False <span class="se">\</span>
-               --random<span class="o">=</span>True <span class="se">\</span>
-               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
-               --prefix test_function1 <span class="se">\</span>
-               --threads <span class="m">8</span> test.gene_symbol
-    </pre>
-    </td></tr></tbody></table>
-    <p>Options:
-    The <cite>test.gene_symbol</cite> is the gene set user input, which is a text file with one official gene symbol or refseq id per line, mixture of the both is not supported yet, this is used as a prefix for output, so put the file in a directory with written permission.</p>
-    <p>-–epigenome option controls the histone mark, DNase-seq or both to use in the features.</p>
-    <p>--background option can specify user provided text file containing one gene a row to compare with the target gene set, --background=None to use random selected 3000 genes.</p>
-    <h6>Run only one method</h6></h3>
-    <p>run only the knockout or beta (direct from TF ChIP-seq) method:
-    --method option can control the method to run knockout or beta method, use it with the option –web=True to turn off the baseline method.</p>
+   <p class="just">The LISA framework has three pipeline represented with three sub-parsers, <cite>model</cite>, <cite>multiple_fastq2bigwig</cite>, and <cite>multiple_bigwig2hdf</cite>;
+   The TF rank method is run through the <cite>model</cite> sub-parser.</p>
+   <h6>Run all the methods</h6>
+   <p class="just">
+   <div class="highlight"><pre>
+   # with fixed background gene set
+   time lisa model --method="all" --web=False --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix background_explore --background=dynamic_auto_tad --stat_background_number=1000 --threads 8 test.gene_symbol
 
-    </td><td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'knockout'</span> <span class="se">\</span>
-               --web<span class="o">=</span>True --new_rp_h5<span class="o">=</span>None <span class="se">\</span>
-               --new_count_h5<span class="o">=</span>None --species hg38 <span class="se">\</span>
-               --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
-               --cluster<span class="o">=</span>False --covariates<span class="o">=</span>False <span class="se">\</span>
-               --random<span class="o">=</span>True <span class="se">\</span>
-               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
-               --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
-    
-    lisa model --method<span class="o">=</span><span class="s1">'beta'</span> <span class="se">\</span>
-               --web<span class="o">=</span>True <span class="se">\</span>
-               --new_rp_h5<span class="o">=</span>None --new_count_h5<span class="o">=</span>None <span class="se">\</span>
-               --species hg38 --epigenome <span class="s2">"['H3K27ac']"</span> <span class="se">\</span>
-               --cluster<span class="o">=</span>False --covariates<span class="o">=</span>False <span class="se">\</span>
-               --random<span class="o">=</span>True <span class="se">\</span>
-               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
-               --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
-    </pre>
-    </td></tr></tbody></table>
-    
-    <p>run only the cluster method to rank</p>
-    </td><td class="code"><div class="highlight"><pre>lisa model --method<span class="o">=</span><span class="s1">'none'</span> <span class="se">\</span>
-               --web<span class="o">=</span>True --new_rp_h5<span class="o">=</span>None <span class="se">\</span>
-               --new_count_h5<span class="o">=</span>None --species hg38 <span class="se">\</span>
-               --epigenome <span class="s2">"['H3K27ac']"</span> --cluster<span class="o">=</span>True <span class="se">\</span>
-               --background<span class="o">=</span>None <span class="se">\</span> ## option for user the specify background genes
-               --covariates<span class="o">=</span>False --random<span class="o">=</span>True <span class="se">\</span>
-               --prefix test_function1 --threads <span class="m">8</span> test.gene_symbol
-    </pre>
-    </td></tr></tbody></table>
+   # with customized gene set
+   time lisa model --method="all" --web=False --new_rp_h5=None --new_count_h5=None --species hg38 --epigenome "['DNase', 'H3K27ac']" --cluster=False --covariates=False --random=True --prefix background_explore --background=background.gene_symbol --stat_step_background_number=1000 --threads 8 test.gene_symbol
+   </pre></div></p>
 
+   <p>Options:
+   The <cite>test.gene_symbol</cite> is the gene set user input, which is a text file with one official gene symbol or refseq id per line, mixture of the both is not supported yet, this is used as a prefix for output, so put the file in a directory with written permission.</p>
+   <p>--epigenome option controls the histone mark, DNase-seq or both to use in the features.</p>
+   <p>--background option can specify user provided text file containing one gene a row to compare with the target gene set, --background=None to use random selected 3000 genes.</p>
+   <p>--stat_background_number specify the background genes number for wilcoxon test, usually specify 500-1000, if the --background specify user customized gene set, all of the genes will be used from the text file.</p>
+   <h6>Run only one method</h6></h3>
+   <p>run only the knockout or beta (direct from TF ChIP-seq) method:
+   --method option can control the method to run knockout or beta method or both, use it with the option --web=True to turn off the baseline method.</p>
+    
     <h6 id="item-2-3">Local Output</h6>
     <p>Take <em>AR.symbol</em> input and histone mark <em>H3K27ac</em> as an example. By using the above command, the key results are as follows,</p>
     <table border="0" class="table">
@@ -243,6 +208,14 @@
     <td>baseline method based on chip-seq peak hit between differential &amp; control gene</td>
     <td>one row is CistromeID|TF_name,p-value</td>
     </tr>
+    <tr class="row-odd"><td>AR.symbol.gene_symbol.DNase.coefs.csv</td>
+    <td>Regression coefficients for DNase</td>
+    <td>one row is CistromeID,coefficient,cell type, cell line, tissue</td>
+    </tr>
+    <tr class="row-even"><td>AR.symbol.DNase.lisa_predicted_rp.csv</td>
+    <td>predicted differential expression log probability</td>
+    <td>one row is refseq,log probability</td>
+    </tr>
     <tr class="row-odd"><td>AR.symbol.gene_symbol.H3K27ac.coefs.csv</td>
     <td>Regression coefficients for H3K27ac</td>
     <td>one row is CistromeID,coefficient,cell type, cell line, tissue</td>
@@ -255,9 +228,21 @@
     <td>differential gene prediction</td>
     <td>one row is AUC,PRAUC</td>
     </tr>
-    <tr class="row-even"><td>AR.symbol.lisa_direct.csv</td>
-    <td>BETA TF ranks based on random background or epigenetic background</td>
+    <tr class="row-even"><td>AR.symbol.1000.lisa_direct.csv</td>
+    <td>BETA TF ranks based on 1000 background genes (or user customized genes)</td>
     <td>one row is CistromeID|TF_name,p_value</td>
+    </tr>
+    <tr class="row-even"><td>AR.symbol.3000.lisa_direct.csv</td>
+    <td>BETA TF ranks based on 3000 background genes (or user customized genes)</td>
+    <td>one row is CistromeID|TF_name,p_value</td>
+    </tr>
+    <tr class="row-odd"><td>AR.symbol.gene_symbol.DNase.motif99.p_value.csv</td>
+    <td>motif insilco knockout result for DNase</td>
+    <td>one row is motif_id|TF_name,p-value</td>
+    </tr>
+    <tr class="row-even"><td>AR.symbol.DNase.chipseq.p_value.csv</td>
+    <td>TF ChIP-seq insilco knockout result for DNase</td>
+    <td>one row is motif_id|TF_name,p-value</td>
     </tr>
     <tr class="row-odd"><td>AR.symbol.gene_symbol.H3K27ac.motif99.p_value.csv</td>
     <td>motif insilco knockout result for H3K27ac</td>
@@ -267,13 +252,21 @@
     <td>TF ChIP-seq insilco knockout result for H3K27ac</td>
     <td>one row is motif_id|TF_name,p-value</td>
     </tr>
-    <tr class="row-odd"><td>AR.symbol.gene_symbol.H3K27ac.motif99.entropy_rank.csv</td>
-    <td>motif-based TF ranks from KL divergence method</td>
-    <td>one row is  motif_id|TF_name,KLD,rank</td>
+    <tr class="row-even"><td>AR.symbol_chipseq_cauchy_combine_raw.csv</td>
+    <td>Combined ChIP-seq-based TF p values by Cauchy combination test</td>
+    <td>one row is motif_id|TF_name,p_value</td>
     </tr>
-    <tr class="row-even"><td>AR.symbol.gene_symbol.H3K27ac.chipseq.entropy_rank.csv</td>
-    <td>ChIP-seq-based TF ranks from KL divergence method</td>
-    <td>one row is motif_id|TF_name,KLD,rank|</td>
+    <tr class="row-even"><td>AR.symbol_chipseq_cauchy_combine_dedup.csv</td>
+    <td>Combined ChIP-seq-based TF p values removing redundant samples</td>
+    <td>one row is motif_id|TF_name,p_value</td>
+    </tr>
+    <tr class="row-even"><td>AR.symbol_chipseq_fisher_combine_raw.csv</td>
+    <td>Combined ChIP-seq-based TF p values by Fisher's method</td>
+    <td>one row is motif_id|TF_name,p_value</td>
+    </tr>
+    <tr class="row-even"><td>AR.symbol_chipseq_fisher_combine_dedup.csv</td>
+    <td>Combined ChIP-seq-based TF p values removing redundant samples</td>
+    <td>one row is motif_id|TF_name,p_value</td>
     </tr>
     </tbody>
     </table>
@@ -296,11 +289,11 @@
     </thead>
     <tbody valign="top">
     <tr class="row-even"><td>DNase-seq</td>
-    <td>1,110</td>
-    <td>359</td>
+    <td>1,106</td>
+    <td>361</td>
     </tr>
     <tr class="row-odd"><td>H3K27ac ChIP-seq</td>
-    <td>1,545</td>
+    <td>1,544</td>
     <td>1,031</td>
     </tr>
     <!--
@@ -318,7 +311,7 @@
     </tr>
     -->
     <tr class="row-odd"><td>TF and CR ChIP-seq</td>
-    <td>6,773</td>
+    <td>8,471</td>
     <td>4,363</td>
     </tr>
     <!--
@@ -341,7 +334,7 @@
     </a>
     <ul class="navbar-nav bd-navbar-nav flex-row">
     <li class="nav-item active">
-     <span>Copyright @2018 Liu lab</span>
+     <span>Copyright @2019 Liu lab</span>
     </li>
     </ul>
   </div>
@@ -366,3 +359,4 @@ $('#spyOnThis').scrollspy();
 </script>
 -->
 {% endblock %}
+

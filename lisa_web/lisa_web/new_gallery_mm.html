@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LISA</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!--
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/> -->
+<link rel="stylesheet" href="/static/font-awesome.min.css">
+<link rel="stylesheet" href="/static/custom.css">
+
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+
+<link rel="stylesheet" href="/static/lisa2.css">
+
+    <!--[if lt IE 9]>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  </head>
+  <body>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="40" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/new_gallery/new_gallery.html">Combined Human Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/new_gallery_mm/new_gallery_mm.html">Combined Mouse Gallery</a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+<div class="row body2">
+   <div class="col-sm-12">
+<div class="jumbotron jumbotron-fluid shadow-sm">
+  <div class="container">
+    <h1 class="display-4">Gallery of LISA benchmark datasets</h1>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="container body">
+  <table class="table table-hover table-striped table-bordered " id="myTable">
+   <thead class="thead-dark">
+   <tr>
+  
+     <th scope="col">cell_type</th>
+  
+     <th scope="col">hs_gene_symbol</th>
+  
+     <th scope="col">organism</th>
+  
+     <th scope="col">pert_type</th>
+  
+     <th scope="col">gene_set_type</th>
+  
+     <th scope="col">Combined</th>
+  
+   </tr>
+   </thead>
+   <tbody>
+  
+    <tr>
+    
+       
+       <td>Bone marrow progenitors (c-Kit +)</td>
+       
+    
+       
+       <td>ZFX</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/13_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/13_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/13_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>spleen B cells</td>
+       
+    
+       
+       <td>IRF4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/20_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/20_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/20_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MEFs</td>
+       
+    
+       
+       <td>CEBPG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/37_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/37_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/37_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>STAT5A STAT5B</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>knockin</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/58_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/58_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/58_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>STAT5A STAT5B</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>knockin</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/59_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/59_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/59_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>STAT5A STAT5B</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>knockin</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/60_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/60_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/60_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Skin</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>transgene</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/66_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/66_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/66_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>embryonic day 17.5</td>
+       
+    
+       
+       <td>E2F1 E2F2 E2F3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/89_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/89_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/89_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>neonate</td>
+       
+    
+       
+       <td>E2F1 E2F2 E2F3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/90_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/90_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/90_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>colon</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/135_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/135_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/135_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>hematopoietic stem cell</td>
+       
+    
+       
+       <td>FOXO1 FOXO3 FOXO4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/152_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/152_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/152_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/154_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/154_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/154_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/155_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/155_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/155_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/156_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/156_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/156_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/157_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/157_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/157_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/158_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/158_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/158_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/159_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/159_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/159_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/160_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/160_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/160_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/161_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/161_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/161_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>MYOD1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Mutation</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/162_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/162_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/162_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Heart ventricles</td>
+       
+    
+       
+       <td>GATA4</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>Deletion</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/163_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/163_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/163_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/172_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/172_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/172_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>EBF1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/173_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/173_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/173_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>EBF1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/174_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/174_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/174_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblasts</td>
+       
+    
+       
+       <td>EBF1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/175_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/175_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/175_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/176_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/176_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/176_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/177_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/177_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/177_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Embryonic fibroblast</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/178_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/178_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/178_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>FOXP3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/180_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/180_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/180_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>T cells</td>
+       
+    
+       
+       <td>FOXP3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/181_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/181_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/181_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Epididymal white adipose tissue</td>
+       
+    
+       
+       <td>NR1D1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/182_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/182_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/182_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>NKX2-5</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/183_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/183_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/183_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>brown adipose tissue</td>
+       
+    
+       
+       <td>YY1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/187_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/187_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/187_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>Bone Marrow Derived Murine Macrophages</td>
+       
+    
+       
+       <td>NFE2L2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/189_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/189_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/189_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>NR1D1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/199_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/199_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/199_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>CD8+ T cells</td>
+       
+    
+       
+       <td>RUNX3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/220_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/220_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/220_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pre-B cells</td>
+       
+    
+       
+       <td>BCL6</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/222_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/222_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/222_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/234_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/234_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/234_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/235_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/235_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/235_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/236_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/236_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/236_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/237_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/237_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/237_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/238_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/238_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/238_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>heart</td>
+       
+    
+       
+       <td>PPARG</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/239_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/239_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/239_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreatic islets</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/250_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/250_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/250_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>pancreatic islets</td>
+       
+    
+       
+       <td>HNF4A HNF1A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/251_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/251_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/251_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>liver</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/254_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/254_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/254_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>fetal testis</td>
+       
+    
+       
+       <td>ESR1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/263_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/263_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/263_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>hair follicles</td>
+       
+    
+       
+       <td>GATA3</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/264_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/264_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/264_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>neural stem cell</td>
+       
+    
+       
+       <td>BMI1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>OE</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/275_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/275_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/275_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>midbrain</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/276_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/276_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/276_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>lateral prostate</td>
+       
+    
+       
+       <td>MED1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/280_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/280_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/280_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>ventral prostate</td>
+       
+    
+       
+       <td>MED1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/281_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/281_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/281_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>regulatory T cell</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/282_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/282_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/282_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>trophoblast stem cell</td>
+       
+    
+       
+       <td>SOX2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/292_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/292_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/292_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MEL cell line</td>
+       
+    
+       
+       <td>RUNX1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/304_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/304_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/304_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>MEL cell line</td>
+       
+    
+       
+       <td>RUNX1</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KD</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/305_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/305_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/305_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>bone marrow</td>
+       
+    
+       
+       <td>EZH2</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/307_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/307_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/307_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+    <tr>
+    
+       
+       <td>colon</td>
+       
+    
+       
+       <td>HNF4A</td>
+       
+    
+       
+       <td>mouse</td>
+       
+    
+       
+       <td>KO</td>
+       
+    
+       
+       <td><a href=http://lisa.cistrome.org/gallery/314_down.txt>down</a><span> & </span><a href=http://lisa.cistrome.org/gallery/314_up.txt>up</a></td>
+       
+    
+       
+       <td><div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery_mm/314_combined.html">Combined</a></div></td>
+       
+    
+    </tr>
+  
+   </tbody>
+  </table>
+
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2019 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
+  </body>
+
+  <script src="http://lisa.cistrome.org/static/jquery-1.12.4.js"></script>
+  <script src="http://lisa.cistrome.org/static/popper.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+ <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+ <script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+});
+ </script>
+</html>

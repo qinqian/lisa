@@ -19,7 +19,7 @@ def cauchy_p_value(p_vals, wi=None):
     p_vals = np.array(p_vals, np.float64)
     if np.any(p_vals <= 1e-15): # np.finfo(np.float64) 1e-15
         from mpmath import mp
-        mp.dps = 150
+        mp.dps = 200
         mp.pretty = True
         p_vals = [mp.mpf(i) for i in p_vals]
         t0 = sum([mp.tan((mp.mpf(0.5)-i)*mp.pi())/mp.mpf(3) for i in p_vals])

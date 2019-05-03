@@ -33,6 +33,7 @@ app.secret_key = 's3cr3t' # crsf
 download = '/data/home/qqin/lisa_web/download'
 gallery = '/data/home/qqin/lisa_web/lisa_web/gallery'
 new_gallery = '/data/home/qqin/lisa_web/lisa_web/new_gallery'
+new_gallery_mm = '/data/home/qqin/lisa_web/lisa_web/new_gallery_mm'
 upload = '/data/home/qqin/lisa_web/upload'
 
 # debug mode on
@@ -77,6 +78,9 @@ def submit_lisa():
 
         job_name = form.name.data
         job_name = job_name.replace(' ', '_')
+        job_name = job_name.replace('(', '')  # incase user input ( or )
+        job_name = job_name.replace(')', '')
+
         method = form.method.data
 
         species = form.species.data.encode('utf-8')
@@ -524,6 +528,10 @@ def download_gallery(filename):
 @app.route('/new_gallery/<path:filename>')
 def download_new_gallery(filename):
     return send_from_directory(new_gallery, filename)
+
+@app.route('/new_gallery_mm/<path:filename>')
+def download_new_gallery_mm(filename):
+    return send_from_directory(new_gallery_mm, filename)
 
 @app.route('/upload/<path:filename>')
 def custom_upload(filename):

@@ -5,6 +5,6 @@ links=${links/.coefs.csv/}
 
 ## http://lisa.cistrome.org//data5/lisa_browser/test.bed
 
-shuf /data/home/qqin/lisa_web/upload/$3 | head -20 > /data/home/qqin/lisa_web/upload/${3}.20
-python make_session.py /data/home/qqin/lisa_web/upload/$1 /data/home/qqin/lisa_web/upload/$2 /data/home/qqin/lisa_web/upload/${3}.20 > /data/home/qqin/lisa_web/upload/${links}.url
+shuf /project/Cistrome/LISA/lisa_web/upload/$3 | head -20 > /project/Cistrome/LISA/lisa_web/upload/${3}.20
+python make_session.py /project/Cistrome/LISA/lisa_web/upload/$1 /project/Cistrome/LISA/lisa_web/upload/$2 /project/Cistrome/LISA/lisa_web/upload/${3}.20 > /project/Cistrome/LISA/lisa_web/upload/${links}.url
 

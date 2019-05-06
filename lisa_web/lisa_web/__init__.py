@@ -30,17 +30,18 @@ celery.conf.update(app.config)
 from .form import LISAForm
 
 app.secret_key = 's3cr3t' # crsf
-download = '/data/home/qqin/lisa_web/download'
-gallery = '/data/home/qqin/lisa_web/lisa_web/gallery'
-new_gallery = '/data/home/qqin/lisa_web/lisa_web/new_gallery'
-new_gallery_mm = '/data/home/qqin/lisa_web/lisa_web/new_gallery_mm'
-upload = '/data/home/qqin/lisa_web/upload'
+dir_prefix = '/project/Cistrome/LISA/lisa_web/'
+download = dir_prefix + 'download/'
+gallery = dir_prefix + 'lisa_web/gallery'
+new_gallery = dir_prefix + 'lisa_web/new_gallery'
+new_gallery_mm = dir_prefix + 'lisa_web/new_gallery_mm'
+upload = dir_prefix + 'upload/'
 
 # debug mode on
 app.debug = False
 if not app.debug:
     app.logger.setLevel(logging.INFO)
-    handler = RotatingFileHandler('/data/home/qqin/lisa_web/lisa.log', maxBytes=10000000, backupCount=20)
+    handler = RotatingFileHandler(dir_prefix + '/lisa.log', maxBytes=10000000, backupCount=20)
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
     handler.setLevel(logging.INFO)
     handler.setFormatter(formatter)
@@ -51,9 +52,9 @@ def internal_error(exception):
     app.logger.exception(exception)
     return "Sorry internal program error", 500
 
-#@app.errorhandler(404)
-#def page_not_found(e):
-#    return render_template('404.html'), 404
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 @app.route('/', methods=['GET', 'POST'])
 def submit_lisa():
@@ -127,7 +128,6 @@ def submit_lisa():
                                  task_id=prefix+"__"+species, method=method, download_zip = os.path.join('/download', prefix+"__"+species+'.zip'))
             with open('%s/%s%s' % (download, prefix+"__"+species, "_result.html"), 'w') as outf:
                 outf.write(cc)
-            ##return render_template('display.html', epigenome=marks, task_id=prefix)
             return redirect('/download/%s_result.html'%(prefix+"__"+species))
         else:
             if len(genes.split('\n')) > 500 or len(genes.split('\n')) < 20:
@@ -171,9 +171,9 @@ def multiple_run_lisa(self, method, species, mark, prefix, background_file, to_u
     # chmod 777 /var/www/.theano
     # is not a good idea...
     # cmd = "/data/home/qqin/lisa_web/run_lisa2.sh %s %s %s %s %s %s" % (species, str([mark]), prefix, str(method), "%s_gs1.txt" % os.path.join(upload, prefix), "%s_gs2.txt" %  os.path.join(upload, prefix))
-    cmd = "/data/home/qqin/lisa_web/run_lisa2.sh %s %s %s %s %s %s %s" % (species, str(mark).replace(' ',''), prefix, str(method), "%s_gs1.txt" % os.path.join(upload, prefix), "%s_gs2.txt" %  os.path.join(upload, prefix), background_file)
+    cmd = dir_prefix + "run_lisa2.sh %s %s %s %s %s %s %s" % (species, str(mark).replace(' ',''), prefix, str(method), "%s_gs1.txt" % os.path.join(upload, prefix), "%s_gs2.txt" %  os.path.join(upload, prefix), background_file)
     app.logger.info(cmd)
-    with open('/data/home/qqin/lisa_web/upload/%s_snakemake_output.txt' % prefix, 'a') as fout:
+    with open(upload + '/%s_snakemake_output.txt' % prefix, 'a') as fout:
         p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
         out, err = p.communicate()
         fout.flush()
@@ -195,24 +195,24 @@ def multiple_run_lisa(self, method, species, mark, prefix, background_file, to_u
     # z.drop(["id", "coefficients"], axis=1, inplace=True)
     # z.to_csv(os.path.join(upload, '%s.%s.coefs2.csv' % (prefix, mark)), index=False)
 
-    if method == 'all' or method == 'knockout':
-        ## recovery by setting Require not ip in apache
-        for m in mark:
-            chipp1 = '%s_gs1.txt.%s.chipseq.p_value.csv' % (prefix, m)
-            chipp2 = '%s_gs2.txt.%s.chipseq.p_value.csv' % (prefix, m)
-            motif1 = '%s_gs1.txt.%s.motif99.p_value.csv' % (prefix, m)
-            motif2 = '%s_gs2.txt.%s.motif99.p_value.csv' % (prefix, m)
-            cmd = "/data/home/qqin/lisa_web/run_browser.sh %s %s %s" % ('%s_gs1.txt.%s.coefs.csv' % (prefix, m), chipp1, '%s_gs1.txt.foreground_gene' % prefix)
-            app.logger.info(cmd)
-            os.system(cmd)
-            cmd = "/data/home/qqin/lisa_web/run_browser.sh %s %s %s" % ('%s_gs2.txt.%s.coefs.csv' % (prefix, m), chipp2, '%s_gs2.txt.foreground_gene' % prefix)
-            app.logger.info(cmd)
-            os.system(cmd)
+    ## if method == 'all' or method == 'knockout':
+    ##     ## recovery by setting Require not ip in apache
+    ##     for m in mark:
+    ##         chipp1 = '%s_gs1.txt.%s.chipseq.p_value.csv' % (prefix, m)
+    ##         chipp2 = '%s_gs2.txt.%s.chipseq.p_value.csv' % (prefix, m)
+    ##         motif1 = '%s_gs1.txt.%s.motif99.p_value.csv' % (prefix, m)
+    ##         motif2 = '%s_gs2.txt.%s.motif99.p_value.csv' % (prefix, m)
+    ##         cmd = dir_prefix + "run_browser.sh %s %s %s" % ('%s_gs1.txt.%s.coefs.csv' % (prefix, m), chipp1, '%s_gs1.txt.foreground_gene' % prefix)
+    ##         app.logger.info(cmd)
+    ##         os.system(cmd)
+    ##         cmd = dir_prefix + "run_browser.sh %s %s %s" % ('%s_gs2.txt.%s.coefs.csv' % (prefix, m), chipp2, '%s_gs2.txt.foreground_gene' % prefix)
+    ##         app.logger.info(cmd)
+    ##         os.system(cmd)
 
-        with open(os.path.join(upload, '%s_browser_link.txt' % prefix), 'w') as out_browser:
-            for m in mark:
-                out_browser.write("http://cistrome.org/browser/?genome=" + species + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (prefix, m)) + "&gftk=refGene,full \n")
-                out_browser.write("http://cistrome.org/browser/?genome=" + species + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (prefix, m)) + "&gftk=refGene,full \n")
+    ##     with open(os.path.join(upload, '%s_browser_link.txt' % prefix), 'w') as out_browser:
+    ##         for m in mark:
+    ##             out_browser.write("http://cistrome.org/browser/?genome=" + species + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (prefix, m)) + "&gftk=refGene,full \n")
+    ##             out_browser.write("http://cistrome.org/browser/?genome=" + species + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (prefix, m)) + "&gftk=refGene,full \n")
 
     # upload/AR12_2017_11_12_0017060.299.txt.DNase.chipseq.csv
     ## turn off the heatmap
@@ -233,16 +233,16 @@ def multiple_run_lisa(self, method, species, mark, prefix, background_file, to_u
         gs1_motif   = output_collapse('gs1', 'motif', 'combined')
         gs2_motif   = output_collapse('gs2', 'motif', 'combined2')
 
-    cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_chip Combined_LISA_Model_ChIP-seq %s %s" % (gs1_chipseq, gs2_chipseq, os.path.join(upload, prefix), labels1, labels2)
+    cmd = dir_prefix + "run_plot.sh %s %s %s_chip Combined_LISA_Model_ChIP-seq %s %s" % (gs1_chipseq, gs2_chipseq, os.path.join(upload, prefix), labels1, labels2)
     app.logger.info(cmd)
-    with open('/data/home/qqin/lisa_web/upload/%s_chip_plot_output.txt' % prefix, 'a') as fout:
+    with open(upload + '%s_chip_plot_output.txt' % prefix, 'a') as fout:
         p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
         out, err = p.communicate()
         fout.flush()
 
-    cmd = "/data/home/qqin/lisa_web/run_plot.sh %s %s %s_motif Combined_LISA_Model_Motif %s %s" % (gs1_motif, gs2_motif, os.path.join(upload, prefix), labels1, labels2)
+    cmd = dir_prefix + "run_plot.sh %s %s %s_motif Combined_LISA_Model_Motif %s %s" % (gs1_motif, gs2_motif, os.path.join(upload, prefix), labels1, labels2)
     app.logger.info(cmd)
-    with open('/data/home/qqin/lisa_web/upload/%s_motif_plot_output.txt' % prefix, 'a') as fout:
+    with open(upload + '/%s_motif_plot_output.txt' % prefix, 'a') as fout:
         p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
         out, err = p.communicate()
         fout.flush()
@@ -256,35 +256,27 @@ def run_lisa(self, method, species, mark, prefix, background_file, to_user):
     # issues: chmod 777 of lisa2 anaconda library and lisa_web root directory
     # chmod 777 /var/www/.theano
     # is not a good idea...
-    #cmd = "/data/home/qqin/lisa_web/run_lisa.sh %s %s %s %s %s" % (species, str([mark]), prefix, "%s.txt" %  os.path.join(upload, prefix), str(method))
-    cmd = "/data/home/qqin/lisa_web/run_lisa.sh %s %s %s %s %s %s" % (species, str(mark).replace(' ', ''), prefix, "%s.txt" %  os.path.join(upload, prefix), str(method), background_file)
+    app.logger.info(prefix)
+    cmd = "%srun_lisa.sh %s %s %s %s %s %s" % (dir_prefix, species, str(mark).replace(' ', ''), prefix, "%s.txt" %  os.path.join(upload, prefix), str(method), background_file)
     app.logger.info(cmd)
-    with open('/data/home/qqin/lisa_web/upload/%s_snakemake_output.txt' % prefix, 'a') as fout:
+    with open(upload + '/%s_snakemake_output.txt' % prefix, 'a') as fout:
         p = subprocess.Popen(cmd.split(), stdout=fout, stderr=fout)
         out, err = p.communicate()
         fout.flush()
         app.logger.info(out)
         app.logger.info(err)
 
-    #z=pd.read_csv(os.path.join(upload, '%s.txt.%s.coefs.csv' % (prefix, mark)))
-    #z.columns = ['id', 'coefficients', 'cell_type', 'cell_line', 'tissue']
-    #z.coefficients = z.coefficients.map(lambda x: "%.2E" % x)
-    #z.loc[:, "coefficient"] = z.apply(lambda x: "%s|%s" % (x[0], x[1]), axis=1)
-    # /data/home/qqin/lisa_web/upload/AR_test10_2018_08_15_0602400.705.txt.H3K27ac.2199.csv
-    # z.loc[:, "download"] = ["http://lisa.cistrome.org/upload/%s.txt.%s.%s.csv"%(prefix, mark, i) for i in z.id]
-    # z.drop(["id", "coefficients"], axis=1, inplace=True)
-    # z.to_csv(os.path.join(upload, '%s.%s.coefs.csv' % (prefix, mark)), index=False)
+    ## TODO: wait for WashU installation
+    ##if method == 'all' or method == 'knockout':
+    ##    for m in mark:
+    ##       chipp = '%s.txt.%s.chipseq.p_value.csv' % (prefix, m)
+    ##       cmd = dir_prefix + "run_browser.sh %s %s %s" % ('%s.txt.%s.coefs.csv' % (prefix, m), chipp, '%s.txt.foreground_gene' % prefix)
+    ##       app.logger.info(cmd)
+    ##       os.system(cmd)
 
-    if method == 'all' or method == 'knockout':
-        for m in mark:
-           chipp = '%s.txt.%s.chipseq.p_value.csv' % (prefix, m)
-           cmd = "/data/home/qqin/lisa_web/run_browser.sh %s %s %s" % ('%s.txt.%s.coefs.csv' % (prefix, m), chipp, '%s.txt.foreground_gene' % prefix)
-           app.logger.info(cmd)
-           os.system(cmd)
-
-        with open(os.path.join(upload, '%s_browser_link.txt' % prefix), 'w') as out_browser:
-            for m in mark:
-                out_browser.write("http://cistrome.org/browser/?genome=" + species + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (prefix, m)) + "&gftk=refGene,full \n")
+    ##    with open(os.path.join(upload, '%s_browser_link.txt' % prefix), 'w') as out_browser:
+    ##        for m in mark:
+    ##            out_browser.write("http://cistrome.org/browser/?genome=" + species + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s.txt.%s.url' % (prefix, m)) + "&gftk=refGene,full \n")
 
     # compress all output for download
     combined_result = os.path.join(upload, "%s.txt_chipseq_cauchy_combine_raw.csv" % prefix)
@@ -367,9 +359,9 @@ def lisa_taskstatus(epigenome, task_id):
                         else:
                             percent = 99
                         response['status'] = '%s%%' % percent
-                        response['result'] = os.path.join("/"+os.path.basename(upload), '%s.combined.chipseq.csv' % (task_id))
-                        response['result2'] = os.path.join("/"+os.path.basename(upload), '%s.combined.motif.csv' % (task_id))
-                        response['result_zip'] = os.path.join("/"+os.path.basename(download), '%s.zip' % (task_id))
+                        response['result'] = os.path.join("/upload", '%s.combined.chipseq.csv' % (task_id))
+                        response['result2'] = os.path.join("/upload", '%s.combined.motif.csv' % (task_id))
+                        response['result_zip'] = os.path.join("/download", '%s.zip' % (task_id))
                         # response['result'] = os.path.join("/"+os.path.basename(upload), '%s.direct.csv' % (task_id))
                         # response['result0'] = os.path.join("/"+os.path.basename(upload), '%s.%s.coefs.csv' % (task_id, epigenome))
                         # response['result1'] = os.path.join("/"+os.path.basename(upload), "%s.%s.chip.csv" % (task_id, epigenome))
@@ -392,9 +384,9 @@ def lisa_taskstatus(epigenome, task_id):
                 else:
                     percent = 99
                 response['status'] = '%s%%' % percent
-                response['result'] = os.path.join("/"+os.path.basename(upload), '%s.combined.chipseq.csv' % (task_id))
-                response['result2'] = os.path.join("/"+os.path.basename(upload), '%s.combined.motif.csv' % (task_id))
-                response['result_zip'] = os.path.join("/"+os.path.basename(download), '%s.zip' % (task_id))
+                response['result'] = os.path.join("/upload", '%s.combined.chipseq.csv' % (task_id))
+                response['result2'] = os.path.join("/upload", '%s.combined.motif.csv' % (task_id))
+                response['result_zip'] = os.path.join("/download", '%s.zip' % (task_id))
                 #response['result'] = os.path.join("/"+os.path.basename(upload), '%s.direct.csv' % (task_id))
                 #response['result0'] = os.path.join("/"+os.path.basename(upload), '%s.%s.coefs.csv' % (task_id, epigenome))
                 #response['result1'] = os.path.join("/"+os.path.basename(upload), "%s.%s.chip.csv" % (task_id, epigenome))
@@ -434,18 +426,18 @@ def lisa_taskstatus2(epigenome, task_id):
                         else:
                             percent = 99
                         response['status'] = '%s%%' % percent
-                        response['result'] = os.path.join("/"+os.path.basename(upload), '%s.combined.chipseq.csv' % (task_id))
-                        response['result2'] = os.path.join("/"+os.path.basename(upload), '%s.combined.motif.csv' % (task_id))
-                        response['result_2'] = os.path.join("/"+os.path.basename(upload), '%s.combined2.chipseq.csv' % (task_id))
-                        response['result2_2'] = os.path.join("/"+os.path.basename(upload), '%s.combined2.motif.csv' % (task_id))
-                        response['result1_fig'] = os.path.join("/"+os.path.basename(upload), '%s_chip.html' % (task_id))
-                        response['result2_fig'] = os.path.join("/"+os.path.basename(upload), '%s_motif.html' % (task_id))
+                        response['result'] = os.path.join("/upload", '%s.combined.chipseq.csv' % (task_id))
+                        response['result2'] = os.path.join("/upload", '%s.combined.motif.csv' % (task_id))
+                        response['result_2'] = os.path.join("/upload", '%s.combined2.chipseq.csv' % (task_id))
+                        response['result2_2'] = os.path.join("/upload", '%s.combined2.motif.csv' % (task_id))
+                        response['result1_fig'] = os.path.join("/upload", '%s_chip.html' % (task_id))
+                        response['result2_fig'] = os.path.join("/upload", '%s_motif.html' % (task_id))
                         #response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
                         #response['resultl_1'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
                         #response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
                         #response['resultl_1'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
 
-                        response['result_zip'] = os.path.join("/"+os.path.basename(download), '%s.zip' % (task_id))
+                        response['result_zip'] = os.path.join("/download", '%s.zip' % (task_id))
                         # response['result'] = os.path.join("/"+os.path.basename(upload), '%s.direct1.csv' % (task_id))
                         # response['result_1'] = os.path.join("/"+os.path.basename(upload), '%s.direct2.csv' % (task_id))
                         # response['result_fig'] = os.path.join("/"+os.path.basename(upload), '%s_direct.html' % (task_id))
@@ -473,13 +465,13 @@ def lisa_taskstatus2(epigenome, task_id):
                     percent = 99
 
                 response['status'] = '%s%%' % percent
-                response['result'] = os.path.join("/"+os.path.basename(upload), '%s.combined.chipseq.csv' % (task_id))
-                response['result2'] = os.path.join("/"+os.path.basename(upload), '%s.combined.motif.csv' % (task_id))
-                response['result_2'] = os.path.join("/"+os.path.basename(upload), '%s.combined2.chipseq.csv' % (task_id))
-                response['result2_2'] = os.path.join("/"+os.path.basename(upload), '%s.combined2.motif.csv' % (task_id))
-                response['result1_fig'] = os.path.join("/"+os.path.basename(upload), '%s_chip.html' % (task_id))
-                response['result2_fig'] = os.path.join("/"+os.path.basename(upload), '%s_motif.html' % (task_id))
-                response['result_zip'] = os.path.join("/"+os.path.basename(download), '%s.zip' % (task_id))
+                response['result'] = os.path.join("/upload", '%s.combined.chipseq.csv' % (task_id))
+                response['result2'] = os.path.join("/upload", '%s.combined.motif.csv' % (task_id))
+                response['result_2'] = os.path.join("/upload", '%s.combined2.chipseq.csv' % (task_id))
+                response['result2_2'] = os.path.join("/upload", '%s.combined2.motif.csv' % (task_id))
+                response['result1_fig'] = os.path.join("/upload", '%s_chip.html' % (task_id))
+                response['result2_fig'] = os.path.join("/upload", '%s_motif.html' % (task_id))
+                response['result_zip'] = os.path.join("/download", '%s.zip' % (task_id))
                 # response['result'] = os.path.join("/"+os.path.basename(upload), '%s.direct1.csv' % (task_id))
                 # response['result_1'] = os.path.join("/"+os.path.basename(upload), '%s.direct2.csv' % (task_id))
                 # if (os.path.exists(os.path.join(upload, '%s_direct.html' % (task_id)))):

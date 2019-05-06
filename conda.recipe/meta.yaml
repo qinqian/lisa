@@ -12,13 +12,13 @@ requirements:
     - python
     - fire
     - setuptools
-    - numpy
+    - numpy ==1.15.1
     - patchelf
     - {{ compiler('c') }}
   host:
     - python
     - zlib
-    - numpy
+    - numpy ==1.15.1
   run:
     - python
     - zlib

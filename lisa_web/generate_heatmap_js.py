@@ -1,6 +1,6 @@
 import pandas as pd
 from clustergrammer import Network
-import  numpy as np
+import numpy as np
 import collections
 import argparse 
 

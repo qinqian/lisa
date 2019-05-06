@@ -10,14 +10,16 @@ export PATH="${HOME}/miniconda3/bin:$PATH"
 
 conda create -n lisa python=3.6 && conda config --add channels conda-forge && conda config --add channels bioconda
 
-conda activate lisa
-# or for old conda
-source activate lisa
 ```
 
 ### Installation
 
 ``` sh
+conda activate lisa
+# or for old conda
+source activate lisa
+export MKL_THREADING_LAYER=GNU
+
 conda install -c qinqian lisa
 ```
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/project/dev/qqin/miniconda3/bin/python
 import sys
 import pandas as pd
 import numpy as np

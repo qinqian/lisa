@@ -9,9 +9,10 @@ import copy
 def deduplicate(df):
     out = copy.deepcopy(df)
     #do not deduplicate, since row names is not consistent for cistromedb and imputed TFBS
-    #out.loc[:, 'TF'] = df.index.map(lambda x: x.split('|')[1]) 
-    #out.loc[:, 'TF'] = df.index.map(lambda x: x.split('_')[0])
-    #out = out.drop_duplicates('TF', inplace=False)
+    out.loc[:, 'TF'] = df.index.map(lambda x: x.split('|')[1]) 
+    ##out.loc[:, 'TF'] = df.index.map(lambda x: x.split('_')[0])
+    out = out.drop_duplicates('TF', inplace=False)
+    print(out.head())
     return out
 
 def cauchy_p_value(p_vals, wi=None):
@@ -51,15 +52,15 @@ def main():
         return True
     else:
         rank_dedup.to_csv('%s_dedup.csv' % args.rankcsv[0].replace('.csv', ''))
-        #rank_dedup.index = rank_dedup.TF
-        #rank_dedup.drop('TF', axis=1)
+        rank_dedup.index = rank_dedup.TF
+        rank_dedup.drop('TF', axis=1)
 
     for r in args.rankcsv[1:]:
         rank2 = pd.read_csv(r, index_col=0, header=None)
         rank_dedup2 = deduplicate(rank2)
         rank_dedup2.to_csv('%s_dedup.csv' % r.replace('.csv', ''))
-        #rank_dedup2.index = rank_dedup2.TF
-        #rank_dedup2.drop('TF', axis=1)
+        rank_dedup2.index = rank_dedup2.TF
+        rank_dedup2.drop('TF', axis=1)
         rank = rank.merge(rank2, left_index=True, right_index=True)
 
     print(rank.shape)

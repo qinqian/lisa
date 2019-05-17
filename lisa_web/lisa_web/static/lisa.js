@@ -103,9 +103,6 @@ function tabulate(cl, data, columns, interact) {
            dom: 'Bfrtip',
            buttons: [
                'csv', 'excel', 'pdf'
-           ],
-           "columnDefs": [
-              { "width": "20%", "targets": 0 }
            ]
          });
        });
@@ -165,7 +162,7 @@ function fetch(row, test_type) {
                  '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"></div></div>' +
                  '</div></div>' + 
                  '<div class="row"><div class="col"><b>Visualize</b></div></div>' + 
-                 '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU Browser</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC Browser</a></div></div></div>' + 
+                 '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC</a></div></div></div>' + 
                  '</div></div>');
       $(".annotation").append( modelc );
       modelc = $('<div class="card"><div class="card-header">Tool</div><div class="card-body"><table class="table">' +
@@ -190,41 +187,6 @@ function fetch(row, test_type) {
   });
 };
 
-function multiple_request(url, index) {
-      d3.csv(url, function(error, d) {
-        if (error) {
-          // this cause multiple dataTable rendering
-          // setTimeout(function() {
-          //   update_progress(status_url, status_div, div_heatmap_data);
-          // }, 2000);
-          // use queue instead
-          setTimeout(function() {
-              multiple_request(url, index);
-          }, 3000);
-          return null;
-        }
-
-        $(".tab-pane.active").ready(function() {
-          tabulate(index, d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, index);
-          fetch(false);
-          $('.dataTable').on('draw.dt', function() {
-            fetch(false);
-          });
-        });
-
-        if ($('.tab'+index).length == 0) {
-          tabulate(index, d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, index);
-          fetch(false);
-          $('.dataTable').on('draw.dt', function() {
-            fetch(false);
-          });
-          multiple_request(url, index);
-        }
-        return true;
-      });
-      return true;
-}
-
 function update_progress(status_url, status_div, div_heatmap_data) {
   // send GET request to status URL
   $.getJSON(status_url, function(data) {
@@ -235,81 +197,33 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       $('.progress').hide();
       $(".result").show(1200);
       $("h4").hide();
-      $(".tab-pane.active").ready(function() {
-        if($(".tab-pane.active").hasClass("tf1")) {
-          // $(".tf").html($('<div class="col"><a href="' + data['result'] +'">download lisa beta results</a></div>'));
-          initiald = data['result'];
-          d3.csv(initiald, function(error, d) {
-            if (error) {
-              multiple_request(initiald, 'tf1');
-            } else {
-              $(".tab-pane.active").ready(function() {
-                tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
-                fetch(false);
-                $('.dataTable').on('draw.dt', function() {
-                  fetch(false);
-                });
-              });
-            }
-          });
-        } else if ($(".tab-pane.active").hasClass("tf1")) {
-          $(".tf1").html($('<div class="col"><a href="' + data['result'] +'">download knockout ranks from ChIP-seq data</a></div>'));
-          initiald = data['result'];
-          d3.csv(initiald, function(error, d) {
-            if (error) {
-              console.log("test3 error");
-              multiple_request(initiald, 'tf1');
-            } else {
-              $(".tab-pane.active").ready(function() {
-                  tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
-                  fetch(false);
-                  $('.dataTable').on('draw.dt', function() {
-                    fetch(false);
-                  });
-              });
-            }
-          });
-        }
+      d3.csv(data['result2'], function(error, d) {
+        tabulate('tf2', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], false); 
+        fetch(false);
+        $('.dataTable').on('draw.dt', function() {
+          fetch(false);
+        });
+      });
+      $('.leftpanel a[href="#tf2"]').click(function(e) {
+        $('.active').removeClass("active");
+        $(".annotation").html("");
+        $(this).tab('show');
       });
 
+      d3.csv(data['result'], function(error, d) {
+        tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true);
+        fetch(false);
+        $('.dataTable').on('draw.dt', function() {
+          fetch(false);
+        });
+      });
       $('.leftpanel a[href="#tf1"]').click(function(e) {
-        console.log("chip-seq ");
-        $('.active').removeClass("active");
-        $(".annotation").hide();
-        $(".annotation").html("");
-        $('.active').removeClass("active");
-
-        if ($('.tabtf1').length == 0) {
-          // $(".tf").html($('<div class="col"><a href="' + data['result'] +'">download combined lisa ChIP-seq results</a></div>'));
-          d3.csv(data['result'], function(error, d) {
-            tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
-            fetch(false);
-            $('.dataTable').on('draw.dt', function() {
-              fetch(false);
-            });
-          });
-        }
-        $(this).tab('show');
+       $('.active').removeClass("active");
+       $(".annotation").hide();
+       $(".annotation").html("");
+       $(this).tab('show');
       });
 
-      $('.leftpanel a[href="#tf2"]').click(function(e){
-        console.log("motifs ");
-        $('.active').removeClass("active");
-        $(".annotation").hide();
-        $(".annotation").html("");
-        if ($('.tabtf2').length == 0) {
-         // $(".tf2").html($('<div class="col"><a href="' + data['result2'] +'">download combined lisa motif results</a></div>'));
-         d3.csv(data['result2'], function(error, d) {
-           tabulate('tf2', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value"], false, 'tf2'); // "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"
-           fetch(false, 'motif');
-           $('.dataTable').on('draw.dt', function() {
-             fetch(false, 'motif');
-           });
-         });
-        }
-        $(this).tab('show');
-      });
-      
     } else {
       setTimeout(function() {
         update_progress(status_url, status_div, div_heatmap_data);

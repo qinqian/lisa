@@ -88,10 +88,7 @@ def get_collapse_tf(z, prefix, mark, t):
     return out
     
 def generate_htmls(ids):
-    bench = '/data5/home/jfan/projects/LISA/lisa_results/fixed_background/human'
-    bench = '/data/home/qqin/lisa_web/figure1/combined'
-
-    #bench = '/data5/home/jfan/projects/LISA/lisa_results/fixed_background/mouse'
+    bench = '/project/dev/qqin/LISA/lisa_web/figure1/combined/'
     loader = FileSystemLoader('.')
     env = Environment(loader=loader) #autoescape=select_autoescape(['html']))
     template = env.get_template('combined_gallery_multiple_display.html')
@@ -99,43 +96,44 @@ def generate_htmls(ids):
         # /data/home/qqin/lisa_web/figure1/combined/123_down.gene_symbol_chipseq_cauchy_combine_raw.csv
         with open('%s_combined.html' % (i), 'w') as fout:
             fout.write(template.render(method='all', task_id=i))
-        # d1 = os.path.join(bench, "%s_down.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
-        # if (not os.path.exists(d1)):
-        #     print('%s not exists!' % d1)
-        #     continue
-        # d2 = os.path.join(bench, "%s_up.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
-        # if (not os.path.exists(d2)):
-        #     print('%s not exists!' % d2)
-        #     continue
+        #d1 = os.path.join(bench, "%s_down.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
+        #if (not os.path.exists(d1)):
+        #    print('%s not exists!' % d1)
+        #    continue
+        #d2 = os.path.join(bench, "%s_up.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
+        #if (not os.path.exists(d2)):
+        #    print('%s not exists!' % d2)
+        #    continue
 
-        # os.system('python ../../plotly_scatter.py %s %s %s Combined_TR_ChIP-seq down-regulated up-regulated' % (d1, d2, '%s_combined.fig1' % i))
-        # d1 = pd.read_csv(d1)
-        # d2 = pd.read_csv(d2)
-        # di1 = get_collapse_tf(d1, '%s_down' % i, 'combined', 'chipseq.')
-        # di2 = get_collapse_tf(d2, '%s_up' % i, 'combined', 'chipseq.')
+        #os.system('python ../../plotly_scatter.py %s %s %s Combined_TR_ChIP-seq down-regulated up-regulated' % (d1, d2, '%s_combined.fig1' % i))
+        #d1 = pd.read_csv(d1)
+        #d2 = pd.read_csv(d2)
+        #di1 = get_collapse_tf(d1, '%s_down' % i, 'combined', 'chipseq.')
+        #di2 = get_collapse_tf(d2, '%s_up' % i, 'combined', 'chipseq.')
 
-        # json_dict = {}
-        # json_dict['status'] = '100%'
-        # json_dict['result'] = di1
-        # json_dict['result_2'] = di2
-        # json_dict['result1_fig'] = '%s_combined.fig1.html' % i
+        #json_dict = {}
+        #json_dict['status'] = '100%'
+        #json_dict['result'] = di1
+        #json_dict['result_2'] = di2
+        #json_dict['result1_fig'] = '%s_combined.fig1.html' % i
 
-        # m1 = os.path.join(bench, '%s_up.gene_symbol_motif_cauchy_combine_raw.csv' % i)
-        # m2 = os.path.join(bench, '%s_down.gene_symbol_motif_cauchy_combine_raw.csv' % i)
-        # os.system('python ../../plotly_scatter.py %s %s %s Combined_TR_motif down-regulated up-regulated' % (m1, m2, '%s_combined.fig2' % i))
+        #m1 = os.path.join(bench, '%s_up.gene_symbol_motif_cauchy_combine_raw.csv' % i)
+        #m2 = os.path.join(bench, '%s_down.gene_symbol_motif_cauchy_combine_raw.csv' % i)
+        #os.system('python ../../plotly_scatter.py %s %s %s Combined_TR_motif down-regulated up-regulated' % (m1, m2, '%s_combined.fig2' % i))
 
-        # m1 = pd.read_csv(m1)
-        # m2 = pd.read_csv(m2)
-        # mo1 = get_collapse_tf(m1, '%s_down' % i, 'combined', 'motif.')
-        # mo2 = get_collapse_tf(m2, '%s_up' % i, 'combined', 'motif.')
-        # json_dict['result2'] = mo1
-        # json_dict['result2_2'] = mo2
-        # json_dict['result2_fig'] = '%s_combined.fig2.html' % i
+        #m1 = pd.read_csv(m1)
+        #m2 = pd.read_csv(m2)
+        #mo1 = get_collapse_tf(m1, '%s_down' % i, 'combined', 'motif.')
+        #mo2 = get_collapse_tf(m2, '%s_up' % i, 'combined', 'motif.')
+        #json_dict['result2'] = mo1
+        #json_dict['result2_2'] = mo2
+        #json_dict['result2_fig'] = '%s_combined.fig2.html' % i
 
-        # test = '%s_combined.json' % (i)
-        # with open(test, 'w') as jsonf:
-        #     json.dump(json_dict, jsonf)
+        #test = '%s_combined.json' % (i)
+        #with open(test, 'w') as jsonf:
+        #    json.dump(json_dict, jsonf)
 
 #generate_page()
+#generate_htmls(ids)
+#print(ids)
 generate_htmls(ids)
-#generate_htmls(df.iloc[:,0])

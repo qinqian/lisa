@@ -543,10 +543,11 @@ def custom_download(filename):
 #        return users.get(username)
 #    return None
 #
-#@app.route('/cistromedb_data/<path:filename>')
+@app.route('/cistromedb_data/<path:filename>')
 #@auth.login_required
-#def data(filename):
-#    return send_from_directory('/data/home/qqin/lisa_web/cistromedb_data/', filename)
+def data(filename):
+    return send_from_directory('/data/home/qqin/lisa_web/cistromedb_data/', filename)
+
 #@auth.error_handler
 #def unauthorized():
 #    return make_response(jsonify({'error': '!!Sorry, Unauthorized access'}), 403)

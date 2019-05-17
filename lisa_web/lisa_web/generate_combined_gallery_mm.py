@@ -79,10 +79,7 @@ def get_collapse_tf(z, prefix, mark, t):
     return out
     
 def generate_htmls(ids):
-    bench = '/data5/home/jfan/projects/LISA/lisa_results/fixed_background/mouse/'
-    bench = '/data/home/qqin/lisa_web/figure1/mouse_combined/'
-
-    #bench = '/data5/home/jfan/projects/LISA/lisa_results/fixed_background/mouse'
+    bench = '/project/dev/qqin/LISA/lisa_web/figure1/mouse_combined/'
     loader = FileSystemLoader('.')
     env = Environment(loader=loader) #autoescape=select_autoescape(['html']))
     template = env.get_template('combined_gallery_multiple_display.html')

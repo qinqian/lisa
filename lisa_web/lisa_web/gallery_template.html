@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LISA</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!--
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/> -->
+<link rel="stylesheet" href="/static/font-awesome.min.css">
+<link rel="stylesheet" href="/static/custom.css">
+
+<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+
+<link rel="stylesheet" href="/static/lisa2.css">
+
+    <!--[if lt IE 9]>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  </head>
+  <body>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="/static/lisa.jpg" height="55" width="40" alt="">
+      <span></span>LISA
+    </a>
+    <div id="navbar-nav-scroll">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/">HOME</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/new_gallery/new_gallery.html">Combined Human Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/new_gallery_mm/new_gallery_mm.html">Combined Mouse Gallery</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc">Documentation</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link nav-a" href="http://lisa.cistrome.org/doc#item-2">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+<div class="row body2">
+   <div class="col-sm-12">
+<div class="jumbotron jumbotron-fluid shadow-sm">
+  <div class="container">
+    <h1 class="display-4">Gallery of LISA benchmark datasets</h1>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="container body">
+  <table class="table table-hover table-striped table-bordered " id="myTable">
+   <thead class="thead-dark">
+   <tr>
+  {% for h in header %}
+     <th scope="col">{{h}}</th>
+  {% endfor %}
+   </tr>
+   </thead>
+   <tbody>
+  {% for row in table %}
+    <tr>
+    {% for cell in row %}
+       {% if cell.index == 8 %}
+       <td><a href="{{cell}}_{{row[0]}}">{{cell}}</a></td>
+       {% else %}
+       <td>{{cell}}</td>
+       {%endif %}
+    {% endfor %}
+    </tr>
+  {% endfor %}
+   </tbody>
+  </table>
+
+<nav class="navbar fixed-bottom navbar-dark">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row">
+    <li class="nav-item active">
+     <span>Copyright @2019 Liu lab</span>
+    </li>
+    </ul>
+  </div>
+</nav>
+  </body>
+
+  <script src="http://lisa.cistrome.org/static/jquery-1.12.4.js"></script>
+  <script src="http://lisa.cistrome.org/static/popper.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+ <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+ <script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+});
+ </script>
+</html>
+

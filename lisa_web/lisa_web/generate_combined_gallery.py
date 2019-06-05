@@ -26,7 +26,8 @@ result1 = list(map(lambda x: '<div class="col"><a class="" href="http://lisa.cis
 result0 = list(map(lambda x: '<div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery/%s_DNase.html">DNase-seq</a></div>' %(x), df.iloc[:,0]))
 combined = list(map(lambda x:'<div class="col"><a class="" href="http://lisa.cistrome.org/new_gallery/%s_combined.html">Combined</a></div>' %(x), df.iloc[:,0]))
 df.drop(['Accession'], inplace=True, axis=1)
-df.drop(['geo_id'], inplace=True, axis=1)
+#df.drop(['geo_id'], inplace=True, axis=1)
+df['geo_id'] = list(map(lambda x:'<div class="col"><a class="" href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s">%s</a></div>' %(x, x), df.loc[:, 'geo_id']))
 ids = df.ID
 df.drop(['ID'], inplace=True, axis=1)
 ###df['LISA_results'] =  result
@@ -95,7 +96,7 @@ def generate_htmls(ids):
     for i in ids:
         # /data/home/qqin/lisa_web/figure1/combined/123_down.gene_symbol_chipseq_cauchy_combine_raw.csv
         with open('%s_combined.html' % (i), 'w') as fout:
-            fout.write(template.render(method='all', task_id=i))
+            fout.write(template.render(method='all', task_id=i, labels1='Down-regulated', labels2='Up-regulated'))
         #d1 = os.path.join(bench, "%s_down.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
         #if (not os.path.exists(d1)):
         #    print('%s not exists!' % d1)
@@ -134,6 +135,6 @@ def generate_htmls(ids):
         #    json.dump(json_dict, jsonf)
 
 #generate_page()
-#generate_htmls(ids)
-#print(ids)
 generate_htmls(ids)
+#print(ids)
+#generate_htmls(ids)

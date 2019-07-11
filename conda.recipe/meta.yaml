@@ -1,9 +1,10 @@
+## https://docs.anaconda.com/anaconda-cloud/user-guide/tutorials/
 package:
   name: lisa
   version: 1.0
 
 build:
-  number: 5
+  number: 6
   #entry_points:
   #  - lisa = ../bin/lisa
 

@@ -23,6 +23,9 @@ export MKL_THREADING_LAYER=GNU
 conda install -c qinqian lisa
 ```
 
+To update, use `git clone https://github.com/qinqian/lisa && cd lisa && python setup.py develop`.
+
+
 ### Get pre-computed datasets from CistromeDB
 
 User can download hg38 or mm10 datasets based on their experiments for human or mouse, the password can be obtained after LISA is published.

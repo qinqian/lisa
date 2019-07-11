@@ -35,8 +35,6 @@ def generate_dedup_refseq(s, e, g):
     feature.loc[:, 'Y'] = gene_vec
     feature.loc[:, 'symbols'] = symbol
     feature_symbols = feature.drop_duplicates(subset='symbols', keep='first', inplace=False)
-    print(sum(gene_vec))
-    print(feature_symbols.Y.sum())
     feature_symbols = feature_symbols.drop('symbols', axis=1, inplace=False)
     return feature_symbols
 
@@ -62,7 +60,6 @@ def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num
     n = 0
     genes = []
     z = 0
-    print(len(prop_dict.keys()))
     for i in prop_dict:
         # NOTE: class ratio < 1 will be ignored, add back below
         gene_num = int(prop_dict[i] / background.shape[0] * num * 1.1) # sampling a bit more genes
@@ -71,12 +68,11 @@ def sampling_by_tad(prefix, species, epigenomes, df, excl_genes, incl_genes, num
         if gene_num == 0: ## in case TAD+promoter activity class ratio < 1, add one back
             gene_num += 1
         n += gene_num
-        print(gene_num)
-        genes += list(np.random.choice(np.array(prop_dict_genes[i]), gene_num, replace=False)) # replace=False
-    print(n)
-    print(num)
-    print(background.shape)
-    print(tad_promoter_chr.shape)
+        print(len(np.array(prop_dict_genes[i])), gene_num, 'check')
+        if len(np.array(prop_dict_genes[i])) < gene_num:
+            genes += list(np.random.choice(np.array(prop_dict_genes[i]), len(np.array(prop_dict_genes[i]))-1, replace=False)) # replace=False
+        else:
+            genes += list(np.random.choice(np.array(prop_dict_genes[i]), gene_num, replace=False)) # replace=False
     return list(set(genes))
 
 
@@ -138,12 +134,16 @@ def get_background(species, epigenomes, gene_set, prefix, random, background, st
                 ## keep exactly stat_step_background_number number of background genes
                 sub_background_genes = background_genes[np.in1d(np.array(list(map(lambda x:x.split(':')[-1].upper(), background_genes))), 
                                                                 sub_background_genes)]
-                sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=stat_step_background_number, replace=False))
+                print(len(sub_background_genes), 'total')
+                if len(sub_background_genes) < stat_step_background_number: ## avoid sampling error caused by >=3000 stat_step_background_number
+                    sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=len(sub_background_genes)-1, replace=False))
+                else:
+                    sub_background_genes = np.unique(np.random.choice(sub_background_genes, size=stat_step_background_number, replace=False))
                 np.savetxt('%s.background_gene.3000' % prefix,
                            background_genes, fmt="%s")
                 np.savetxt('%s.background_gene.1000' % prefix,
                            sub_background_genes, fmt="%s")
-            else:
+            else:  # user customized gene set too few genes
                 if gene_set != None:
                     assert ((background.Y == 1) & (feature_symbols.Y==0)).sum() >= 30, 'too few background genes, or background overlapped too much with target genes!'
                     background_genes = np.unique(background.index[(background.Y == 1) & (feature_symbols.Y==0)].values)

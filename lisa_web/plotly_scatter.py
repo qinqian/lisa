@@ -14,13 +14,19 @@ labels1 = sys.argv[5]
 labels2 = sys.argv[6]
 
 up=pd.read_csv(up_r, header=0)
-up=up.sort_values(by='0.1')
+if '1' in up.columns:
+    up=up.sort_values(by='1')
+if '0.1' in up.columns:
+    up=up.sort_values(by='0.1')
 up.loc[:, 'name'] = up.iloc[:, 0].map(lambda x:x.split('|')[1])
 up.drop_duplicates('name', inplace=True, keep='first')
 print(up.head())
 
 dn=pd.read_csv(dn_r, header=0)
-dn=dn.sort_values(by='0.1')
+if '1' in dn.columns:
+    dn=dn.sort_values(by='1')
+if '0.1' in dn.columns:
+    dn=dn.sort_values(by='0.1')
 dn.loc[:, 'name'] = dn.iloc[:, 0].map(lambda x:x.split('|')[1])
 dn.drop_duplicates('name', inplace=True, keep='first')
 print(dn.head())

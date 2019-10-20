@@ -4,7 +4,7 @@ package:
   version: 1.0
 
 build:
-  number: 6
+  number: 7
   #entry_points:
   #  - lisa = ../bin/lisa
 
@@ -30,8 +30,9 @@ requirements:
     - theano
     - pandas
     - h5py
+    - numpy ==1.15.1
     - PyYAML >=3.12
-    - snakemake
+    - snakemake ==5.7.1
     - yappi
     - bwa
     - samtools=0.1.19 

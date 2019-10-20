@@ -13,7 +13,7 @@ def get_command(cov, new_h5):
     frame+=" --only_newhdf5=%s " % (str(config['only_newhdf5']))
     return frame
 
-rule lisa_regress:
+checkpoint lisa_regress:
     input:
         gene_set = "{sample}",
         background = "{sample}.background_gene.3000",
@@ -24,7 +24,7 @@ rule lisa_regress:
     message: "lisa regression steps..."
     benchmark:
         "{sample}.{epigenome}.benchmark.txt"
-    log: "{sample}.log"
+    log: "{sample}.{epigenome}.log"
     params: species=config["species"],
             epigenome="{epigenome}",
             prefix="{sample}.{epigenome}",

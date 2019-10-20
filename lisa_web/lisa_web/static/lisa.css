@@ -45,7 +45,8 @@
 
 .body {
     padding-top: 0px;
-    padding-bottom: 90px;
+    padding-bottom: 120px;
+    margin-bottom: 80px;
     font-family: lato, sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -246,4 +247,12 @@ p.just {
 .highlight pre code {
     font-size: inherit;
     color: #212529
+}
+
+
+.btn-align {
+    padding: 6px 12px;
+    line-height: 1.42857143;
+    vertical-align: middle;
+
 }

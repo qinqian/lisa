@@ -85,7 +85,7 @@ def model(sample_number, species, epigenome, gene_set, foreground, background, p
                            columns=feature.columns,
                            index=feature.index)
 
-    feature_sub = feature.ix[:, coefs.index]
+    feature_sub = feature.loc[:, coefs.index]
 
     lisa_predicted_rp = np.dot(feature_sub.values,
                                coefs.iloc[:, 0].values)

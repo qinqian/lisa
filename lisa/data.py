@@ -29,7 +29,7 @@ class EpigenomeData(object):
                  & (quality['PBC'] > 0.5) \
                  & (quality['FRiP'] > 0.003) \
                  #& (quality['UnionDHSRatio'] > 0.3)
-        sids = quality.ix[selector, 'X']
+        sids = quality.loc[selector, 'X']
         # print(sids.shape)
         return list(set(map(str, list(sids))))
 

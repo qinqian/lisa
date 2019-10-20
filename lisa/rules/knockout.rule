@@ -26,7 +26,7 @@ rule lisa_in_silico_knockout_motif_99:
     message: "lisa In silico Knockout motif..."
     benchmark:
         "{sample}.{epigenome}.motif99.knockout.benchmark.txt"
-    log: "{sample}.log"
+    log: "{sample}.{epigenome}.log"
     params: species=config["species"], prefix="{sample}"
     shell:
         get_knockout_command(config['covariates'], 'motif99',
@@ -44,7 +44,7 @@ rule lisa_in_silico_knockout_tf_chipseqpeak:
     message: "lisa In silico Knockout chip-seq ..."
     benchmark:
         "{sample}.{epigenome}.chipseq.knockout.benchmark.txt"
-    log: "{sample}.log"
+    log: "{sample}.{epigenome}.log"
     params: species=config["species"], prefix="{sample}",
     shell:
         get_knockout_command(config['covariates'], 'chipseq',

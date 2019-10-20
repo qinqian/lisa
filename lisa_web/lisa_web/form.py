@@ -13,7 +13,7 @@ class LISAForm(FlaskForm):
 
     background = TextAreaField('Background', validators=[optional()])
 
-    name = StringField('Job Name', validators=[Required()])
+    name = StringField('Job Name', validators=[optional()]) ## change to optional and give out a warning information
     mail = EmailField('Optional email', validators=[optional(), Email()])
     method = SelectField("Methods",
                          choices=[('knockout', 'ISD-RP for both motif and ChIP-seq'),

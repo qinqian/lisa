@@ -113,6 +113,8 @@ def submit_lisa():
             app.logger.info("%s %s %s at %s from %s" % (str(genes), marks, species, prefix,
                                                         request.remote_addr))
             gsf = os.path.join(upload, '%s.txt' % (prefix+"__"+species))
+            if job_name == '':
+                return render_template('index.html', form=form, message_job='inline-block')
             if len(genes.split('\n')) > 500 or len(genes.split('\n')) < 20:
                 return render_template('index.html', form=form, message='inline-block')
 
@@ -130,6 +132,8 @@ def submit_lisa():
                 outf.write(cc)
             return redirect('/download/%s_result.html'%(prefix+"__"+species))
         else:
+            if job_name == '':
+                return render_template('index.html', form=form, message_job='inline-block')
             if len(genes.split('\n')) > 500 or len(genes.split('\n')) < 20:
                 return render_template('index.html', form=form, message='inline-block')
             if len(genes2.split('\n')) > 500 or len(genes2.split('\n')) < 20:

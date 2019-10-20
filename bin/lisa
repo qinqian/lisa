@@ -118,7 +118,7 @@ class LisaPipeline(object):
             with open('%s.Snakefile.model' % self.prefix, 'w') as outf:
                 outf.write(template.substitute(
                     {'config': "%s.yml" % self.prefix}))
-        os.system("snakemake --profile %s.profile -j %s --latency-wait 120 -s %s.Snakefile.model --use-conda"
+        os.system("snakemake --runtime-profile %s.profile -j %s --latency-wait 120 -s %s.Snakefile.model --use-conda"
                   % (self.prefix, threads, self.prefix))
 
 if __name__ == '__main__':

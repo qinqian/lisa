@@ -90,3 +90,8 @@ conda env remove -n lisa
 rm -r mm10/ hg38/
 ```
 
+### Citation 
+
+Qin Q, Fan J, Zheng R, Wan C, Mei S, Wu Q. Inferring transcriptional regulators through integrative modeling of public chromatin accessibility and ChIP-seq data. 2019.
+
+Please note that the reference is a preprint hosted at [biorxiv](https://www.biorxiv.org/content/10.1101/846139v1).

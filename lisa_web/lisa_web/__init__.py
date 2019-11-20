@@ -507,6 +507,10 @@ def lisa_taskstatus2(epigenome, task_id):
                 return jsonify(response)
     return jsonify(response)
 
+@app.route('/stat', methods=['GET'])
+def get_stat():
+    return render_template('stat.html')
+
 @app.route('/doc', methods=['GET'])
 def get_docs():
     return render_template('doc.html')

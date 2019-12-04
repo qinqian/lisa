@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import re
 import glob
+from check_genename import clean_empty_lins, check_available_genes
 
 from flask import Flask, render_template, redirect, url_for, send_from_directory, abort
 from flask import make_response, jsonify
@@ -115,11 +116,18 @@ def submit_lisa():
             gsf = os.path.join(upload, '%s.txt' % (prefix+"__"+species))
             if job_name == '':
                 return render_template('index.html', form=form, message_job='inline-block')
-            if len(genes.split('\n')) > 500 or len(genes.split('\n')) < 20:
+
+            genes = genes.split('\n')
+            genes = clean_empty_lins(genes)
+
+            ## support ensemble
+            genes = check_available_genes(genes, species)
+
+            if len(genes) > 500 or len(genes) < 20:
                 return render_template('index.html', form=form, message='inline-block')
 
             gene_set = open(gsf, 'w')
-            for i in genes.split('\n'):
+            for i in genes:
                 i = i.strip().split(",") # comma is ok
                 for j in i:
                     print >>gene_set, j
@@ -134,9 +142,16 @@ def submit_lisa():
         else:
             if job_name == '':
                 return render_template('index.html', form=form, message_job='inline-block')
-            if len(genes.split('\n')) > 500 or len(genes.split('\n')) < 20:
+            genes = genes.split('\n')
+            genes2 = genes2.split('\n')
+            genes = clean_empty_lins(genes)
+            genes2 = clean_empty_lins(genes2)
+
+            genes = check_available_genes(genes, species)
+            genes2 = check_available_genes(genes2, species)
+            if len(genes) > 500 or len(genes) < 20:
                 return render_template('index.html', form=form, message='inline-block')
-            if len(genes2.split('\n')) > 500 or len(genes2.split('\n')) < 20:
+            if len(genes2) > 500 or len(genes2) < 20:
                 return render_template('index.html', form=form, message='inline-block')
 
             app.logger.info("%s %s %s at %s" % (str(genes), marks, species, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))

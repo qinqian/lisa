@@ -160,7 +160,7 @@ def submit_lisa():
                                                         request.remote_addr))
             gsf1 = os.path.join(upload, '%s_gs1.txt' % (prefix+"__"+species))
             gene_set1 = open(gsf1, 'w')
-            for i in genes.split('\n'):
+            for i in genes:
                 i = i.strip().split(",") # comma is ok
                 for j in i:
                     print >>gene_set1, j
@@ -168,7 +168,7 @@ def submit_lisa():
 
             gsf2 = os.path.join(upload, '%s_gs2.txt' % (prefix+"__"+species))
             gene_set2 = open(gsf2, 'w')
-            for i in genes2.split('\n'):
+            for i in genes2:
                 i = i.strip().split(",") # comma is ok
                 for j in i:
                     print >>gene_set2, j

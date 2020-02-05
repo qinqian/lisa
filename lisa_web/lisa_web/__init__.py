@@ -1,7 +1,8 @@
 import logging
 import os, sys
 import subprocess
-from logging.handlers import RotatingFileHandler
+#from logging.handlers import RotatingFileHandler, FileHandler
+from logging import FileHandler
 import time
 import numpy as np
 import pandas as pd
@@ -41,10 +42,11 @@ upload = dir_prefix + 'upload/'
 # debug mode on
 app.debug = False
 if not app.debug:
-    app.logger.setLevel(logging.INFO)
-    handler = RotatingFileHandler(dir_prefix + '/lisa.log', maxBytes=10000000, backupCount=20)
+    app.logger.setLevel(logging.DEBUG)
+    #handler = RotatingFileHandler(dir_prefix + '/lisa.log', maxBytes=10000000, backupCount=20)
+    handler = FileHandler(dir_prefix + '/lisa.log')
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
-    handler.setLevel(logging.INFO)
+    handler.setLevel(logging.DEBUG)
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
 
@@ -82,6 +84,9 @@ def submit_lisa():
         job_name = job_name.replace(' ', '_')
         job_name = job_name.replace('(', '')  # incase user input ( or )
         job_name = job_name.replace(')', '')
+        job_name = job_name.replace('#', '')  # user input weird character 
+        job_name = job_name.replace("\'", "")  # user input weird character 
+        job_name = job_name.replace('-', '')  # user input weird character 
 
         method = form.method.data
 

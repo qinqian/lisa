@@ -1,7 +1,7 @@
 import pandas as pd
 
 def check_available_genes(genes, species='hg38'):
-    if genes[0].startswith('ENSG'):
+    if genes[0].startswith('ENSG') or genes[0].startswith('ENSM'):
         genes = list(map(lambda x: x.split('.')[0], genes))
         if species == 'hg38':
             ensemble = pd.read_csv('/project/Cistrome/LISA/lisa_web/download/Homo97_Ensembl.txt', sep='\t')
@@ -20,9 +20,12 @@ def clean_empty_lins(genes):
 
 if __name__ == '__main__':
 #    print(clean_empty_lins(['a', 'b', 'c', '']))
-    # print(check_available_genes(['ENSG00000174837',
-    #                              'ENSG00000232702',
-    #                              'ENSG00000172738'], 'human'))
-    print(check_available_genes(['AR',
-                                 'FOXA1',
-                                 'TP53'], 'mouse'))
+    print(check_available_genes(['ENSG00000174837',
+                                 'ENSG00000232702',
+                                 'ENSG00000172738'], 'hg38'))
+    #print(check_available_genes(['AR',
+    #                             'FOXA1',
+    #                             'TP53'], 'mouse'))
+    print(check_available_genes(['ENSMUSG00000000916',
+                                 'ENSMUSG00000000732',
+                                 'ENSMUSG00000000948'], 'mouse'))

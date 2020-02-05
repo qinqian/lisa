@@ -8,14 +8,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% endblock %}
 
-{% block title %}LISA{% endblock %}
+{% block title %}Lisa{% endblock %}
 
 {% block navbar %}
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
   <div class="container">
     <a href="/" class="navbar-brand">
       <img src="/static/lisa.jpg" height="55" width="40" alt="lisa">
-      <span></span>LISA
+      <span></span>Lisa
     </a>
     <div id="navbar-nav-scroll">
       <ul class="navbar-nav bd-navbar-nav flex-row">
@@ -49,20 +49,21 @@
 <div class="row">
 <div class="d-none d-xl-block col-xl-2 bd-toc">
 <ul class="section-nav">
-<li class="toc-entry toc-h2"><a href="#item-0">About</a></li>
-<li class="toc-entry toc-h2"><a href="#item-1">Online version</a></li>
+<li class="toc-entry toc-h2"><a href="#item-0">Video tutorial</a></li>
+<li class="toc-entry toc-h2"><a href="#item-1">About</a></li>
+<li class="toc-entry toc-h2"><a href="#item-2">Online version</a></li>
 <ul>
-<li class="toc-entry toc-h3"><a href="#item-1-1">Online usage</a></li>
-<li class="toc-entry toc-h3"><a href="#item-1-2">Online output</a></li>
+<li class="toc-entry toc-h3"><a href="#item-2-1">Online usage</a></li>
+<li class="toc-entry toc-h3"><a href="#item-2-2">Online output</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#item-2">Local command version</a>
+<li class="toc-entry toc-h2"><a href="#item-3">Local command version</a>
 <ul>
-<li class="toc-entry toc-h3"><a href="#item-2-1">Local installation</a></li>
-<li class="toc-entry toc-h3"><a href="#item-2-2">Local usage</a></li>
-<li class="toc-entry toc-h3"><a href="#item-2-3">Local output</a></li>
+<li class="toc-entry toc-h3"><a href="#item-3-1">Local installation</a></li>
+<li class="toc-entry toc-h3"><a href="#item-3-2">Local usage</a></li>
+<li class="toc-entry toc-h3"><a href="#item-3-3">Local output</a></li>
 </ul>
-<li class="toc-entry toc-h2"><a href="#item-3">FAQ</a></li>
+<li class="toc-entry toc-h2"><a href="#item-4">FAQ</a></li>
 </li>
 </ul>
 </div>
@@ -70,8 +71,12 @@
 <div class="col-sm-8 body3">
 <div data-target="#navbar-example" data-offset="0">
   <h1 id="item-0">LISA</h2>
+  <h4 id="item-0">Video tutorial</h4>
+  <iframe width="500" height="480"
+		      src="https://www.youtube.com/embed/ECflrQuoc0c" frameborder="0" allowfullscreen>
+  </iframe>
 
-  <h4 id="item-0">About</h4>
+  <h4 id="item-1">About</h4>
   <p class="just">Transcriptional regulators (TRs), including transcription factors and chromatin regulators, play central role in gene regulation, and are essential in many biological processes. To rank TRs given geneset, we develop a computational biology framework, LISA, to evaluate and rank TRs effect by integrative modelling of chromatin landscapes and cistromes from Cistrome Data Browser (<a href="http://cistrome.org/db/">CistromeDB</a>). To run LISA online application or local command line, the only thing you need is the differential gene set derived from differential gene expression analysis of microarray and RNA-seq. Then you will be able to leverage the power of the most comprehensive TR ChIP-seq, DNase-seq, H3K27ac ChIP-seq database to discover the underlying regulatory TRs.</p>
   </p>
   </hr>
@@ -80,8 +85,8 @@
   </hr>
 </div>
 
-  <h4 id="item-1">Website version</h4>
-  <h5 id="item-1-1">Website Usage</h5>
+  <h4 id="item-2">Online version</h4>
+  <h5 id="item-2-1">Online Usage</h5>
   <p class="just">The input fields and options is shown in the input interface(Figure 1). User can input one or two gene set by using RefSeq ids or gene official symbols, usually the two gene sets can be obtained from up and down-regulated gene set from a differential gene expression analysis,and select the species the gene set originates from, for example, here are two gene sets for MYC knockdown in brain tumors: <a href="http://lisa.cistrome.org/gallery/83_up.txt">up-regulated gene set</a>, and <a href="http://lisa.cistrome.org/gallery/83_down.txt">down-regulated geneset</a>. If one gene set is given, it should be placed in "Gene Set 1", and the TF ranking list of that one gene list would be provided. If two are given, an additional figure of comparison between the two gene set analysis will be generated, a typical scenario would be input up and down regulated gene set from a set of expression profiles, the label for each gene set can be customized optionally. For gene set size, we would recommend 50 to 500 genes, since few genes will lower the predictive power of chromatin profile modelling. To build a model that can best represent the cell type specific chromatin landscape, the number of genes can not be too few. By default, LISA samples 3000 background genes for comparison, user can also specify customized background gene set. However, because in-silico deleting binding sites are time-consuming step for all the ChIP-seq profile and motif hit profile for all the input genes, the LISA running time would suffer from the number of genes when it goes beyond 3000. By using the default backgroudn gene set based on TAD and promoter activity, we prepared a set of transcription factor perturbation experiments used as benchmarks in the paper (see in <a href="http://lisa.cistrome.org/new_gallery/new_gallery.html">Human</a>/<a href="http://lisa.cistrome.org/new_gallery_mm/new_gallery_mm.html">Mouse</a> Gallery). In addition, user can select method based on TR ChIP-seq peak, based on in-silico knockout method, or both. A single run takes 5-10 minutes depending on the size of the gene set, user can optionally set an email to receive the result link.</p>
   </hr>
 
@@ -91,7 +96,7 @@
   <div align="center">Figure 1. LISA input interface</div>
   </hr>
 
-  <h5 id="item-1-2">Website Output</h5>
+  <h5 id="item-2-2">Online output</h5>
   <p class="just">With two gene sets input, the MYC knockdown demo outputs <a href="http://lisa.cistrome.org/download/MYC_LISA_2019_04_30_0017080.114__hg38_result.html">the page</a>, which lists the following results as in Figure 2:</p>
   <div class="figure2" align="center">
   <img alt="_images/2.png" src="http://lisa.cistrome.org/static/Figure2.png" height="340" width="420">
@@ -139,8 +144,8 @@
   </div>
   <div align="center">Figure 8. gene set enrichment view mode on Wash U genome browser</div>
 
-  <h4 id="item-2">Local command version</h4>
-  <h4 id="item-2-1">Local installation</h4>
+  <h4 id="item-3">Local command version</h4>
+  <h4 id="item-3-1">Local installation</h4>
   <p class="just">LISA can be deployed as a command line version, which is installed using the following commands. </p>
   <figure class='highlight'>
    <pre>
@@ -159,7 +164,7 @@
    </figure>
    </hr>
 
-   <h4 id="item-2-2">Local usage</h4>
+   <h4 id="item-3-2">Local usage</h4>
    <p class="just">The LISA framework has three pipeline represented with three sub-parsers, <cite>model</cite>, <cite>multiple_fastq2bigwig</cite>, and <cite>multiple_bigwig2hdf</cite>;
    The TF rank method is run through the <cite>model</cite> sub-parser.</p>
    <h6>Run all the methods</h6>
@@ -181,7 +186,7 @@
    <p>run only the knockout or beta (direct from TF ChIP-seq) method:
    --method option can control the method to run knockout or beta method or both, use it with the option --web=True to turn off the baseline method.</p>
     
-    <h6 id="item-2-3">Local Output</h6>
+    <h6 id="item-3-3">Local Output</h6>
     <p>Take <em>AR.symbol</em> input and histone mark <em>H3K27ac</em> as an example. By using the above command, the key results are as follows,</p>
     <table border="0" class="table">
     <colgroup>
@@ -271,7 +276,7 @@
     </tbody>
     </table>
 
-    <h4 id="item-3">FAQ</h4>
+    <h4 id="item-4">FAQ</h4>
     <h6>How many datasets are there?</h6>
     <p>The 1st version of CistromeDB is incorporated, the dataset statistics is as the table below, NOTE: the data used for current LISA online is updated to CistromeDB (201801). </p>
     <div align="center">Table 1. Chromatin profile data and TF/CR ChIP-seq dataset</div>
@@ -333,11 +338,11 @@
 <nav class="navbar fixed-bottom navbar-dark">
   <div class="container">
     <a href="/" class="navbar-brand">
-      <img src="http://liulab.dfci.harvard.edu/WEBSITE/images/Global/logofinal.png" height="46" width="58">
+      <img src="http://cistrome.org/db/cistrome_logo.png" height="46" width="58">
     </a>
     <ul class="navbar-nav bd-navbar-nav flex-row">
     <li class="nav-item active">
-     <span>Copyright @2019 Liu lab</span>
+     <span>Copyright @2020 Liu lab</span>
     </li>
     </ul>
   </div>

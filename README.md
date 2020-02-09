@@ -23,8 +23,9 @@ export MKL_THREADING_LAYER=GNU
 conda install -c qinqian lisa
 ```
 
-To update, use `git clone https://github.com/qinqian/lisa && cd lisa && python setup.py develop`.
+### Update package
 
+use `git clone https://github.com/qinqian/lisa && cd lisa && python setup.py develop`.
 
 ### Get pre-computed datasets from CistromeDB
 

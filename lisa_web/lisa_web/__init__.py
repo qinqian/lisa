@@ -455,8 +455,8 @@ def lisa_taskstatus2(epigenome, task_id):
                         response['result_2'] = os.path.join("/upload", '%s.combined2.chipseq.csv' % (task_id))
                         response['result2_2'] = os.path.join("/upload", '%s.combined2.motif.csv' % (task_id))
                         response['result1_fig'] = os.path.join("/upload", '%s_chip.html' % (task_id))
-                        if os.path.exists(os.path.join("/upload", '%s_motif.html' % (task_id))):
-                            response['result2_fig'] = os.path.join("/upload", '%s_motif.html' % (task_id))
+                        #if os.path.exists(os.path.join("/upload", '%s_motif.html' % (task_id))):
+                        response['result2_fig'] = os.path.join("/upload", '%s_motif.html' % (task_id))
                         #response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
                         #response['resultl_1'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs2.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
                         #response['resultl'] = "http://cistrome.org/browser/?genome=" + task_id.split('__')[-1] + "wugb&datahub=http://lisa.cistrome.org/" + os.path.join("/"+os.path.basename(upload), '%s_gs1.txt.%s.url' % (task_id, epigenome.split('_')[0])) + "&gftk=refGene,full"
@@ -495,8 +495,8 @@ def lisa_taskstatus2(epigenome, task_id):
                 response['result_2'] = os.path.join("/upload", '%s.combined2.chipseq.csv' % (task_id))
                 response['result2_2'] = os.path.join("/upload", '%s.combined2.motif.csv' % (task_id))
                 response['result1_fig'] = os.path.join("/upload", '%s_chip.html' % (task_id))
-                if os.path.exists(os.path.join("/upload", '%s_motif.html' % (task_id))):
-                    response['result2_fig'] = os.path.join("/upload", '%s_motif.html' % (task_id))
+                #if os.path.exists(os.path.join("/upload", '%s_motif.html' % (task_id))):
+                response['result2_fig'] = os.path.join("/upload", '%s_motif.html' % (task_id))
                 response['result_zip'] = os.path.join("/download", '%s.zip' % (task_id))
                 # response['result'] = os.path.join("/"+os.path.basename(upload), '%s.direct1.csv' % (task_id))
                 # response['result_1'] = os.path.join("/"+os.path.basename(upload), '%s.direct2.csv' % (task_id))

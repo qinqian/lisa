@@ -16,7 +16,6 @@ from functools import wraps
 import fire
 import time
 from multiprocessing import Pool, cpu_count
-#from pathos.multiprocessing import ProcessingPool as Pool2
 
 def test(args):
     x, y = args
@@ -64,13 +63,18 @@ class LisaRank(object):
         #                                                   how="greater"),
         #                       axis=0)
 
-
         pvalue = multiple_apply(test, beta_df, 
-                                np.arange(self.diff_gene_num), np.arange(self.diff_gene_num, beta_df.shape[0]), 5)
-
+                                np.arange(self.diff_gene_num), np.arange(self.diff_gene_num, beta_df.shape[0]), 4)
         pvalue.index = self._get_tfbs_annotation(pvalue.index, 'chipseq')
-        pvalue = pvalue.iloc[:, 0]
-        pvalue = pvalue.sort_values(ascending=True, inplace=False)
+
+        pvalue = pvalue.iloc[:, 0:1]
+        pvalue.columns = ['pval']
+        pvalue = pvalue.sort_values(['pval'], ascending=True, inplace=False)
+        print(pvalue.head())
+        match_meta = self._get_tfbs_annotation(pvalue.index, 'chipseq', is_full=True)
+        match_meta.index = pvalue.index
+        pvalue = pd.concat([pvalue, match_meta], axis=1)
+        print(pvalue.head())
         beta_df.to_csv('%s.lisa_peak_rp.csv' % self.prefix)
         pvalue.to_csv('%s.lisa_direct.csv' % self.prefix)
 
@@ -274,12 +278,21 @@ class LisaRank(object):
 
         delta_rp_df.loc[:, 'diff_status'] = diff_binary
         delta_rp_df.to_csv("%s.%s.%s.csv" % (self.prefix, self.epigenome.epigenome, dtype))
-        pvalue = pvalue.sort_values(inplace=False)
+
+        pvalue = pd.DataFrame(pvalue)
+        pvalue.columns = ['pval']
+        pvalue = pvalue.sort_values(['pval'], ascending=True, inplace=False)
+        print(pvalue.head())
+        match_meta = self._get_tfbs_annotation(pvalue.index, dtype, is_full=True)
+        match_meta.index = pvalue.index
+        pvalue = pd.concat([pvalue, match_meta], axis=1)
+        print(pvalue.head())
         pvalue.to_csv("%s.%s.%s.p_value.csv" % (self.prefix, self.epigenome.epigenome, dtype))
 
-    def _get_tfbs_annotation(self, cols, dtype, is_qc=False):
+    def _get_tfbs_annotation(self, cols, dtype, is_qc=False, is_full=False):
         # annotation of chipseq dc ids or motif ids
         cols_new = []
+        cols = list(map(lambda x:x.split('|')[0], cols))
         for i in cols:
             try:
                 cols_new.append(i.decode('utf-8').split('_')[0])
@@ -300,10 +313,15 @@ class LisaRank(object):
             selection_ids = cols_new
             selection = 'symbol'
             meta = pd.read_table(self.epigenome.config.get_motif_meta, encoding="ISO-8859-1", index_col=0)
-        annotation = meta.loc[selection_ids, selection]
-        result = list(map(lambda x: '|'.join(map(str, x)), 
-                          zip(annotation.index, 
-                              annotation)))
+        if not is_full:
+            annotation = meta.loc[selection_ids, selection]
+            result = list(map(lambda x: '|'.join(map(str, x)), 
+                              zip(annotation.index, 
+                                  annotation)))
+        else:
+            print(selection_ids[:5])
+            result = meta.loc[selection_ids, :]
+            print(result.head())
         return result
 
     def entropy(self, epigenome, coefficient, covariates, dtype, new_h5):

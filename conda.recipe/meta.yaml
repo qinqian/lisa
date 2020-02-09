@@ -26,7 +26,7 @@ requirements:
     - mkl-service
     - curl
     - fire
-    - scikit-learn
+    - scikit-learn ==0.21.3
     - theano
     - pandas
     - h5py

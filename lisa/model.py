@@ -54,7 +54,7 @@ class Logit(object):
             else:
                 break
         #print('feature ready...', snum)
-        self.reg_log2 = self.reg_log2.ix[:, sel]
+        self.reg_log2 = self.reg_log2.loc[:, sel]
 
     def _select_k_feature(self, n_samp=200):
         """ anova feature select a fixed number of n_samp samples """
@@ -62,7 +62,7 @@ class Logit(object):
             n_samp = self.reg_log2.shape[1] - 1
         select = SelectKBest(f_classif, k=n_samp)
         select.fit(self.reg_log2, self.gene_binary)
-        self.reg_log2 = self.reg_log2.ix[:, select.get_support()]
+        self.reg_log2 = self.reg_log2.loc[:, select.get_support()]
 
     def _select_feature2(self, upper_bound=0.5):
         """ cross validation with random search to select a certain amount of
@@ -79,7 +79,7 @@ class Logit(object):
         lisa_expression_rs.fit(self.reg_log2, self.gene_binary)
         best_params, coefs, prauc, auc = self.evaluate(lisa_expression_rs)
         select = np.abs(coefs) >= 1e-6
-        self.reg_log2 = self.reg_log2.ix[:, select]
+        self.reg_log2 = self.reg_log2.loc[:, select]
         #print(best_params, coefs, prauc, auc)
         #print(self.reg_log2.shape)
         if np.sum(select) >= 10:

@@ -94,8 +94,8 @@ def model(sample_number, species, epigenome, gene_set, foreground, background, p
     lisa_predicted_rp.to_csv("%s.lisa_predicted_rp.csv" % prefix)
 
     ## write out the selected mark regulatory potential
-    for i in range(feature_sub.shape[1]):
-        feature_sub.iloc[:, i].to_csv("%s.%s.csv" % (prefix, feature_sub.columns[i]))
+    ## for i in range(feature_sub.shape[1]):
+    ##     feature_sub.iloc[:, i].to_csv("%s.%s.csv" % (prefix, feature_sub.columns[i]))
 
     # plt.plot(fpr, tpr, color='blue', label="ROC AUC %s" % auc)
     # plt.title(name + " TF binding prediction \n from differential expression logistic regression ")

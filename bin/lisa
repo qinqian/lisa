@@ -21,7 +21,7 @@ from lisa import Config
 
 class LisaPipeline(object):
     """ LISA pipeline for processing multiple files """
-    def __init__(self, prefix, species, epigenome, cluster, only_newhdf5=False, sample_number=10, web=False):
+    def __init__(self, prefix, species, epigenome, cluster, only_newhdf5=False, sample_number=10, web=False, clean=False):
         """ species: the species of gene_sets,
             epigenome: a list of marks, e.g. ['H3K4me3', 'H3K27ac'],
                        for multiple_bigwig2hdf, this can be covariates, such as `GC`
@@ -41,7 +41,8 @@ class LisaPipeline(object):
             cluster=cluster,
             only_newhdf5=only_newhdf5,
             web=web,
-            prefix=self.prefix)
+            prefix=self.prefix, 
+            clean=clean)
 
     def multiple_fastq2bigwig(self, *fastqs):
         """ input fastq and generate bigwig
@@ -120,6 +121,9 @@ class LisaPipeline(object):
                     {'config': "%s.yml" % self.prefix}))
         os.system("snakemake --runtime-profile %s.profile -j %s --latency-wait 120 -s %s.Snakefile.model --use-conda"
                   % (self.prefix, threads, self.prefix))
+        if self.yml_data['clean']:
+            os.system("snakemake -s %s.Snakefile.model clean"
+                      % (self.prefix))
 
 if __name__ == '__main__':
     fire.Fire(LisaPipeline)

@@ -9,6 +9,7 @@ import copy
 def deduplicate(df):
     out = copy.deepcopy(df)
     #do not deduplicate, since row names is not consistent for cistromedb and imputed TFBS
+    print(df.head())
     out.loc[:, 'TF'] = df.index.map(lambda x: x.split('|')[1]) 
     ##out.loc[:, 'TF'] = df.index.map(lambda x: x.split('_')[0])
     out = out.drop_duplicates('TF', inplace=False)
@@ -40,7 +41,7 @@ def main():
     args = parser.parse_args()
     
     individual_ranks = []
-    rank = pd.read_csv(args.rankcsv[0], index_col=0, header=None)
+    rank = pd.read_csv(args.rankcsv[0], index_col=0, header=0)
     rank_dedup = deduplicate(rank)
    
     if len(args.rankcsv) == 1:
@@ -56,27 +57,30 @@ def main():
         rank_dedup.drop('TF', axis=1)
 
     for r in args.rankcsv[1:]:
-        rank2 = pd.read_csv(r, index_col=0, header=None)
+        rank2 = pd.read_csv(r, index_col=0, header=0)
         rank_dedup2 = deduplicate(rank2)
         rank_dedup2.to_csv('%s_dedup.csv' % r.replace('.csv', ''))
         rank_dedup2.index = rank_dedup2.TF
         rank_dedup2.drop('TF', axis=1)
         rank = rank.merge(rank2, left_index=True, right_index=True)
 
-    print(rank.shape)
-    print(rank.head())
-
+    if 'qc' in rank.columns:  # chip-seq 
+        rank_meta = rank.iloc[:, -7:]
+    else: # motif
+        rank_meta = rank.iloc[:, -28:]
+    rank = rank.loc[:, rank.columns.str.startswith('pval')]
     # cauchy combination test 
     combine_p = rank.apply(lambda x: cauchy_p_value(x)[1], axis=1)
-    combine_p.sort_values(inplace=True)
+    print(combine_p.head())
     combine_p = pd.DataFrame(combine_p)
+    combine_p = pd.concat([combine_p, rank_meta], axis=1)
+    combine_p.columns = ['pval'] + list(map(lambda x: x.replace('_y', ''), rank_meta.columns))
+    combine_p.sort_values(['pval'], inplace=True)
     combine_p.to_csv('%s_cauchy_combine_raw.csv' % args.prefix)
     combine_p = deduplicate(combine_p)
     combine_p.to_csv('%s_cauchy_combine_dedup.csv' % args.prefix)
 
     combine_p2 = rank.apply(lambda x: stats.combine_pvalues(x, method='fisher')[1], axis=1)
-    ## load meta data
-
     combine_p2.sort_values(inplace=True)
     combine_p2 = pd.DataFrame(combine_p2)
     combine_p2.to_csv('%s_fisher_combine_raw.csv' % args.prefix)

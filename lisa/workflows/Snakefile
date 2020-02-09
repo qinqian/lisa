@@ -1,4 +1,5 @@
 import os
+import glob
 from pkg_resources import resource_filename
 import json
 configfile: "$config"
@@ -88,4 +89,14 @@ rule all:
         get_targets()
 
 rule clean:
-    shell: "rm -rf *csv *performance *bench* *log *fore* *back*"
+    params:
+        prefix = config['prefix']
+    run: 
+        for g in config["gene_sets"]:
+            print(g)
+            for f in glob.glob('%s*' % g):
+                if g == f or 'p_val' in f or 'dedup' in f or 'coefs' in f or 'cauchy_combine_raw' in f:
+                    print('preserve %s' % f)
+                    continue
+                print('clean up %s' % f)
+                os.remove(f)

@@ -44,9 +44,8 @@ class EpigenomeData(object):
         #         & (quality['PBC'] > 0.6) \
         #         & (quality['FRiP'] > 0.003) \
         #         & (quality['FactorName'] == self.epigenome)
-        #sids = quality.ix[selector, 'X']
+        #sids = quality.loc[selector, 'X']
         sids = meta.index[((meta.qc==1) & (meta.factor==self.epigenome))]   ## qc is a column defined by above metrics cutoffs
-        print(sids.shape)
         return list(set(map(str, list(sids))))
 
     @property
@@ -64,7 +63,9 @@ class EpigenomeData(object):
         if not TF:
             meta = pd.read_csv(self.config.get_meta, sep='\t', encoding="ISO-8859-1", index_col=0)
             meta.index = meta.index.astype('str')
-            return meta.ix[ids, 3:6]
+            print(meta.head())
+            ids = list(map(str, ids))
+            return meta.loc[ids, :].iloc[:, 3:6]
         return
 
     def create_RP_h5(self, bigwig, prefix):

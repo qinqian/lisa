@@ -4,7 +4,7 @@ package:
   version: 1.0
 
 build:
-  number: 7
+  number: 8
   #entry_points:
   #  - lisa = ../bin/lisa
 
@@ -51,7 +51,7 @@ requirements:
 
 about:
   home: http://lisa.cistrome.org
-  license: EULA
-  license_family: OTHER
+  license: MIT
+  license_family: MIT
   license_file: ../LICENSE
   summary: 'ChIP-seq/DNase-seq data-driven TF and CR prioritization tool'

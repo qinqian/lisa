@@ -1,21 +1,22 @@
 #!/usr/bin/env python
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, redirect, url_for, send_from_directory, abort, jsonify
 import pandas as pd
 import os
 import json
-
 df = pd.read_table('lisa_results_meta_table_mouse_with_gene_sets.xls')
+
 df.drop('GEO_id', inplace=True, axis=1)
 df.drop('DE_col', inplace=True, axis=1)
-index = [ i for i in range(0, df.shape[0], 2) ]
+index = [ i for i in range(0, df.shape[0], 2)] 
+
 df = df.iloc[index,:]
 df = df.iloc[:,:-2]
 inc = pd.read_table('lisa_results_meta_table_mouse_new_selected.xls')
 df = df.loc[df.ID.isin(inc.loc[:, 'ID']), :]
 
-print(df.head())
 labels  = [ "%s_%s" % (i, j) for i, j in zip(df.iloc[:, 0], df.iloc[:, -1]) ]
 labels2 = [ "%s_up" % (i) for i, j in zip(df.iloc[:, 0], df.iloc[:, -1]) ]
 df.iloc[:, -1] = list(map(lambda x, y: '<a href=http://lisa.cistrome.org/gallery/{0}.txt>{1}</a><span> & </span><a href=http://lisa.cistrome.org/gallery/{2}.txt>{3}</a>'.format(x, x.split('_')[1], y, y.split('_')[1]), labels, labels2))
@@ -36,6 +37,7 @@ def generate_page():
     with open('new_gallery_mm.html', 'w') as outf:
         outf.write(x)
     os.system('cp new_gallery_mm.html ../templates/new_gallery_mm.html')
+    #os.system('cp new_gallery.html ../templates/new_gallery_mm.html')
 
 def clean_coef(x, mark, prefix):
     x.columns = ['id', 'coefficients', 'cell_type', 'cell_line', 'tissue']
@@ -50,6 +52,7 @@ def get_collapse_tf(z, prefix, mark, t):
     a = {}
     p = {}
     
+    print(z.head())
     z = z.sort_values('0.1') # pick the top five ones
     
     for i in range(z.shape[0]):
@@ -83,48 +86,102 @@ def generate_htmls(ids):
     bench = '/project/dev/qqin/LISA/lisa_web/figure1/mouse_combined/'
     loader = FileSystemLoader('.')
     env = Environment(loader=loader) #autoescape=select_autoescape(['html']))
-    template = env.get_template('combined_gallery_multiple_display.html')
     for i in ids:
-        # /data/home/qqin/lisa_web/figure1/combined/123_down.gene_symbol_chipseq_cauchy_combine_raw.csv
+        template = env.get_template('combined_gallery_multiple_display_mm.html')
+        d1 = os.path.join(bench, "%s_down.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
+        d2 = os.path.join(bench, "%s_up.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
+        os.system('cp %s .' %d1)
+        os.system('cp %s .' %d2)
+
+        if (not os.path.exists(d1)) or (not os.path.exists(d2)):
+            template = env.get_template('combined_gallery_single_display_mm.html')
+            json_dict = {}
+            if not os.path.exists(d1):
+                m2 = os.path.join(bench, '%s_up.gene_symbol_motif_cauchy_combine_raw.csv' % i)
+                os.system('cp %s .' %d2)
+                os.system('cp %s .' %m2)
+
+                os.system('zip -r %s.zip %s %s' % (i, os.path.basename(d2), os.path.basename(m2)))
+                d2 = pd.read_csv(d2)
+                print('%s not exists!' % d1)
+                di2 = get_collapse_tf(d2, '%s_up' % i, 'combined', 'chipseq.')
+                print(m2)
+                m2 = pd.read_csv(m2)
+                mo2 = get_collapse_tf(m2, '%s_up' % i, 'combined', 'motif.')
+
+                json_dict['status'] = '100%'
+                json_dict['result'] = di2
+                json_dict['result_2'] = mo2
+                json_dict['result_zip'] = '%s.zip' % i
+                test = '%s_combined.json' % (i)
+                with open('%s_combined.html' % (i), 'w') as fout:
+                    fout.write(template.render(method='all', task_id=i, labels1='Down-regulated', labels2='Up-regulated', download_zip='%s.zip' % i))
+                with open(test, 'w') as jsonf:
+                    json.dump(json_dict, jsonf)
+                continue
+            if not os.path.exists(d2):
+                m1 = os.path.join(bench, '%s_up.gene_symbol_motif_cauchy_combine_raw.csv' % i)
+                os.system('cp %s .' %d1)
+                os.system('cp %s .' %m1)
+
+                os.system('zip -r %s.zip %s %s' % (i, os.path.basename(d1), os.path.basename(m1)))
+
+                with open('%s_combined.html' % (i), 'w') as fout:
+                    fout.write(template.render(method='all', task_id=i, labels1='Down-regulated', labels2='Up-regulated', download_zip='%s.zip' % i))
+
+                d1 = pd.read_csv(d1)
+                print('%s not exists!' % d1)
+                di1 = get_collapse_tf(d1, '%s_up' % i, 'combined', 'chipseq.')
+                m1 = pd.read_csv(m1)
+                mo1 = get_collapse_tf(m1, '%s_up' % i, 'combined', 'motif.')
+
+                json_dict = {}
+                json_dict['status'] = '100%'
+                json_dict['result'] = di1
+                json_dict['result_2'] = mo1
+                json_dict['result_zip'] = '%s.zip' % i
+                print('%s not exists!' % d1)
+                test = '%s_combined.json' % (i)
+                with open(test, 'w') as jsonf:
+                    json.dump(json_dict, jsonf)
+                continue
         with open('%s_combined.html' % (i), 'w') as fout:
-            fout.write(template.render(method='all', task_id=i, labels1='Down-regulated', labels2='Up-regulated'))
-#        d1 = os.path.join(bench, "%s_down.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
-#        if (not os.path.exists(d1)):
-#            print('%s not exists!' % d1)
-#            continue
-#        d2 = os.path.join(bench, "%s_up.gene_symbol_chipseq_cauchy_combine_raw.csv" % (i))
-#        if (not os.path.exists(d2)):
-#            print('%s not exists!' % d2)
-#            continue
-#
-#        os.system('python ../../plotly_scatter.py %s %s %s Combined_TR_ChIP-seq down-regulated up-regulated' % (d1, d2, '%s_combined.fig1' % i))
-#        d1 = pd.read_csv(d1)
-#        d2 = pd.read_csv(d2)
-#        di1 = get_collapse_tf(d1, '%s_down' % i, 'combined', 'chipseq.')
-#        di2 = get_collapse_tf(d2, '%s_up' % i, 'combined', 'chipseq.')
-#
-#        json_dict = {}
-#        json_dict['status'] = '100%'
-#        json_dict['result'] = di1
-#        json_dict['result_2'] = di2
-#        json_dict['result1_fig'] = '%s_combined.fig1.html' % i
-#
-#        m1 = os.path.join(bench, '%s_up.gene_symbol_motif_cauchy_combine_raw.csv' % i)
-#        m2 = os.path.join(bench, '%s_down.gene_symbol_motif_cauchy_combine_raw.csv' % i)
-#        os.system('python ../../plotly_scatter.py %s %s %s Combined_TR_motif down-regulated up-regulated' % (m1, m2, '%s_combined.fig2' % i))
-#
-#        m1 = pd.read_csv(m1)
-#        m2 = pd.read_csv(m2)
-#        mo1 = get_collapse_tf(m1, '%s_down' % i, 'combined', 'motif.')
-#        mo2 = get_collapse_tf(m2, '%s_up' % i, 'combined', 'motif.')
-#        json_dict['result2'] = mo1
-#        json_dict['result2_2'] = mo2
-#        json_dict['result2_fig'] = '%s_combined.fig2.html' % i
-#
-#        test = '%s_combined.json' % (i)
-#        with open(test, 'w') as jsonf:
-#            json.dump(json_dict, jsonf)
+            fout.write(template.render(method='all', task_id=i, labels1='Down-regulated', labels2='Up-regulated', download_zip='%s.zip' % i))
+
+        m1 = os.path.join(bench, '%s_down.gene_symbol_motif_cauchy_combine_raw.csv' % i)
+        m2 = os.path.join(bench, '%s_up.gene_symbol_motif_cauchy_combine_raw.csv' % i)
+        os.system('cp %s .' %m1)
+        os.system('cp %s .' %m2)
+        os.system('zip -r %s.zip %s %s %s %s %s_up.combined.chipseq.csv %s_down.combined.motif.csv %s_up.combined.motif.csv %s_down.combined.motif.csv' % (i, os.path.basename(d1), os.path.basename(d2), os.path.basename(m1), os.path.basename(m2), i, i, i, i))
+
+        os.system('python ../../plotly_scatter_oldoutput.py %s %s %s Combined_TR_ChIP-seq down-regulated up-regulated' % (d1, d2, '%s_combined.fig1' % i))
+
+        d1 = pd.read_csv(d1)
+        d2 = pd.read_csv(d2)
+        di1 = get_collapse_tf(d1, '%s_down' % i, 'combined', 'chipseq.')
+        di2 = get_collapse_tf(d2, '%s_up' % i, 'combined', 'chipseq.')
+
+        json_dict = {}
+        json_dict['status'] = '100%'
+        json_dict['result'] = di1
+        json_dict['result_2'] = di2
+        json_dict['result1_fig'] = '%s_combined.fig1.html' % i
+        json_dict['result_zip'] = '%s.zip' % i
+
+        os.system('python ../../plotly_scatter_oldoutput.py %s %s %s Combined_TR_motif down-regulated up-regulated' % (m1, m2, '%s_combined.fig2' % i))
+
+        m1 = pd.read_csv(m1)
+        m2 = pd.read_csv(m2)
+        mo1 = get_collapse_tf(m1, '%s_down' % i, 'combined', 'motif.')
+        mo2 = get_collapse_tf(m2, '%s_up' % i, 'combined', 'motif.')
+        json_dict['result2'] = mo1
+        json_dict['result2_2'] = mo2
+        json_dict['result2_fig'] = '%s_combined.fig2.html' % i
+
+        test = '%s_combined.json' % (i)
+        with open(test, 'w') as jsonf:
+            json.dump(json_dict, jsonf)
 
 generate_page()
+#generate_htmls(['307'])
 generate_htmls(ids)
-

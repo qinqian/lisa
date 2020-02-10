@@ -8,7 +8,7 @@ function tabulate(cl, data, columns, interact) {
   }
 
   var table = table.append("table")
-        .attr("class", "table compact hover row-border tab" + cl),
+        .attr("class", "hover row-border table-bordered tab" + cl),
       thead = table.append("thead"),
       tbody = table.append("tbody").attr("class", "tbody");
 
@@ -35,8 +35,6 @@ function tabulate(cl, data, columns, interact) {
                   return "row";
                 }
               });
-
-  console.log(rows);
 
   // create a cell in each row for each column
   var cells = enter.selectAll("td")
@@ -221,7 +219,7 @@ function fetch(row, test_type) {
             }
 
             if (d.treats[0].unique_id.startsWith('GSM')) {
-                link = 'https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id;
+                link = 'http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=' + d.treats[0].unique_id;
             } else {
                 // https://www.encodeproject.org/experiments/ENCSR264RJX/
                 link = 'https://www.encodeproject.org/experiments/' + d.treats[0].unique_id.split('_')[0];
@@ -239,15 +237,16 @@ function fetch(row, test_type) {
                                         '<p class="tight-line"><b>Disease:</b>' + d.treats[0].disease_state__name + '</p></div></div></div>' + 
   '<div class="col-sm-3"><div class="row"><div class="col"><b>Quality Control</b></div></div>' + 
   '<div class="row"><div class="col">' + 
-     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.fastqc] + '"></div></div>' +
-     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.map] + '"></div></div>' +
-     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.pbc] + '"></div></div>' +
-     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.peaks] + '"></div></div>' +
-     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.frip] + '"></div></div>' +
-     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.fastqc] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Sequence Quality:</strong><br> Raw sequence median quality score and raw read GC contents"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.map] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Mapping Quality:</strong><br> Uniquely mapped ratio"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.pbc] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Library Complexity:</strong><br> PCR bottleneck coefficient (PBC)"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.peaks] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>ChIP enrichment:</strong><br> Sufficient number of peaks(above 500) with good enrichment(10 fold change)"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.frip] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Signal to Noise Ratio:</strong><br> Fraction of reads in peaks (FRiP)"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Regulatory Region:</strong><br> "DNase-seq union hypersensitive sites" (DHS) overlapped ratio in top 5000 peaks"></div></div>' +
   '</div></div>' + 
   '<div class="row"><div class="col"><b>Visualize</b></div></div>' + 
-  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC</a></div></div></div>' + 
+    //http://epigenomegateway.wustl.edu/browser/?genome=hg38&hub=http://dc2.cistrome.org/api/datahub/93&gftk=refGene,full
+  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&hub=http://dc2.cistrome.org/api/datahub/'+d.id+'&gftk=refGene,full">WashU</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC</a></div></div></div>' + 
   '</div></div>');
   $(".annotation").append( modelc );
   modelc = $('<div class="card"><div class="card-header">Tool</div><div class="card-body"><table class="table">' +
@@ -259,7 +258,7 @@ function fetch(row, test_type) {
                        '<tr><td>FRiP</td><td>' + d.qc.table.frip[0] + '</td></tr>' + 
                        '<tr><td>Peaks in promoter/exon/intron/intergenic</td><td>' + d.qc.table.meta + '</td><tr>' +
                        '<tr><td>DHS ratio</td><td>' + d.qc.table.dhs + '</td></tr>' +
-                       '<tr><td>Converation plot</td><td><img class="img-fluid" height="400" width="400" src="' + conserv + '">' + '</td></tr></tbody>' +
+                       '<tr><td>Conservation plot</td><td><img class="img-fluid" height="400" width="400" src="' + conserv + '">' + '</td></tr></tbody>' +
                        '</table></div></div>');
    $(".annotation").append( modelc );
             if (d.motif) {
@@ -305,6 +304,10 @@ function multiple_request(url, index) {
 function update_progress(status_url, status_div, div_heatmap_data) {
   // send GET request to status URL
   $.getJSON(status_url, function(data) {
+    $(document).ready(function() {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    });
+
     // update UI
     $(status_div.childNodes[0]).css("width", data['status']);
     $(status_div.childNodes[0]).text(data['status']+ " " + data['state']);
@@ -407,17 +410,19 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       });
 
       // show figure results by default
-      fig = data['result_fig'];
-      if (fig) {
-        $(".tf1_fig").html($('<iframe frameBorder="0" width="100%" height="650" src="' + fig + '"></iframe>'));
-      }
+      // fig = data['result_fig'];
+      // if (fig) {
+      //   $(".tf1_fig").html($('<iframe frameBorder="0" width="100%" height="650" src="' + fig + '"></iframe>'));
+      // }
+      console.log(data)
       fig = data['result1_fig'];
 
       if (fig) {
         $(".tf1_fig").append($('<iframe frameBorder="0" width="100%" height="650" src="' + fig + '"></iframe>'));
       }
 
-      fig = data['result2_fig'];
+      fig = data['result2_fig']; 
+      console.log(fig);
       if (fig) {
         $(".tf1_fig").append($('<iframe frameBorder="0" width="100%" height="650" src="' + fig + '"></iframe>'));
       }

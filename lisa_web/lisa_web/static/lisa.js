@@ -1,7 +1,7 @@
 // The table generation function
 function tabulate(cl, data, columns, interact) {
   var table = d3.select("." + cl).append("table")
-        .attr("class", "table compact hover row-border tab" + cl),
+        .attr("class", "hover row-border table-bordered tab" + cl),
       thead = table.append("thead"),
       tbody = table.append("tbody").attr("class", "tbody");
 
@@ -143,7 +143,7 @@ function fetch(row, test_type) {
         browser_sp = "mm10";
       }
       modelc = $('<div class="card"><div class="card-header"><div class="card-title"><h3><b>Inspector</b></h3></div></div><div class="card-body"><div class="row"><div class="col-sm-9"><div class="row inspector_attrib_row"><div class="col"><b>Title:</b></div><div class="col">' + d.treats[0].name + '</div></div>' + 
-                 '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="https://www.ncbi.nlm.nih.gov/sra?term=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
+                 '<div class="row inspector_attrib_row"><div class="col"><b>GEO:</b></div><div class="col"><p class="tight-line">' + '<a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=' + d.treats[0].unique_id + '">' + d.treats[0].unique_id + '</a></div></div>' + 
                  '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 
                  '<div class="row inspector_attrib_row"><div class="col"><b>Citation:</b></div><div class="col"><p>' + d.treats[0].paper__reference + '</p>' +'PMID:' + '<a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=' + d.treats[0].paper__pmid + '">' + d.treats[0].paper__pmid + '</a></div></div>' + 
                  '<div class="row inspector_attrib_row"><div class="col"><b>Species:</b></div><div class="col"><p>' + d.treats[0].species__name + '</p></div></div>' + 
@@ -154,15 +154,15 @@ function fetch(row, test_type) {
                  '<p class="tight-line"><b>Disease:</b>' + d.treats[0].disease_state__name + '</p></div></div></div>' + 
                  '<div class="col-sm-3"><div class="row"><div class="col"><b>Quality Control</b></div></div>' + 
                  '<div class="row"><div class="col">' + 
-                 '<div class="circle-col"><div class="circle ' + color[d.qc.judge.fastqc] + '"></div></div>' +
-                 '<div class="circle-col"><div class="circle ' + color[d.qc.judge.map] + '"></div></div>' +
-                 '<div class="circle-col"><div class="circle ' + color[d.qc.judge.pbc] + '"></div></div>' +
-                 '<div class="circle-col"><div class="circle ' + color[d.qc.judge.peaks] + '"></div></div>' +
-                 '<div class="circle-col"><div class="circle ' + color[d.qc.judge.frip] + '"></div></div>' +
-                 '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.fastqc] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Sequence Quality:</strong><br> Raw sequence median quality score and raw read GC contents"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.map] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Mapping Quality:</strong><br> Uniquely mapped ratio"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.pbc] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Library Complexity:</strong><br> PCR bottleneck coefficient (PBC)"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.peaks] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>ChIP enrichment:</strong><br> Sufficient number of peaks(above 500) with good enrichment(10 fold change)"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.frip] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Signal to Noise Ratio:</strong><br> Fraction of reads in peaks (FRiP)"></div></div>' +
+     '<div class="circle-col"><div class="circle ' + color[d.qc.judge.dhs] + '"' + 'data-toggle="tooltip" data-html="true" data-placement="auto" data-original-title="<strong class=\'text-primary\'>Regulatory Region:</strong><br> "DNase-seq union hypersensitive sites" (DHS) overlapped ratio in top 5000 peaks"></div></div>' +
                  '</div></div>' + 
                  '<div class="row"><div class="col"><b>Visualize</b></div></div>' + 
-                 '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&amp;datahub=http://dc2.cistrome.org/api/datahub/'+d.id+'&amp;gftk=refGene,full">WashU</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC</a></div></div></div>' + 
+  '<div class="row"><div class="col"><div class="btn-group">' + '<a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://epigenomegateway.wustl.edu/browser/?genome='+browser_sp+'&hub=http://dc2.cistrome.org/api/datahub/'+d.id+'&gftk=refGene,full">WashU</a><a target="_blank" id="genomebrowser-bw" type="button" class="btn btn-default button-list" href="http://dc2.cistrome.org/api/hgtext/' + d.id + '/?db=' + browser_sp + '">UCSC</a></div></div></div>' + 
                  '</div></div>');
       $(".annotation").append( modelc );
       modelc = $('<div class="card"><div class="card-header">Tool</div><div class="card-body"><table class="table">' +
@@ -190,6 +190,10 @@ function fetch(row, test_type) {
 function update_progress(status_url, status_div, div_heatmap_data) {
   // send GET request to status URL
   $.getJSON(status_url, function(data) {
+    $(document).ready(function() {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    });
+
     // update UI
     $(status_div.childNodes[0]).css("width", data['status']);
     $(status_div.childNodes[0]).text(data['status']+ " " + data['state']);

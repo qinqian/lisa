@@ -16,12 +16,11 @@ labels2 = sys.argv[6]
 
 def dedup_rank(csv):
     up=pd.read_csv(csv, header=0, index_col=0)
+    up.loc[:, 'id'] = up.index.map(lambda x:x.split('|')[0])
     if 'pval' in up.columns:
         up=up.sort_values(by='pval')
-        #up.loc[:, 'name'] = up.iloc[:, [2, 4, 5, 6]].apply(lambda x: ','.join([y for y in list(map(str, x)) if y!='None']), axis=1)
     if 'tissue' in up.columns:
-        up.loc[:, 'name'] = up.iloc[:, [2, 4, 5, 6]].apply(lambda x: ','.join([y for y in list(map(str, x)) if y!='None']), axis=1)
-        #up.loc[:, 'name'] = up.loc[:, 'name'].map(lambda x: up.index.map(lambda x: x.split('|')[0]) +','+x)
+        up.loc[:, 'name'] = up.iloc[:, [2, 4, 5, 6, -1]].apply(lambda x: ','.join([y for y in list(map(str, x)) if y!='None']), axis=1)
     else:
         up.loc[:, 'name'] = up.index.values
     print(up.head())
@@ -33,7 +32,7 @@ dn, dn_dedup = dedup_rank(dn_r)
 print(up.head())
 print(up_dedup.head())
 
-uniq_selection = list(up_dedup.index) + list(dn_dedup.index)
+uniq_selection = np.unique(list(up_dedup.index) + list(dn_dedup.index))
 
 final = up.merge(dn, left_index=True, right_index=True, how='outer')
 final = final.loc[uniq_selection, :]
@@ -73,7 +72,8 @@ trace1 = Scatter(x=x,
                     size=11,
                     color='black'
                  ),
-                 text = list(map(lambda x: "%s\n%s" % ('Cistrome ID|TF', x), final_top.loc[:, 'name_y'])),
+                 text = list(map(lambda x: "%s\n%s" % ('CistromeDB:', x), 
+                     final_top.loc[:, 'name_y'])),
                  hoverinfo = 'text',
                  textposition='top right')
 

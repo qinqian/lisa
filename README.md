@@ -2,6 +2,7 @@
 
 ![](https://zenodo.org/badge/DOI/10.5281/zenodo.3583466.svg)
 ![](https://anaconda.org/qinqian/lisa/badges/version.svg)
+![](https://anaconda.org/qinqian/lisa_minimal/badges/license.svg)
 
 Web version and documentation is hosted at http://lisa.cistrome.org. For large scale gene set analysis, we recommend user to install local version.
 
@@ -25,6 +26,12 @@ source activate lisa
 export MKL_THREADING_LAYER=GNU
 
 conda install -c qinqian lisa
+```
+
+Another minimal version without preprocessing fastq to hdf5 can be installed with, 
+
+```
+conda install -c qinqian lisa_minimal
 ```
 
 ### Update package
@@ -94,6 +101,10 @@ lisa_update_conf --folder mm10/ --species mm10
 conda env remove -n lisa
 rm -r mm10/ hg38/
 ```
+
+### Preprocessing datasets
+
+This [repository](https://bitbucket.org/Alvin_Qin/marge2/src/default/) includes scripts for preprocessing CistromeDB datasets, includes Peak-RP and Chrom-RP.
 
 ### Citation 
 

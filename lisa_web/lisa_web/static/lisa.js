@@ -29,9 +29,13 @@ function tabulate(cl, data, columns, interact) {
 
   // create a cell in each row for each column
   var cells = rows.selectAll("td")
-        .data(function(row) {
+        .data(function(row, i) {
           return columns.map(function(column) {
-            return {column: column, value: row[column]};
+	    if (column == 'rank') {
+                return {column: column, rank:i};
+	    } else {
+                return {column: column, value:row[column]};
+	    }
           });
         })
         .enter()
@@ -40,10 +44,19 @@ function tabulate(cl, data, columns, interact) {
           "vertical-align": "middle"
         })
         .attr({
-          data_id: function(d) { return d.value.split(';')[0].split('|')[0]; }
+          data_id: function(d) {
+		 if (d.hasOwnProperty('value')) {
+                     return d.value.split(';')[0].split('|')[0];
+		 } else {
+                     return null;
+		 }
+	  }
         })
         .html(function(d) {
           if (d.column != 'Transcription Factor') {
+            if (d.column == 'rank') {
+                 return d.rank+1;
+            }
             if (interact){
               a = d.value;
               a = a.split(';');
@@ -202,7 +215,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       $(".result").show(1200);
       $("h4").hide();
       d3.csv(data['result2'], function(error, d) {
-        tabulate('tf2', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], false); 
+        tabulate('tf2', d, ["Transcription Factor", "rank", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], false); 
         fetch(false);
         $('.dataTable').on('draw.dt', function() {
           fetch(false);
@@ -215,7 +228,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       });
 
       d3.csv(data['result'], function(error, d) {
-        tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true);
+        tabulate('tf1', d, ["Transcription Factor", "rank", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true);
         fetch(false);
         $('.dataTable').on('draw.dt', function() {
           fetch(false);

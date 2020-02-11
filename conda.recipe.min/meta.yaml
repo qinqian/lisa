@@ -1,0 +1,43 @@
+## https://docs.anaconda.com/anaconda-cloud/user-guide/tutorials/
+package:
+  name: lisa_minimal
+  version: 1.0
+
+build:
+  number: 8
+
+requirements:
+  build:
+    - python
+    - fire
+    - setuptools
+    - numpy ==1.15.1
+    - patchelf
+    - {{ compiler('c') }}
+  host:
+    - python
+    - zlib
+    - numpy ==1.15.1
+  run:
+    - python
+    - zlib
+    - mkl-service
+    - curl
+    - fire
+    - scikit-learn ==0.21.3
+    - theano
+    - pandas
+    - h5py
+    - numpy ==1.15.1
+    - PyYAML >=3.12
+    - snakemake ==5.7.1
+    - yappi
+    - openssl=1.0
+    - mpmath
+
+about:
+  home: http://lisa.cistrome.org
+  license: MIT
+  license_family: MIT
+  license_file: ../LICENSE
+  summary: 'ChIP-seq/DNase-seq data-driven TF and CR prioritization tool: minimal version with fewer dependency'

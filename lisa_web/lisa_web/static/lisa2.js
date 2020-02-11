@@ -8,7 +8,7 @@ function tabulate(cl, data, columns, interact) {
   }
 
   var table = table.append("table")
-        .attr("class", "hover row-border table-bordered tab" + cl),
+        .attr("class", "hover row-border compact table-bordered tab" + cl), //table compact 
       thead = table.append("thead"),
       tbody = table.append("tbody").attr("class", "tbody");
 
@@ -38,9 +38,13 @@ function tabulate(cl, data, columns, interact) {
 
   // create a cell in each row for each column
   var cells = enter.selectAll("td")
-        .data(function(row) {
+        .data(function(row, i) {
           return columns.map(function(column) {
-            return {column: column, value: row[column]};
+	    if (column == 'rank') {
+                return {column: column, rank:i};
+	    } else {
+                return {column: column, value:row[column]};
+	    }
           });
         });
 
@@ -49,6 +53,9 @@ function tabulate(cl, data, columns, interact) {
 
   enterc.html(function(d) {
     if (d.column != 'Transcription Factor') {
+      if (d.column == 'rank') {
+           return d.rank+1;
+      }
       if (interact){
         a = d.value;
         a = a.split(';');
@@ -56,7 +63,7 @@ function tabulate(cl, data, columns, interact) {
           return a[1];
         } else {
           return d.value;
-        } 
+        }
       } else {
         if (d.value.indexOf("http") !== -1) {
           aaa = d.value.split(".");
@@ -85,7 +92,11 @@ function tabulate(cl, data, columns, interact) {
 
   updatec.attr("data_id",
                function(d) {
-                 return d.value.split(';')[0].split('|')[0];
+		 if (d.hasOwnProperty('value')) {
+                     return d.value.split(';')[0].split('|')[0];
+		 } else {
+                     return null;
+		 }
                });
   updatec.style({
     "vertical-align": "middle"
@@ -432,7 +443,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       });
 
       d3.csv(data['result_2'], function(error, d) {
-        tabulate('tf2', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf2'); 
+        tabulate('tf2', d, ["Transcription Factor", "rank", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf2'); 
         fetch(false);
         $('.dataTable').on('draw.dt', function() {
           fetch(false);
@@ -445,7 +456,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       });
 
       d3.csv(data['result2_2'], function(error, d) {
-        tabulate('tf2_1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value"], false, 'tf2_1'); // "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"
+        tabulate('tf2_1', d, ["Transcription Factor", "rank", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value"], false, 'tf2_1'); // "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"
         fetch(false, 'motif');
         $('.dataTable').on('draw.dt', function() {
           fetch(false, 'motif');
@@ -459,7 +470,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       });
 
       d3.csv(data['result'], function(error, d) {
-        tabulate('tf1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
+        tabulate('tf1', d, ["Transcription Factor", "rank", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value", "5th Sample p-value"], true, 'tf1');
         fetch(false);
         $('.dataTable').on('draw.dt', function() {
           fetch(false);
@@ -473,7 +484,7 @@ function update_progress(status_url, status_div, div_heatmap_data) {
       });
 
       d3.csv(data['result2'], function(error, d) { 
-        tabulate('tf1_1', d, ["Transcription Factor", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value"], false, 'tf1_1');
+        tabulate('tf1_1', d, ["Transcription Factor", "rank", "1st Sample p-value", "2nd Sample p-value", "3rd Sample p-value", "4th Sample p-value"], false, 'tf1_1');
         fetch(false, 'motif');
         $('.dataTable').on('draw.dt', function() {
           fetch(false, 'motif');

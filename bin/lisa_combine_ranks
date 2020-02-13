@@ -64,16 +64,19 @@ def main():
         rank_dedup2.drop('TF', axis=1)
         rank = rank.merge(rank2, left_index=True, right_index=True)
 
-    if 'qc' in rank.columns:  # chip-seq 
+    for i in rank.columns:
+        print(i)
+    if 'qc' in rank.columns or 'qc_x' in rank.columns:  # chip-seq 
         rank_meta = rank.iloc[:, -7:]
     else: # motif
         rank_meta = rank.iloc[:, -28:]
     rank = rank.loc[:, rank.columns.str.startswith('pval')]
     # cauchy combination test 
     combine_p = rank.apply(lambda x: cauchy_p_value(x)[1], axis=1)
-    print(combine_p.head())
+    #print(combine_p.head())
     combine_p = pd.DataFrame(combine_p)
     combine_p = pd.concat([combine_p, rank_meta], axis=1)
+
     combine_p.columns = ['pval'] + list(map(lambda x: x.replace('_y', ''), rank_meta.columns))
     combine_p.sort_values(['pval'], inplace=True)
     combine_p.to_csv('%s_cauchy_combine_raw.csv' % args.prefix)

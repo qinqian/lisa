@@ -67,6 +67,10 @@ class LisaRank(object):
                                 np.arange(self.diff_gene_num), np.arange(self.diff_gene_num, beta_df.shape[0]), 4)
         pvalue.index = self._get_tfbs_annotation(pvalue.index, 'chipseq')
 
+        beta_df.columns = pvalue.index
+        beta_df.loc['pvalue', :] = pvalue.iloc[:, 0]
+        beta_df = beta_df.iloc[:, np.argsort(pvalue.iloc[:, 0].values)]
+
         pvalue = pvalue.iloc[:, 0:1]
         pvalue.columns = ['pval']
         pvalue = pvalue.sort_values(['pval'], ascending=True, inplace=False)
@@ -74,8 +78,9 @@ class LisaRank(object):
         match_meta = self._get_tfbs_annotation(pvalue.index, 'chipseq', is_full=True)
         match_meta.index = pvalue.index
         pvalue = pd.concat([pvalue, match_meta], axis=1)
-        print(pvalue.head())
+
         beta_df.to_csv('%s.lisa_peak_rp.csv' % self.prefix)
+        beta_df.iloc[np.arange(self.diff_gene_num), :300].to_csv('%s.lisa_target_peak_rp.csv' % self.prefix)
         pvalue.to_csv('%s.lisa_direct.csv' % self.prefix)
 
     def _prepare_data(self, bin_length):
@@ -278,6 +283,9 @@ class LisaRank(object):
 
         delta_rp_df.loc[:, 'diff_status'] = diff_binary
         delta_rp_df.to_csv("%s.%s.%s.csv" % (self.prefix, self.epigenome.epigenome, dtype))
+
+        # output target delta rp
+        delta_rp_df.iloc[np.arange(self.diff_gene_num), :300].to_csv("%s.%s.%s.target.csv" % (self.prefix, self.epigenome.epigenome, dtype))
 
         pvalue = pd.DataFrame(pvalue)
         pvalue.columns = ['pval']

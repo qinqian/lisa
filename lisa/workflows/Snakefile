@@ -95,7 +95,7 @@ rule clean:
         for g in config["gene_sets"]:
             print(g)
             for f in glob.glob('%s*' % g):
-                if g == f or 'p_val' in f or 'dedup' in f or 'coefs' in f or 'cauchy_combine_raw' in f:
+                if g == f or 'p_val' in f or 'dedup' in f or 'coefs' in f or 'cauchy_combine_raw' in f or 'target' in f:
                     print('preserve %s' % f)
                     continue
                 print('clean up %s' % f)

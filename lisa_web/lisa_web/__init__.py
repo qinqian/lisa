@@ -87,6 +87,7 @@ def submit_lisa():
         job_name = job_name.replace('#', '')  # user input weird character 
         job_name = job_name.replace("\'", "")  # user input weird character 
         job_name = job_name.replace('-', '')  # user input weird character 
+        job_name = job_name.replace('&', '')  # user input weird character 
 
         method = form.method.data
 
@@ -123,10 +124,13 @@ def submit_lisa():
                 return render_template('index.html', form=form, message_job='inline-block')
 
             genes = genes.split('\n')
+            #app.logger.info("valid gene number %s %s" % (len(genes), genes))
             genes = clean_empty_lins(genes)
+            app.logger.info("valid gene number %s %s" % (len(genes), genes))
 
             ## support ensemble
             genes = check_available_genes(genes, species)
+            app.logger.info("valid gene number %s %s" % (len(genes), genes))
 
             if len(genes) > 500 or len(genes) < 20:
                 return render_template('index.html', form=form, message='inline-block')

@@ -1,7 +1,22 @@
 import pandas as pd
+from check_gene_resources import is_ensembl, is_refseq, is_entrez, is_genename
+#import mygene
+#mg = mygene.MyGeneInfo()
 
 def check_available_genes(genes, species='hg38'):
-    if genes[0].startswith('ENSG') or genes[0].startswith('ENSM'):
+    isens = is_ensembl(genes)
+    isent = is_entrez(genes)
+    issym = is_genename(genes)
+    isref = is_refseq(genes)
+
+    if isens + isent + issym + isref > 1: # a mixture of genes ids
+        import mygene
+        mg = mygene.MyGeneInfo()
+        df = mg.querymany(genes, as_dataframe=True, scopes='refseq,symbol,entrezgene,reporter,uniprot,ensemblgene')
+        df = df.loc[~pd.isnull(df.symbol), :]
+        return list(set(df.symbol.str.upper().tolist()))
+
+    if isens: # pure ensemble ids
         genes = list(map(lambda x: x.split('.')[0], genes))
         if species == 'hg38':
             ensemble = pd.read_csv('/project/Cistrome/LISA/lisa_web/download/Homo97_Ensembl.txt', sep='\t')
@@ -11,8 +26,14 @@ def check_available_genes(genes, species='hg38'):
         #symbols = ensemble.loc[ensemble.iloc[:, 0].isin(genes), 'gene_name'].str.upper()
         symbols = ensemble.loc[ensemble.iloc[:, 0].isin(genes), 'gene_name']
         return list(set(symbols))
-    else:
+    elif isent: # pure entrez ids
+        import mygene
+        mg = mygene.MyGeneInfo()
+        df = mg.getgenes(genes, as_dataframe=True)
+        return df.symbol.tolist()
+    else: # pure symbol, or refseq
         return list(set(genes))
+
 
 def clean_empty_lins(genes):
     filtered_genes = filter(lambda x:x!='', genes)
@@ -21,7 +42,6 @@ def clean_empty_lins(genes):
 
 
 if __name__ == '__main__':
-    #print(clean_empty_lins(['a', 'b', 'c', '']))
     print(check_available_genes(['ENSG00000174837',
                                  'ENSG00000232702',
                                  'ENSG00000172738'], 'hg38'))
@@ -102,5 +122,12 @@ if __name__ == '__main__':
     #'ENSMUSG00000013089',
     #'ENSMUSG00000013921',
     #'ENSMUSG00000014602'], 'mouse')))
+    #df = mg.getgenes([u'ENSMUSG00000019505', u'ENSMUSG00000015291', u'ENSMUSG00000018451', u'ENSMUSG00000016349', u'ENSMUSG00000021700', u'ENSMUSG00000020893', u'ENSMUSG00000021250', u'ENSMUSG00000020612', u'ENSMUSG00000020315', u'ENSMUSG00000020176', u'ENSMUSG00000020894', u'ENSMUSG00000021609', u'ENSMUSG00000022263', u'ENSMUSG00000020900', u'ENSMUSG00000008489', u'ENSMUSG00000018707', u'ENSMUSG00000000794', u'ENSMUSG00000013236', u'ENSMUSG00000002028', u'ENSMUSG00000003814', u'ENSMUSG00000013089', u'ENSMUSG00000021268', u'ENSMUSG00000018474', u'ENSMUSG00000020182', u'ENSMUSG00000021313', u'ENSMUSG00000001525', u'ENSMUSG00000000631', u'ENSMUSG00000000214', u'ENSMUSG00000018846', u'ENSMUSG00000022044', u'ENSMUSG00000015656', u'ENSMUSG00000008348', u'ENSMUSG00000020889', u'ENSMUSG00000021061', u'ENSMUSG00000014602'], as_dataframe=True)
+    #df = mg.getgenes(['ENSG00000004059'], as_dataframe=True)
+    #df = mg.getgenes(['SLC39A9'], as_dataframe=True)
+    #df = mg.querymany(['NM_001256306', 'ENSMUSG00000019505', 'SLC39A9'], as_dataframe=True, scopes='refseq,symbol,entrezgene,reporter,uniprot,ensemblgene')
+    #print(df)
+    #print(df.symbol.str.upper())
+    #print(check_available_genes(['NM_001256306', 'ENSMUSG00000019505', 'SLC39A9']))
+    print(check_available_genes(['MAST2']))
 
-    print(check_available_genes([u'ENSMUSG00000019505', u'ENSMUSG00000015291', u'ENSMUSG00000018451', u'ENSMUSG00000016349', u'ENSMUSG00000021700', u'ENSMUSG00000020893', u'ENSMUSG00000021250', u'ENSMUSG00000020612', u'ENSMUSG00000020315', u'ENSMUSG00000020176', u'ENSMUSG00000020894', u'ENSMUSG00000021609', u'ENSMUSG00000022263', u'ENSMUSG00000020900', u'ENSMUSG00000008489', u'ENSMUSG00000018707', u'ENSMUSG00000000794', u'ENSMUSG00000013236', u'ENSMUSG00000002028', u'ENSMUSG00000003814', u'ENSMUSG00000013089', u'ENSMUSG00000021268', u'ENSMUSG00000018474', u'ENSMUSG00000020182', u'ENSMUSG00000021313', u'ENSMUSG00000001525', u'ENSMUSG00000000631', u'ENSMUSG00000000214', u'ENSMUSG00000018846', u'ENSMUSG00000022044', u'ENSMUSG00000015656', u'ENSMUSG00000008348', u'ENSMUSG00000020889', u'ENSMUSG00000021061', u'ENSMUSG00000014602'], 'mouse'))

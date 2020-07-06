@@ -13,7 +13,8 @@ wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 export PATH="${HOME}/miniconda3/bin:$PATH"
 
-conda create -n lisa python=3.6 && conda config --add channels conda-forge && conda config --add channels bioconda
+# latest python 3.6.x cannot install openssl properly
+conda create -n lisa python=3.6.6 && conda config --add channels conda-forge && conda config --add channels bioconda
 
 ```
 

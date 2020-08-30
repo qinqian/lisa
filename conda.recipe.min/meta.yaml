@@ -1,33 +1,34 @@
 ## https://docs.anaconda.com/anaconda-cloud/user-guide/tutorials/
+## https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html?highlight=patchelf
 package:
   name: lisa_minimal
   version: 1.0
 
 build:
-  number: 8
+  number: 9
+  binary_relocation: True
 
 requirements:
   build:
-    - python
+    - python ==3.6.6
     - fire
     - setuptools
     - numpy ==1.15.1
-    - patchelf
-    - {{ compiler('c') }}
   host:
-    - python
+    - python ==3.6.6
     - zlib
     - numpy ==1.15.1
   run:
-    - python
+    - python ==3.6.6
     - zlib
     - mkl-service
     - curl
     - fire
     - scikit-learn ==0.21.3
     - theano
-    - pandas
+    - pandas ==0.25.2
     - h5py
+    - libopenblas ==0.3.3
     - numpy ==1.15.1
     - PyYAML >=3.12
     - snakemake ==5.7.1

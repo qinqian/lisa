@@ -1,6 +1,10 @@
 """ two methods to rank TFs
 """
 import theano
+## Compiler error for osx clang++
+## https://stackoverflow.com/questions/51238578/error-non-constant-expression-cannot-be-narrowed-from-type-npy-intp-to-int
+if 'clang++' in theano.config.cxx: 
+    theano.config.gcc.cxxflags = "-Wno-c++11-narrowing"
 import theano.tensor as T
 import pandas as pd
 import numpy as np

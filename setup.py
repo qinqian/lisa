@@ -30,9 +30,9 @@ def main():
         packages=find_packages(),
         ext_modules=[get_extension(), ],
         include_dirs=['lisa/regpotential'] + get_numpy_include_dirs(),
-        install_requires=['numpy==1.15.1', #'matplotlib', 'seaborn', 
+        install_requires=['numpy==1.15.1', 
                           'scikit-learn', 'theano', 'fire',
-                          'h5py', 'pandas',
+                          'h5py', 'pandas==0.25.2',
                           'scipy',
                           'snakemake', 'PyYAML', 'yappi', 'mpmath'
                           ],

@@ -5,19 +5,17 @@ package:
 
 build:
   number: 8
-  #entry_points:
-  #  - lisa = ../bin/lisa
 
 requirements:
   build:
-    - python
+    - python ==3.6.6
     - fire
     - setuptools
     - numpy ==1.15.1
     - patchelf
     - {{ compiler('c') }}
   host:
-    - python
+    - python ==3.6.6
     - zlib
     - numpy ==1.15.1
   run:
@@ -28,7 +26,7 @@ requirements:
     - fire
     - scikit-learn ==0.21.3
     - theano
-    - pandas
+    - pandas ==0.25.2
     - h5py
     - numpy ==1.15.1
     - PyYAML >=3.12

@@ -98,12 +98,11 @@ rm -r absolute_path_mm10/ absolute_path_hg38/
 
 ### Preprocessing datasets to update the database
 
-This [repository](https://bitbucket.org/Alvin_Qin/marge2/src/default/) includes scripts for preprocessing CistromeDB datasets, includes Peak-RP and Chrom-RP.
-
+These two [repository](https://github.com/qinqian/preprocess_lisa) and [repository](https://github.com/qinqian/seqpos2) includes scripts for preprocessing CistromeDB datasets, includes Peak-RP and Chrom-RP.
 
 ### Troubleshooting
 
-Sometimes the numpy and pandas would have conflicts version after installation of Lisa, the way to fix that is to uninstall both numpy and pandas, and reinstall the fixed versions of the two packages, these versions include: numpy 1.15.4 with pandas 0.23.4 (thanks @ChangliangWang), numpy 1.15.1 with pandas 0.25.2, numpy 1.15.1 with pandas 1.0.5, numpy 1.17.2 with pandas 1.0.5.
+Sometimes the numpy and pandas would have conflicts version after installation of Lisa, the way to fix that is to uninstall both numpy and pandas, and reinstall the fixed versions of the two packages, these versions include: numpy 1.15.4 with pandas 0.23.4 (thanks @ChangliangWang), numpy 1.15.1 with pandas 0.25.2, numpy 1.15.1 with pandas 1.0.5, numpy 1.17.2 with pandas 1.0.5. Also, user may need to reinstall scikit-learn 0.21.3 with latest Lisa since lbfgs solver does not support l1 penalty for logistic regression. 
 
 ### Citation 
 

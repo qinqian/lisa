@@ -32,7 +32,11 @@ celery.conf.update(app.config)
 from .form import LISAForm
 
 app.secret_key = 's3cr3t' # crsf
-dir_prefix = '/project/Cistrome/LISA/lisa_web/'
+
+
+dir_prefix = '/Users/qq06/Documents/lisa/lisa_web/'  # TODO: ## CHANGE THIS TO your local lisa_web lib PATH
+
+
 download = dir_prefix + 'download/'
 gallery = dir_prefix + 'lisa_web/gallery'
 new_gallery = dir_prefix + 'lisa_web/new_gallery'

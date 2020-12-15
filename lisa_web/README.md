@@ -6,6 +6,7 @@
 - Second setup a lisa_web conda environment with python2.7
  
   a. If you have global flask installed, please uninstall that version
+  
   b. setup environment
   ```sh
   git clone https://github.com/qinqian/lisa
@@ -18,9 +19,13 @@
   ```
   
   c. Start a new terminal session to run redis by `bash run-redis.sh`, this needs `gcc` and `g++` to compile the redis code.
+  
   d. Start another teminal session to run celery by `bash run_celery.sh`
+  
   e. Start a third terminal session to run the web server by `gunicorn --pythonpath . lisa_web:app --timeout 300`
+  
   f. change the necessary harcoded paths manually to your local paths
+  
    * run_lisa.sh and run_lisa2.sh: 
        1. 4th line: conda activate your lisa command line conda environment 
    * The main interface lisa_web/__init__.py:

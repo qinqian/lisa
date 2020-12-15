@@ -19,9 +19,10 @@ def check_available_genes(genes, species='hg38'):
     if isens: # pure ensemble ids
         genes = list(map(lambda x: x.split('.')[0], genes))
         if species == 'hg38':
-            ensemble = pd.read_csv('/project/Cistrome/LISA/lisa_web/download/Homo97_Ensembl.txt', sep='\t')
+            ## lisa path of the gene ensemble annotation
+            ensemble = pd.read_csv('lisa_web/Homo97_Ensembl.txt', sep='\t')
         else:
-            ensemble = pd.read_csv('/project/Cistrome/LISA/lisa_web/download/Mus97_Ensembl.txt', sep='\t')
+            ensemble = pd.read_csv('lisa_web/Mus97_Ensembl.txt', sep='\t')
         ensemble.iloc[:, 0] = ensemble.iloc[:, 0].map(lambda x: x.split('.')[0])
         #symbols = ensemble.loc[ensemble.iloc[:, 0].isin(genes), 'gene_name'].str.upper()
         symbols = ensemble.loc[ensemble.iloc[:, 0].isin(genes), 'gene_name']

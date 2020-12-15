@@ -31,9 +31,9 @@ def is_entrez(genelist):
     return flag
 
 def is_genename(genelist):
-    ensembleh = pd.read_csv('/project/Cistrome/LISA/lisa_web/download/Homo97_Ensembl.txt', sep='\t')
+    ensembleh = pd.read_csv('lisa_web/Homo97_Ensembl.txt', sep='\t')
     print(ensembleh.head())
-    ensemblem = pd.read_csv('/project/Cistrome/LISA/lisa_web/download/Mus97_Ensembl.txt', sep='\t')
+    ensemblem = pd.read_csv('lisa_web/Mus97_Ensembl.txt', sep='\t')
     return (ensembleh.gene_name.isin(genelist).sum() > 0) or (ensemblem.gene_name.isin(genelist).sum() > 0)
 
 if __name__ == '__main__':

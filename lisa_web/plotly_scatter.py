@@ -1,4 +1,3 @@
-#!/project/dev/qqin/miniconda3/bin/python
 import sys
 import pandas as pd
 import numpy as np
@@ -20,7 +19,6 @@ if '0.1' in up.columns:
     up=up.sort_values(by='0.1')
 up.loc[:, 'name'] = up.iloc[:, 0].map(lambda x:x.split('|')[1])
 up.drop_duplicates('name', inplace=True, keep='first')
-print(up.head())
 
 dn=pd.read_csv(dn_r, header=0)
 if '1' in dn.columns:
@@ -29,23 +27,22 @@ if '0.1' in dn.columns:
     dn=dn.sort_values(by='0.1')
 dn.loc[:, 'name'] = dn.iloc[:, 0].map(lambda x:x.split('|')[1])
 dn.drop_duplicates('name', inplace=True, keep='first')
-print(dn.head())
 
 final = up.merge(dn, on='name', how='outer')
-final = final.loc[(final.iloc[:, 1]<=0.05) | (final.iloc[:, 4]<=0.05), :]
+print(final.head())
+final = final.loc[(final.iloc[:, 1]<=0.05) | (final.loc[:, 'pval_y']<=0.05), :]
+
 xlim = -np.log10(np.min(final.iloc[:, 1]))*1.2
-ylim = -np.log10(np.min(final.iloc[:, 4]))*1.2
+ylim = -np.log10(np.min(final.loc[:, 'pval_y']))*1.2
 print(xlim)
 print(ylim)
 
-#final.iloc[np.where(pd.isnull(final.iloc[:, 4]))[0], 3] = 1
-#final.iloc[np.where(pd.isnull(final.iloc[:, 1]))[0], 1] = 1
-top_index = np.union1d(np.argsort(final.iloc[:, 1])[:10], np.argsort(final.iloc[:, 4])[:10])
+top_index = np.union1d(np.argsort(final.iloc[:, 1])[:10], np.argsort(final.loc[:, 'pval_y'])[:10])
 final_top = final.iloc[top_index, :]
 
 final = final.drop(final.index[top_index])
 x = -np.log10(final.iloc[:, 1])
-y = -np.log10(final.iloc[:, 4])
+y = -np.log10(final.loc[:, 'pval_y'])
 
 top_trace0 = Scatter(x=x,
                      y=y, 
@@ -57,7 +54,7 @@ top_trace0 = Scatter(x=x,
                                   ))
 
 x = -np.log10(final_top.iloc[:, 1])
-y = -np.log10(final_top.iloc[:, 4])
+y = -np.log10(final_top.loc[:, 'pval_y'])
 trace1 = Scatter(x=x,
                  y=y,
                  name='top TFs',

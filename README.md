@@ -4,7 +4,7 @@
 ![](https://anaconda.org/qinqian/lisa/badges/version.svg)
 ![](https://anaconda.org/qinqian/lisa_minimal/badges/license.svg)
 
-Web version and documentation is hosted at http://lisa.cistrome.org. For large scale gene set analysis, we recommend user to install local version, only OSX and Linux system have been tested. 
+Lisa web version and documentation is hosted at [Lisa website](http://lisa.cistrome.org). The web version is down recently due to the upgrading, which might be fixed in the near future. We recommend users to install command line Lisa version 1 below (only Mac OSX and Linux system have been tested). Another exploratory Lisa version 2 (https://github.com/liulab-dfci/lisa2/) is under development as well. Both the command line versions are worth trying for large-scale gene set analysis to infer the transcriptional regulators. For more information and citation, please see [Qin Q, Fan J, Zheng R, Wan C, Mei S, Wu Q, et al. Inferring transcriptional regulators through integrative modeling of public chromatin accessibility and ChIP-seq data. Genome Biology;(2020)21:32](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1934-6).
 
 ### Preparation of Anaconda environment and Installation
 
@@ -104,7 +104,4 @@ These two [repository](https://github.com/qinqian/preprocess_lisa) and [reposito
 
 Sometimes the numpy and pandas would have conflicts version after installation of Lisa, the way to fix that is to uninstall both numpy and pandas, and reinstall the fixed versions of the two packages, these versions include: numpy 1.15.4 with pandas 0.23.4 (thanks @ChangliangWang), numpy 1.15.1 with pandas 0.25.2, numpy 1.15.1 with pandas 1.0.5, numpy 1.17.2 with pandas 1.0.5. Also, user may need to reinstall scikit-learn 0.21.3 with latest Lisa since lbfgs solver does not support l1 penalty for logistic regression. 
 
-### Citation 
-
-Now Lisa is online at Genome biology, Qin Q, Fan J, Zheng R, Wan C, Mei S, Wu Q, et al. [Inferring transcriptional regulators through integrative modeling of public chromatin accessibility and ChIP-seq data. Genome Biology;(2020)21:32](https://rdcu.be/b1nyZ)
 

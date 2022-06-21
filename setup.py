@@ -30,7 +30,7 @@ def main():
         packages=find_packages(),
         ext_modules=[get_extension(), ],
         include_dirs=['lisa/regpotential'] + get_numpy_include_dirs(),
-        install_requires=['numpy==1.15.1', 
+        install_requires=['numpy==1.22.0', 
                           'scikit-learn', 'theano', 'fire',
                           'h5py', 'pandas==0.25.2',
                           'scipy',

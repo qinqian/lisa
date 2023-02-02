@@ -9,7 +9,7 @@ Jinja2==2.9.6
 #MarkupSafe==1.0
 MarkupSafe
 WTForms==2.1
-Werkzeug==0.12.1
+Werkzeug==0.15.5
 amqp==2.2.1
 argparse==1.2.1
 billiard==3.5.0.3
